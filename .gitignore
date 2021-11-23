@@ -1,3 +1,8 @@
 #modules
 
 **/node_modules/
+
+#images
+
+**/*.ico
+**/*.png
