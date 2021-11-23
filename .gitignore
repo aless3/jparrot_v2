@@ -1,8 +1,9 @@
 #modules
-
 **/node_modules/
 
 #images
-
 **/*.ico
 **/*.png
+
+# idea files
+.idea/
