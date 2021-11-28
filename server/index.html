@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
+</head>
+<body>
+<button id="btn1">inizia</button>
+<button id="btn">ferma</button>
+<button id="btn2">scollegati</button>
+<p id="nuovo" style="border: solid 2px black; display: flex; flex-direction: column-reverse"></p>
+<script>
+    const socket = io('http://localhost:8000')
+    const btn = document.getElementById('btn')
+    const btn1 = document.getElementById('btn1')
+    const btn2 = document.getElementById('btn2')
+    const par  = document.getElementById('nuovo')
+    const val = false
+    socket.on('connect', () => {
+        console.log(socket.id)
+    })
+
+    socket.on('tweet', (tweet)=>{
+        const tmp = document.createElement('p')
+        tmp.innerHTML = tweet.data.text
+        par.appendChild(tmp)
+        console.log(tweet)
+    })
+
+    btn2.addEventListener('click', ()=>{
+        socket.disconnect()
+        console.log('disconnected')
+    })
+    btn1.addEventListener('click', async ()=>{
+        await socket.emit('start-stream')
+        console.log('streaming started')
+    })
+    btn.addEventListener('click', async ()=>{
+        await socket.emit('end-stream')
+        console.log('streaming ended')
+    })
+
+
+</script>
+</body>
+</html>
