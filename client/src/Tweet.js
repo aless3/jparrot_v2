@@ -14,18 +14,22 @@ function Tweet({ user, tweet }) {
   if (user == undefined) {
     //console.log(user);
     //console.log(tweet);
+    console.error("UNDEFINED");
     return (
       <>
         <div>error!!</div>
       </>
     );
+  } else {
+    console.log("defined");
   }
-  const { name, username, profile_image_url } = user;
-  const { created_at, text } = tweet;
-  const { like_count, quote_count, reply_count, retweet_count } =
-    tweet.public_metrics;
-  return (
-    <div className='tweet-list'>
+
+  try {
+    const { name, username, profile_image_url } = user;
+    const { created_at, text } = tweet;
+    const { like_count, quote_count, reply_count, retweet_count } =
+      tweet.public_metrics;
+    return (
       <div className='tweet-container'>
         <div className='user-details'>
           <img src={profile_image_url} alt={name} />
@@ -56,12 +60,16 @@ function Tweet({ user, tweet }) {
             <div className='date'>
               <FaCalendar />
               <div className='iconed'>{created_at.split("T")[0]}</div>
+              <div>{created_at.split("T")[1].split(".")[0]}</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    console.error(error);
+    return <></>;
+  }
 }
 
 export default Tweet;

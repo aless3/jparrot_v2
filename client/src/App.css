@@ -4,15 +4,20 @@
   background-color: white;
   border-radius: 3rem;
   padding: 1rem;
-  width: 70%;
+  width: 50%;
 }
 
 input[type="range"] {
-  width: 50rem;
+  width: 100%;
 }
 
 .input {
   margin: 1rem;
+}
+
+.input > * {
+  margin-top: 0rem;
+  margin-bottom: 0.2rem;
 }
 
 .label {
@@ -24,4 +29,10 @@ input[type="range"] {
   text-align: center;
   color: rgba(0, 0, 0, 0.342);
   font-size: xx-large;
+}
+
+.tweet-list {
+  margin-top: 2rem;
+  height: 30rem;
+  overflow: scroll;
 }

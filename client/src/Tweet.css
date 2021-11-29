@@ -1,13 +1,10 @@
-.tweet-list {
-  margin-top: 2rem;
-}
-
 .tweet-container {
   border: 0.2rem solid #657786;
   border-radius: 3rem;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
+  margin-bottom: 3rem;
 }
 
 .user-details {

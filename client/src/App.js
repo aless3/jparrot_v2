@@ -28,7 +28,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 function App() {
   var marker = {};
-  const [range, setRange] = useState(0);
+  const [range, setRange] = useState(1);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
   const [showRange, setShowRange] = useState(false);
   const [showTweets, setShowTweets] = useState(false);
@@ -44,23 +44,31 @@ function App() {
   };
 
   const searchTweets = async () => {
-    const result = await axios.get("http://localhost:8000", {
-      params: {
-        range,
-        position,
-        keyword,
-      },
-    });
-    console.log(result);
-    if (result.data.data != undefined) {
-      setTweets(result.data.data);
-      setUsers(result.data.includes.users);
-      setShowError(false);
-      setShowTweets(true);
-      //console.log(result);
-    } else {
-      setShowTweets(false);
-      setShowError(true);
+    try {
+      const result = await axios.get("http://localhost:8000", {
+        params: {
+          range,
+          position,
+          keyword,
+        },
+      });
+      console.log(result);
+      if (result.data.data != undefined) {
+        setTweets(() => {
+          return result.data.data;
+        });
+        setUsers(() => {
+          return result.data.includes.users;
+        });
+        setShowError(false);
+        setShowTweets(true);
+        //console.log(result);
+      } else {
+        setShowTweets(false);
+        setShowError(true);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -77,12 +85,12 @@ function App() {
           <p>Scegli un area</p>
           <input
             type='range'
-            min='0'
+            min='1'
             max='40000'
             value={range}
             onChange={rangeHandle}
           />
-          <p>hai selezionato {range} metri</p>
+          <p>metri: {range}</p>
           <div className='label'>aggiungi una parola chiave e cerca</div>
           <input
             type='text'
@@ -113,11 +121,15 @@ function App() {
           setShowRange={setShowRange}
         />
       </MapContainer>
-      {showTweets &&
-        tweets.map((tweet) => {
-          const user = users.filter((user) => user.id == tweet.author_id);
-          return <Tweet key={tweet.id} user={user[0]} tweet={tweet} />;
-        })}
+      {showTweets && (
+        <div className='tweet-list'>
+          {tweets.map((tweet) => {
+            const user = users.filter((user) => user.id == tweet.author_id);
+            return <Tweet key={tweet.id} user={user[0]} tweet={tweet} />;
+          })}
+        </div>
+      )}
+
       {showError && <div className='errormsg'>No Tweets Found :C</div>}
     </div>
   );

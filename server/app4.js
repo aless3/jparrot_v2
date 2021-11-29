@@ -29,7 +29,7 @@ app.get("/", async (req, res) => {
       expansions: ["author_id"],
       "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
       "user.fields": ["username", "name", "profile_image_url"],
-      max_results: 10,
+      max_results: 50,
     }
   );
   console.log(results);
