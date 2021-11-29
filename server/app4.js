@@ -17,7 +17,7 @@ const app = express();
 app.use(cors());
 const server = http.createServer(app);
 
-app.get("/", async (req, res) => {
+app.get("/geokeyword", async (req, res) => {
   const range = req.query.range;
   const coords = JSON.parse(req.query.position);
   const keyword = req.query.keyword;

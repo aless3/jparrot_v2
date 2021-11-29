@@ -45,7 +45,7 @@ function App() {
 
   const searchTweets = async () => {
     try {
-      const result = await axios.get("http://localhost:8000", {
+      const result = await axios.get("http://localhost:8000/geokeyword", {
         params: {
           range,
           position,
