@@ -3,6 +3,13 @@ import ReactDOM, { render } from "react-dom";
 import "./App.css";
 import Tweet from "./Tweet";
 import axios from "axios";
+
+
+
+import { TagCloud } from 'react-tagcloud';
+
+
+
 import {
   MapContainer,
   TileLayer,
@@ -26,16 +33,31 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
+
+
 function App() {
   var marker = {};
   const [range, setRange] = useState(1);
-  const [position, setPosition] = useState({ lat: 0, lng: 0 });
+  var [position, setPosition] = useState({ lat: 0, lng: 0 });
+
   const [showRange, setShowRange] = useState(false);
   const [showTweets, setShowTweets] = useState(false);
+  const [showCloud, setShowCloud] = useState(true);
   const [showError, setShowError] = useState(false);
+
   const [tweets, setTweets] = useState([]);
   const [users, setUsers] = useState([]);
   const [keyword, setKeyword] = useState("");
+
+  // var data = [];
+
+  var data = [{ value: 'JavaScript', count: 38 },
+    { value: 'React', count: 30 },
+    { value: 'Nodejs', count: 28 },
+    { value: 'Express.js', count: 25 },
+    { value: 'HTML5', count: 33 },
+    { value: 'MongoDB', count: 18 },
+    { value: 'CSS3', count: 20 },];
 
   const rangeHandle = (event) => {
     setRange(() => {
@@ -53,7 +75,7 @@ function App() {
         },
       });
       console.log(result);
-      if (result.data.data != undefined) {
+      if (result.data.data !== undefined) {
         setTweets(() => {
           return result.data.data;
         });
@@ -77,10 +99,50 @@ function App() {
       return { lat: lat, lng: lng };
     });
   };
+
+  const searchTrending = async () => {
+    try {
+      const result = await axios.get("http://localhost:8000/terms", {
+        params: {
+          position
+        }
+      });
+
+
+      // result.data.forEach(function(item, index, array) {
+      //   //console.log(item, index);
+      //   if(index < 3){
+      //
+      //     let t = {value: item.name, count: item.count};
+      //     data.push(item);
+      //   }
+      // })
+       data.push(result.data);
+
+
+      // data = [{ value: 'JavaScript', count: 38 },
+      //   { value: 'React', count: 30 },
+      //   { value: 'Nodejs', count: 28 },
+      //   { value: 'Express.js', count: 25 },
+      //   { value: 'HTML5', count: 33 },
+      //   { value: 'MongoDB', count: 18 },
+      //   { value: 'CSS3', count: 20 },];
+
+      console.log(data);
+
+
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
+
+
   return (
     <div className='container'>
       <p style={{ margin: "1rem" }}>scegli una posizione sulla mappa</p>
-      {showRange && (
+      {false  && (
         <div className='input'>
           <p>Scegli un area</p>
           <input
@@ -103,6 +165,7 @@ function App() {
         </div>
       )}
 
+{false   &&
       <MapContainer
         style={{ height: "30rem" }}
         center={[44.494887, 11.3426163]}
@@ -121,7 +184,9 @@ function App() {
           setShowRange={setShowRange}
         />
       </MapContainer>
-      {showTweets && (
+}
+
+      {false  && (
         <div className='tweet-list'>
           {tweets.map((tweet) => {
             const user = users.filter((user) => user.id == tweet.author_id);
@@ -129,6 +194,22 @@ function App() {
           })}
         </div>
       )}
+      {true && (<div className='cloud'>
+
+            <SimpleCloud
+            values={data}/>
+
+            {/*<TagCloud*/}
+            {/*    minSize={12}*/}
+            {/*    maxSize={35}*/}
+            {/*    tags={data}*/}
+            {/*    shuffle={true}*/}
+            {/*    onClick={tag => alert(`'${tag.value}' was selected!`)}*/}
+            {/*/>*/}
+            <button onClick={searchTrending}>CercaTTT</button>
+          </div>
+      )}
+
 
       {showError && <div className='errormsg'>No Tweets Found :C</div>}
     </div>
@@ -160,5 +241,18 @@ function Mycomponent({ position, updatePosition, range, setShowRange }) {
     </>
   );
 }
+
+function SimpleCloud ({values}) {
+  return(
+      <TagCloud
+          minSize={12}
+          maxSize={35}
+          tags={values}
+          shuffle={true}
+          onClick={tag => alert(`'${tag.value}' was selected!`)}
+      />
+  );
+}
+
 
 export default App;
