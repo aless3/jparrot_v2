@@ -4,11 +4,7 @@ import "./App.css";
 import Tweet from "./Tweet";
 import axios from "axios";
 
-
-
-import { TagCloud } from 'react-tagcloud';
-
-
+import { TagCloud } from "react-tagcloud";
 
 import {
   MapContainer,
@@ -33,8 +29,6 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-
-
 function App() {
   var marker = {};
   const [range, setRange] = useState(1);
@@ -50,14 +44,7 @@ function App() {
   const [keyword, setKeyword] = useState("");
 
   // var data = [];
-
-  var data = [{ value: 'JavaScript', count: 38 },
-    { value: 'React', count: 30 },
-    { value: 'Nodejs', count: 28 },
-    { value: 'Express.js', count: 25 },
-    { value: 'HTML5', count: 33 },
-    { value: 'MongoDB', count: 18 },
-    { value: 'CSS3', count: 20 },];
+  const [data, setData] = useState([]);
 
   const rangeHandle = (event) => {
     setRange(() => {
@@ -104,10 +91,9 @@ function App() {
     try {
       const result = await axios.get("http://localhost:8000/terms", {
         params: {
-          position
-        }
+          position,
+        },
       });
-
 
       // result.data.forEach(function(item, index, array) {
       //   //console.log(item, index);
@@ -117,8 +103,9 @@ function App() {
       //     data.push(item);
       //   }
       // })
-       data.push(result.data);
-
+      setData(() => {
+        return result.data;
+      });
 
       // data = [{ value: 'JavaScript', count: 38 },
       //   { value: 'React', count: 30 },
@@ -129,20 +116,15 @@ function App() {
       //   { value: 'CSS3', count: 20 },];
 
       console.log(data);
-
-
     } catch (error) {
       console.error(error);
     }
-
-  }
-
-
+  };
 
   return (
     <div className='container'>
       <p style={{ margin: "1rem" }}>scegli una posizione sulla mappa</p>
-      {false  && (
+      {false && (
         <div className='input'>
           <p>Scegli un area</p>
           <input
@@ -165,28 +147,28 @@ function App() {
         </div>
       )}
 
-{false   &&
-      <MapContainer
-        style={{ height: "30rem" }}
-        center={[44.494887, 11.3426163]}
-        zoom={13}
-        scrollWheelZoom={true}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        />
+      {false && (
+        <MapContainer
+          style={{ height: "30rem" }}
+          center={[44.494887, 11.3426163]}
+          zoom={13}
+          scrollWheelZoom={true}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          />
 
-        <Mycomponent
-          position={position}
-          updatePosition={updatePosition}
-          range={range}
-          setShowRange={setShowRange}
-        />
-      </MapContainer>
-}
+          <Mycomponent
+            position={position}
+            updatePosition={updatePosition}
+            range={range}
+            setShowRange={setShowRange}
+          />
+        </MapContainer>
+      )}
 
-      {false  && (
+      {false && (
         <div className='tweet-list'>
           {tweets.map((tweet) => {
             const user = users.filter((user) => user.id == tweet.author_id);
@@ -194,22 +176,20 @@ function App() {
           })}
         </div>
       )}
-      {true && (<div className='cloud'>
+      {true && (
+        <div className='cloud'>
+          <SimpleCloud values={data} />
 
-            <SimpleCloud
-            values={data}/>
-
-            {/*<TagCloud*/}
-            {/*    minSize={12}*/}
-            {/*    maxSize={35}*/}
-            {/*    tags={data}*/}
-            {/*    shuffle={true}*/}
-            {/*    onClick={tag => alert(`'${tag.value}' was selected!`)}*/}
-            {/*/>*/}
-            <button onClick={searchTrending}>CercaTTT</button>
-          </div>
+          {/*<TagCloud*/}
+          {/*    minSize={12}*/}
+          {/*    maxSize={35}*/}
+          {/*    tags={data}*/}
+          {/*    shuffle={true}*/}
+          {/*    onClick={tag => alert(`'${tag.value}' was selected!`)}*/}
+          {/*/>*/}
+          <button onClick={searchTrending}>CercaTTT</button>
+        </div>
       )}
-
 
       {showError && <div className='errormsg'>No Tweets Found :C</div>}
     </div>
@@ -242,17 +222,16 @@ function Mycomponent({ position, updatePosition, range, setShowRange }) {
   );
 }
 
-function SimpleCloud ({values}) {
-  return(
-      <TagCloud
-          minSize={12}
-          maxSize={35}
-          tags={values}
-          shuffle={true}
-          onClick={tag => alert(`'${tag.value}' was selected!`)}
-      />
+function SimpleCloud({ values }) {
+  return (
+    <TagCloud
+      minSize={10}
+      maxSize={60}
+      tags={values}
+      shuffle={true}
+      onClick={(tag) => alert(`'${tag.value}' was selected!`)}
+    />
   );
 }
-
 
 export default App;

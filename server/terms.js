@@ -18,8 +18,6 @@ app.use(cors());
 const server = http.createServer(app);
 
 app.get("/terms", async (req, res) => {
-
-
   const coords = JSON.parse(req.query.position);
 
   let r = [];
@@ -33,32 +31,23 @@ app.get("/terms", async (req, res) => {
 
   // console.log(places.);
 
-
-
   // const trendsOfPlace = await client.v1.trendsByPlace(places);
   let place = (await client.v1.trendsClosest(1.329, -13.3)).pop().woeid;
   let trendsOfPlace = await client.v1.trendsByPlace(place);
-
-
-
 
   for (const { trends } of trendsOfPlace) {
     for (const trend of trends) {
       let count = 1;
       // if volume is not null set count
-      if(trend.tweet_volume > 1) {
+      if (trend.tweet_volume > 1) {
         count = trend.tweet_volume;
+        let item = { value: trend.name, count: count };
+        r.push(item);
       }
 
-      let item = {value: trend.name, count: count};
       // item.value = trend.name;
       // item.key = trend.name;
       // item.count = count;
-
-      console.log(item);
-
-
-      r.push(item);
     }
   }
 
