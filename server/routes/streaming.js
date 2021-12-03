@@ -1,25 +1,27 @@
-const {ETwitterStreamEvent, TweetStream, TwitterApi, ETwitterApiError } = require('twitter-api-v2');
-const http = require('http')
+const
+{
+    ETwitterStreamEvent,
+    TweetStream,
+    TwitterApi,
+    ETwitterApiError
+} = require('twitter-api-v2');
+
 const path = require('path')
 const express = require('express')
-const socketIo = require('socket.io')
 const appOnlyClient = new TwitterApi('AAAAAAAAAAAAAAAAAAAAAF1UWAEAAAAAS8QQjbrqLHu7VBtWkhZir4EEYU8%3DY2GweqRNYT4hYKZMTXTkI6wwdpdG7HbWURVNjZUd5eAYhm2yHO');
 
 const client = appOnlyClient.readOnly
-const app = express()
+
+var router = express.Router()
 var stream
 
-// to use sockets
-const server = http.createServer(app)
-const io = socketIo(server)
-
-app.get('/', (req, res) =>{
+router.get('/', (req, res) =>{
     res.sendFile(path.resolve(__dirname, 'index.html'))
 })
 
 const resetRules = async () => {
     var rules = await client.v2.streamRules()
-    if(rules.data?.length){
+    if(rules.data.length){
         await deleteRules(rules.data.map(rule=>rule.id))
     }
 }
@@ -76,30 +78,6 @@ const startStream = async (args, socket) => {
         console.log('FROM STREAMING')
         console.log(error)
     }
-
 }
 
-
-
-
-// io.on('connection', async (socket) => {
-//     console.log('user connected')
-//     socket.on('start-stream', async () => {
-//         await startStream(['trump'], socket)
-//         console.log('Streaming Started')
-//
-//     })
-//
-//     socket.on('end-stream', async ()=>{
-//         await stream.destroy()
-//         console.log('Streaming ended')
-//     })
-//
-//     socket.on('disconnect', ()=>{
-//         console.log('user disconnected')
-//     })
-//
-// })
-
-
-server.listen(8000, console.log('listening on 8000'))
+module.exports = router

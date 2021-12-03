@@ -1,10 +1,11 @@
-const {
-  ETwitterStreamEvent,
-  TweetStream,
-  TwitterApi,
-  ETwitterApiError,
+const
+{
+    ETwitterStreamEvent,
+    TweetStream,
+    TwitterApi,
+    ETwitterApiError,
 } = require("twitter-api-v2");
-const http = require("http");
+
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
@@ -13,11 +14,10 @@ const appOnlyClient = new TwitterApi(
 );
 const client = appOnlyClient.readOnly;
 
-const app = express();
-app.use(cors());
-const server = http.createServer(app);
+var router = express.Router();
+router.use(cors());
 
-app.get("/geokeyword", async (req, res) => {
+router.get("/geokeyword", async (req, res) => {
   const range = req.query.range;
   const coords = JSON.parse(req.query.position);
   const keyword = req.query.keyword;
@@ -36,4 +36,4 @@ app.get("/geokeyword", async (req, res) => {
   res.send(results.data);
 });
 
-server.listen(8000, console.log("listening on 8000"));
+modules.export = router

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./terms.js"
+    "start": "node ./router.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
