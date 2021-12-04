@@ -17,6 +17,7 @@ pipeline {
             agent any
             steps {
                 dir("client"){
+                    sh "npm install jest"
                     sh "npm test"
                 }
             }
