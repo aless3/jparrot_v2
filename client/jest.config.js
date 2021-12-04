@@ -6,6 +6,7 @@ const config = {
     ".(css|less)$": "<rootDir>/assets/css/mocks/styleMock.js",
     //    "\\.(css|less)$": "<rootDir>/assets/css/mocks/styleMock.js",
   },
+  testEnvironment: "jsdom",
 };
 
 module.exports = config;
