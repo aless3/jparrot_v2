@@ -8,7 +8,6 @@ import {
   FaCalendar,
 } from "react-icons/fa";
 import "./Tweet.css";
-import axios from "axios";
 
 function Tweet({ user, tweet }) {
   if (user == undefined) {

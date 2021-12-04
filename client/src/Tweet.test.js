@@ -40,7 +40,7 @@ test("test for Tweet component", () => {
     render(<Tweet user={user} tweet={tweet} />, container);
   });
 
-  let u = container.getElementbyClass("name");
+  let u = container.querySelector(".name");
 
   expect(u.textContent).toBe("luca");
 });
