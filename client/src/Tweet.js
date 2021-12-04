@@ -15,11 +15,6 @@ function Tweet({ user, tweet }) {
     //console.log(user);
     //console.log(tweet);
     console.error("UNDEFINED");
-    return (
-      <>
-        <div>error!!</div>
-      </>
-    );
   } else {
     console.log("defined");
   }
