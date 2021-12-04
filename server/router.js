@@ -1,22 +1,38 @@
-var express = require('express')
-var app = express()
+require("dotenv").config();
+var express = require("express");
+var app = express();
 
-var terms = require('./routes/terms.js')
-app.use('/terms', terms)
+const http = require("http");
+const server = http.createServer(app);
+const socketIo = require("socket.io");
+global.io = socketIo(server);
 
-var streaming = require('./routes/streaming.js')
-app.use('/stream', streaming)
+var terms = require("./routes/terms.js");
+app.use("/terms", terms);
 
-var maps = require('./routes/maps.js')
-app.use('/map', maps)
+var streaming = require("./routes/streaming.js");
+app.use("/stream", streaming);
 
-var index = require('./routes/index.js')
-app.use('/index', index)
+var maps = require("./routes/maps.js");
+app.use("/map", maps);
 
-var users = require('./routes/users.js')
-app.use('/users', users)
+var index = require("./routes/index.js");
+app.use("/index", index);
 
-const http = require('http')
-const server = http.createServer(app)
+var users = require("./routes/users.js");
+app.use("/users", users);
 
 server.listen(8000, console.log("listening on 8000"));
+
+// io.on("connection", (socket) => {
+//   console.log("user connected");
+
+//   socket.on("start-stream", () => {
+//     console.log("stream starting");
+//     startStream(socket);
+//   });
+//   socket.on("end-stream", () => {
+//     console.log("stream closing");
+//     stream.close();
+//   });
+// });
