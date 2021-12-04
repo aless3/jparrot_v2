@@ -8,20 +8,25 @@ const
 
 const path = require('path')
 const express = require('express')
-const appOnlyClient = new TwitterApi('AAAAAAAAAAAAAAAAAAAAAF1UWAEAAAAAS8QQjbrqLHu7VBtWkhZir4EEYU8%3DY2GweqRNYT4hYKZMTXTkI6wwdpdG7HbWURVNjZUd5eAYhm2yHO');
+const app = express()
+const http = require('http')
+const server = http.createServer(app);
+const socketIo = require('socket.io')
+//const io = app.get('io')
+const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 
 const client = appOnlyClient.readOnly
 
 var router = express.Router()
 var stream
 
-router.get('/', (req, res) =>{
-    res.sendFile(path.resolve(__dirname, 'index.html'))
+router.get('/home', (req, res) =>{
+    res.sendFile(path.resolve(__dirname, '../index.html'))
 })
 
 const resetRules = async () => {
     var rules = await client.v2.streamRules()
-    if(rules.data.length){
+    if(rules.data?.length){
         await deleteRules(rules.data.map(rule=>rule.id))
     }
 }
@@ -79,5 +84,18 @@ const startStream = async (args, socket) => {
         console.log(error)
     }
 }
+
+io.on('connection', (socket)=>{
+    console.log('user connected')
+
+    socket.on('start-stream', ()=>{
+        console.log('stream starting')
+        startStream(['trump'],socket)
+    })
+    socket.on('end-stream', ()=>{
+        console.log('stream closing')
+        stream.close()
+    })
+})
 
 module.exports = router

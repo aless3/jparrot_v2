@@ -1,17 +1,14 @@
-const
-{
-    ETwitterStreamEvent,
-    TweetStream,
-    TwitterApi,
-    ETwitterApiError,
+const {
+  ETwitterStreamEvent,
+  TweetStream,
+  TwitterApi,
+  ETwitterApiError,
 } = require("twitter-api-v2");
 
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
-const appOnlyClient = new TwitterApi(
-  "AAAAAAAAAAAAAAAAAAAAAOKvNwEAAAAAoWNV8XrBS7KsdCqAZ6GHEkWZXm8%3D0pUlsutplEvsnmu9NQLbSjjvGq1zTs7YFKSxDtQr3bQHitkpN5"
-);
+const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const client = appOnlyClient.readOnly;
 
 var router = express.Router();
@@ -50,4 +47,4 @@ router.get("/", async (req, res) => {
   res.send(r);
 });
 
-module.exports = router
+module.exports = router;
