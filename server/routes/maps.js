@@ -36,4 +36,4 @@ router.get("/geokeyword", async (req, res) => {
   res.send(results.data);
 });
 
-modules.export = router
+module.exports = router

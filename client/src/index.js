@@ -1,13 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import Tweet from "./Tweet.js"
+import Maps from "./maps_frontEnd";
+import Tweet from "./Tweet.js";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Links from "./link";
 
 //import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <div>
+        <p>
+          <Link to='/'>term cloud</Link>
+        </p>
+        <p>
+          <Link to='/map'>Mapps</Link>
+        </p>
+      </div>
+      <Routes>
+        <Route path='/' element={<App />}></Route>
+        <Route path='/map' element={<Maps />}></Route>
+      </Routes>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

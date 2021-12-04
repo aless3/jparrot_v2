@@ -26,7 +26,7 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-function maps_frontEnd() {
+function Maps_frontEnd() {
   var marker = {};
   const [range, setRange] = useState(1);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
@@ -45,7 +45,7 @@ function maps_frontEnd() {
 
   const searchTweets = async () => {
     try {
-      const result = await axios.get("http://localhost:8000/geokeyword", {
+      const result = await axios.get("http://localhost:8000/map/geokeyword", {
         params: {
           range,
           position,
@@ -161,4 +161,4 @@ function Mycomponent({ position, updatePosition, range, setShowRange }) {
   );
 }
 
-export default maps_frontEnd;
+export default Maps_frontEnd;

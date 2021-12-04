@@ -18,7 +18,7 @@ var router = express.Router();
 
 router.use(cors());
 
-router.get("/terms", async (req, res) => {
+router.get("/", async (req, res) => {
   const coords = JSON.parse(req.query.position);
 
   let r = [];
