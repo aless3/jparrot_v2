@@ -21,17 +21,17 @@ afterEach(() => {
 test("test for Tweet component", () => {
   var user = {
     name: "luca",
-    userName: "cane",
+    username: "cane",
     profile_image_url: "",
   };
 
   var tweet = {
-    created_at: "0.0.0T0.0.0",
+    created_at: "2021-09-15T23:05.0",
     text: "god i dead",
     public_metrics: {
       like_count: "12",
-      quote_count: "00",
-      reply_count: "012",
+      quote_count: "36",
+      reply_count: "50",
       retweet_count: "125",
     },
   };
@@ -40,7 +40,12 @@ test("test for Tweet component", () => {
     render(<Tweet user={user} tweet={tweet} />, container);
   });
 
-  let u = container.querySelector(".name");
-
-  expect(u.textContent).toBe("luca");
+  expect(container.querySelector(".name").textContent).toBe("luca");
+  expect(container.querySelector(".username").textContent).toBe("@cane");
+  expect(container.querySelector(".text").textContent).toBe("god i dead");
+  expect(container.querySelector(".reply").textContent).toBe("50");
+  expect(container.querySelector(".like").textContent).toBe("12");
+  expect(container.querySelector(".retweet").textContent).toBe("125");
+  expect(container.querySelector(".quote").textContent).toBe("36");
+  expect(container.querySelector(".date").textContent).toBe("2021-09-1523:05");
 });
