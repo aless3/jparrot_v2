@@ -4,7 +4,6 @@ import App from "./App";
 import Maps from "./maps_frontEnd";
 import Tweet from "./Tweet.js";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Links from "./link";
 
 //import reportWebVitals from "./reportWebVitals";
 
