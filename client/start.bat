@@ -1,0 +1,1 @@
+START CMD /C "npm start"
