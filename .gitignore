@@ -7,6 +7,3 @@
 
 # idea files
 .idea/
-
-#dotenv
-**/.env
