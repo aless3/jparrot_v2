@@ -12,15 +12,19 @@ const router = express.Router();
 router.use(cors());
 
 router.get("/", async (req, res) => {
-  const coords = JSON.parse(req.query.position);
+  let latitude = req.query.latitude;
+  let longitude = req.query.longitude;
 
-  let latitude = 1.329;
-  let longitude = -13.3;
-
-  if(coords !== undefined){
-    latitude = coords.lat;
-    longitude = coords.lng;
-  }
+  console.log("lat");
+  console.log("lat");
+  console.log("lat");
+  console.log("lat");
+  console.log("lat");
+  console.log("lat");
+  console.log(req.query);
+  console.log("lat");
+  console.log("lat");
+  console.log("lat");
 
   let r = [];
 

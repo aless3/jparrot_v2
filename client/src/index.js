@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import App from "./Terms_frontEnd";
 import Maps from "./maps_frontEnd";
 import Tweet from "./Tweet.js";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
@@ -15,7 +15,7 @@ ReactDOM.render(
           <Link to='/'>term cloud</Link>
         </p>
         <p>
-          <Link to='/map'>Mapps</Link>
+          <Link to='/map'>Maps</Link>
         </p>
       </div>
       <Routes>
