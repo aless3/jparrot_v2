@@ -45,7 +45,7 @@ function Maps_frontEnd() {
 
   const searchTweets = async () => {
     try {
-      const result = await axios.get("http://localhost:8000/map/geokeyword", {
+      const result = await axios.get("http://localhost:8000/map/geo-keyword", {
         params: {
           range,
           position,

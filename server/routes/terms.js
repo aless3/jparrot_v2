@@ -1,11 +1,7 @@
 const {
-  ETwitterStreamEvent,
-  TweetStream,
-  TwitterApi,
-  ETwitterApiError,
+  TwitterApi
 } = require("twitter-api-v2");
 
-const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);

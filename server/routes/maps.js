@@ -1,11 +1,7 @@
 const {
-  ETwitterStreamEvent,
-  TweetStream,
-  TwitterApi,
-  ETwitterApiError,
+  TwitterApi
 } = require("twitter-api-v2");
 
-const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
@@ -14,7 +10,7 @@ const client = appOnlyClient.readOnly;
 const router = express.Router();
 router.use(cors());
 
-router.get("/geokeyword", async (req, res) => {
+router.get("/geo-keyword", async (req, res) => {
   const range = req.query.range;
   const coords = JSON.parse(req.query.position);
   const keyword = req.query.keyword;
