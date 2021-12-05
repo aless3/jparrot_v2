@@ -1,7 +1,7 @@
 @echo off
 
 cd .\server
-START CMD /C "npm start"
+START CMD /C "npx nodemon router.js"
 
 cd ..
 
