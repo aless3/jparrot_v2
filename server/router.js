@@ -4,8 +4,8 @@ const app = express();
 
 const http = require("http");
 const server = http.createServer(app);
-const socketIo = require("socket.io");
-global.io = socketIo(server);
+const { Server } = require("socket.io");
+global.io = new Server(server);
 
 const terms = require("./routes/terms.js");
 app.use("/terms", terms);
@@ -22,7 +22,7 @@ app.use("/index", index);
 const users = require("./routes/users.js");
 app.use("/users", users);
 
-server.listen(8000, console.log("listening on 8000"));
+server.listen(8000, ()=>{console.log("listening on 8000")});
 
 // io.on("connection", (socket) => {
 //   console.log("user connected");
