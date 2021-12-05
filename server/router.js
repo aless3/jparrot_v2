@@ -19,9 +19,6 @@ app.use("/map", maps);
 const index = require("./routes/index.js");
 app.use("/index", index);
 
-const users = require("./routes/users.js");
-app.use("/users", users);
-
 server.listen(8000, ()=>{console.log("listening on 8000")});
 
 // io.on("connection", (socket) => {
