@@ -11,7 +11,7 @@ const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const client = appOnlyClient.readOnly;
 
-var router = express.Router();
+const router = express.Router();
 router.use(cors());
 
 router.get("/geokeyword", async (req, res) => {

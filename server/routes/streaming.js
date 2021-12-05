@@ -10,41 +10,39 @@ const path = require('path')
 const express = require('express')
 const app = express()
 const http = require('http')
-const server = http.createServer(app);
-const socketIo = require('socket.io')
-//const io = app.get('io')
+
 const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 
 const client = appOnlyClient.readOnly
 
-var router = express.Router()
-var stream
+const router = express.Router();
+let stream;
 
 router.get('/home', (req, res) =>{
     res.sendFile(path.resolve(__dirname, '../index.html'))
 })
 
 const resetRules = async () => {
-    var rules = await client.v2.streamRules()
+    let rules = await client.v2.streamRules()
     if(rules.data?.length){
         await deleteRules(rules.data.map(rule=>rule.id))
     }
 }
 
-const setRules = async (arguments) => {
-    if(arguments.length > 0){
+const setRules = async (rules) => {
+    if(rules.length > 0){
         await client.v2.updateStreamRules({
-            add: arguments.map((keyword)=>{
+            add: rules.map((keyword)=>{
                 return{value: keyword}
             })
         })
-        var rules = await client.v2.streamRules()
-        console.log(rules)
+        let streamRules = await client.v2.streamRules();
+        console.log(streamRules)
     }
 }
 
 const getRules = async () => {
-     return await client.v2.streamRules()
+     return client.v2.streamRules()
 }
 
 const deleteRules = async (args) => {
@@ -59,7 +57,7 @@ const deleteRules = async (args) => {
 }
 
 const startStream = async (args, socket) => {
-    var i = 0
+    let i = 0;
     try{
         await resetRules()
         await setRules(args)
@@ -90,7 +88,7 @@ io.on('connection', (socket)=>{
 
     socket.on('start-stream', ()=>{
         console.log('stream starting')
-        startStream(['trump'],socket)
+        startStream(['trump'], socket).then()
     })
     socket.on('end-stream', ()=>{
         console.log('stream closing')

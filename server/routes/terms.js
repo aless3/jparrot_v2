@@ -11,26 +11,24 @@ const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const client = appOnlyClient.readOnly;
 
-var router = express.Router();
+const router = express.Router();
 
 router.use(cors());
 
 router.get("/", async (req, res) => {
   const coords = JSON.parse(req.query.position);
 
+  let latitude = 1.329;
+  let longitude = -13.3;
+
+  if(coords !== undefined){
+    latitude = coords.lat;
+    longitude = coords.lng;
+  }
+
   let r = [];
-  //
-  // const { result } = await client.v1.geoReverseGeoCode({ lat: 1.329, long: -13.3 });
-  //
-  // for (const place of result.places) {
-  //   console.log(place); // PlaceV1
-  // }
-  //
 
-  // console.log(places.);
-
-  // const trendsOfPlace = await client.v1.trendsByPlace(places);
-  let place = (await client.v1.trendsClosest(1.329, -13.3)).pop().woeid;
+  let place = (await client.v1.trendsClosest(latitude, longitude)).pop().woeid;
   let trendsOfPlace = await client.v1.trendsByPlace(place);
 
   for (const { trends } of trendsOfPlace) {
