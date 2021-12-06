@@ -3,17 +3,25 @@ pipeline {
     tools {nodejs "NodeJS5"}
 
     stages {
-        stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv ("https://aminsep.disi.unibo.it/sonarqube"){
-                }
-                script {
-                    def scannerHome = tool 'sonarScanner';
-                    withSonarQubeEnv('sonarqube') {
-                        sh "${tool("sonar-scanner")}/bin/sonar-scanner -Dsonar.projectKey=reactapp -Dsonar.projectName=reactapp"
+        stage("npm install --- install necessary libraries"){
+                    steps {
+                        dir("client"){
+                            sh "npm install"
+                        }
+                        dir("server"){
+                            sh "npm install"
+                        }
                     }
                 }
-            }
-        }
+
+                stage("Client tests") {
+                    agent any
+                    steps {
+                        dir("client"){
+                            sh "npm install jest"
+                            sh "npm test"
+                        }
+                    }
+                }
     }
 }
