@@ -1,7 +1,9 @@
 pipeline {
     agent any
-    tools {nodejs "NodeJS5"}
-    tools {sonar-scanner}
+    tools {
+        nodejs "NodeJS5"
+        SonarScanner "SonarScanner"
+    }
 
     stages {
         stage("npm install --- install necessary libraries"){
@@ -25,7 +27,7 @@ pipeline {
             }
         }
 
-        stage("SonarQube"){
+        stage("SonarScanner"){
             step("SonarScanner"){
                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.host.url=https://aminsep.disi.unibo.it/sonarqube -Dsonar.login=c87ca362a38b9a6127143e2ca2aaa1a68b76edc7 -Dsonar.projectKey=jParrot2 -Dsonar.host.url=https://aminsep.disi.unibo.it/sonarqube -Dsonar.projectBaseDir=/var/jenkins_home/workspace/parrotTest"
             }
