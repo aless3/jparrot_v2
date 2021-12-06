@@ -22,15 +22,5 @@ pipeline {
                 }
             }
         }
-
-        stage("Server tests") {
-                    agent any
-                    steps {
-                        dir("client"){
-                            sh "npm install jest"
-                            sh "npm test"
-                        }
-                    }
-                }
     }
 }
