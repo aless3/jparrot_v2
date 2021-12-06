@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {nodejs "NodeJS5"}
-    tools {sonar "SonarScanner"}
+    tools {sonar-scanner "SonarScanner"}
 
     stages {
         stage("npm install --- install necessary libraries"){
