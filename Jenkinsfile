@@ -28,7 +28,7 @@ pipeline {
 
         stage("SonarScanner"){
             steps {
-                 tool {
+                 tools {
                     sonar "SonarScanner"
                  }
                  step ("${scannerHome}/bin/sonar-scanner") {
