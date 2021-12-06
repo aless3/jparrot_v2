@@ -2,8 +2,6 @@ pipeline {
     agent any
     tools {nodejs "NodeJS5"}
 
-    def scannerHome = tool 'SonarScanner 4.0';
-
     stages {
         stage("npm install --- install necessary libraries"){
             steps {
