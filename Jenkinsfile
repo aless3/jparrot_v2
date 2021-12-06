@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {nodejs "NodeJS5"}
     stages {
-        stage("npm install"){
+        stage("npm install --- install necessary libraries"){
             steps {
                 dir("client"){
                     sh "npm install"
@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-        stage("client test") {
+        stage("Client tests") {
             agent any
             steps {
                 dir("client"){
@@ -22,5 +22,15 @@ pipeline {
                 }
             }
         }
+
+        stage("Server tests") {
+                    agent any
+                    steps {
+                        dir("client"){
+                            sh "npm install jest"
+                            sh "npm test"
+                        }
+                    }
+                }
     }
 }
