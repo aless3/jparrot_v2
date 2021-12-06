@@ -27,7 +27,7 @@ pipeline {
         }
 
         stage("SonarScanner"){
-            step("SonarScanner"){
+            dir("."){
             tool {
                 sonar "SonarScanner"
             }
