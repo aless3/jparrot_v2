@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        SonarScanner "sonar-scanner"
+        SonarScanner "sonar"
     }
 
     stages {
