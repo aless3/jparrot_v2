@@ -18,6 +18,12 @@ router.get('/home', (req, res) =>{
     res.sendFile(path.resolve(__dirname, '../index.html'))
 })
 
+/**
+ *  Rule reset function.
+ *  Deletes all set rules.
+ *  @async
+ *
+ */
 const resetRules = async () => {
     let rules = await client.v2.streamRules()
     if(rules.data?.length){
@@ -25,6 +31,13 @@ const resetRules = async () => {
     }
 }
 
+/**
+ *  Rule insertion function.
+ *  Adds rules passed by argument. (WHAT DOES IT DO WITH ALREADY EXISTING RULES?)
+ *  @async
+ *  @param rules - the list of rule strings to add to the rules applied for tweets filtering.
+ *
+ */
 const setRules = async (rules) => {
     if(rules.length > 0){
         await client.v2.updateStreamRules({
@@ -37,10 +50,23 @@ const setRules = async (rules) => {
     }
 }
 
+/**
+ *  Rule output function.
+ *  Returns all the rules applied for tweets filtering.
+ *  @async
+ *
+ */
 const getRules = async () => {
      return client.v2.streamRules()
 }
 
+/**
+ *  Rule deletion function.
+ *  Deletes rules passed by argument, keeps all others.
+ *  @async
+ *  @param args - the list of rule IDs to remove from the rules applied for tweets filtering.
+ *
+ */
 const deleteRules = async (args) => {
     if(args.length > 0){
         await client.v2.updateStreamRules({
@@ -52,6 +78,14 @@ const deleteRules = async (args) => {
     }
 }
 
+/**
+ *  Streaming function.
+ *  Sets rules, starts stream
+ *  @async
+ *  @param args - the list of rules to set for tweets filtering
+ *  @param socket - the io socket to emit data to
+ *
+ */
 const startStream = async (args, socket) => {
     let i = 0;
     try{

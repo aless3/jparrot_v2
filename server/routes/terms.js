@@ -11,19 +11,20 @@ const router = express.Router();
 
 router.use(cors());
 
+/**
+ *  Get function.
+ *  Gets latitude and longitude from request. Uses it to compile the term cloud.
+ *  @async
+ *  @param req - the request handler from the client.
+ *  @param res - the response handler for the client.
+ *
+ */
 router.get("/", async (req, res) => {
   let latitude = req.query.latitude;
   let longitude = req.query.longitude;
 
   console.log("lat");
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
   console.log(req.query);
-  console.log("lat");
-  console.log("lat");
   console.log("lat");
 
   let r = [];

@@ -123,7 +123,16 @@ router.use(cors());
 //     return (result);
 // }
 
-async function sentimentCount(keyword){
+/**
+ *  Sentiment Analysis function.
+ *  Takes a keyword and counts tweets with that keyword and positive/negative words
+ *  Result is dependent on percentage of tweets with positive/negative words
+ *
+ *  @async
+ *  @param {string} keyword - the keyword to count occurencies of
+ *
+ */
+async function sentimentCount(keyword) {
     let positiveTweets = await client.v2.tweetCountRecent(
         `${keyword} (happy OR exciting OR excited OR favorite OR fav OR amazing OR lovely OR incredible)`,
         {"granularity": "day"}
@@ -153,7 +162,6 @@ async function sentimentCount(keyword){
         day.neg_count = negativeTweets.data.at(i).tweet_count;
         day.tot_count = totalTweets.data.at(i).tweet_count;
         result.days.push(day);
-
 
         posCount += positiveTweets.data.at(i).tweet_count;
         negCount += negativeTweets.data.at(i).tweet_count;
