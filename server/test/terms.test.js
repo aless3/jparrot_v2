@@ -28,8 +28,6 @@ test('check searchTerms returns an object usable by organizeTrendsOfPlace', asyn
     expected.name = expect.any(String);
     expected.tweet_volume = expect.any(Number);
 
-    // expect(trendsOfPlace).toStrictEqual(expect.objectContaining(expected))
-
     for (const { trends } of trendsOfPlace) {
         for (const trend of trends) {
             if (trend.tweet_volume > 1) {
