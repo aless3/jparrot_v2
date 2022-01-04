@@ -29,7 +29,7 @@ function organizeTrendsOfPlace(trendsOfPlace){
   return r;
 }
 
-async function searchTerms(client, req) {
+async function searchTerms(req, client = termsClient) {
   let latitude = req.query.latitude;
   let longitude = req.query.longitude;
 
@@ -38,7 +38,7 @@ async function searchTerms(client, req) {
 }
 
 router.get("/", async (req, res) => {
-  let trendsOfPlace = await searchTerms(termsClient, req);
+  let trendsOfPlace = await searchTerms(req);
   let result = organizeTrendsOfPlace(trendsOfPlace)
   res.send(result);
 });

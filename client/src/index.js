@@ -1,26 +1,35 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./Terms_frontEnd";
+import Terms from "./Terms_frontEnd";
 import Maps from "./maps_frontEnd";
-import Tweet from "./Tweet.js";
+import Sentiment from "./Sentiment_frontEnd";
+
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-//import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <div>
         <p>
-          <Link to='/'>term cloud</Link>
+          <Link to='/map'>Maps</Link>
         </p>
         <p>
-          <Link to='/map'>Maps</Link>
+          <Link to='/sentiment'>Sent</Link>
+        </p>
+        <p>
+          <Link to='/terms'>Terms</Link>
+        </p>
+        <p>
+          <Link to='/stream'>Stream</Link>
         </p>
       </div>
       <Routes>
-        <Route path='/' element={<App />}></Route>
-        <Route path='/map' element={<Maps />}></Route>
+        {/*<Route path='/' element={<App/>}/>*/}
+        <Route path='/map' element={<Maps/>}/>
+        <Route path='/sentiment' element={<Sentiment/>}/>
+        <Route path='/terms' element={<Terms/>}/>
+        {/*<Route path='/stream' element={<Streaming/>}/>*/}
       </Routes>
     </Router>
   </React.StrictMode>,

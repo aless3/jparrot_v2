@@ -165,7 +165,7 @@ function Sentiment_frontEnd() {
 
             <div className="sentiment">
                 {showSentimentData &&
-                    <p>The sentiment value of tweets with this keyword is <b>{sentimentName}</b> (value: {sentiment}</p>
+                    <p>The sentiment value of tweets with this keyword is <b>{sentimentName}</b> (value: {sentiment})</p>
                 }
             </div>
 

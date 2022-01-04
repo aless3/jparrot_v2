@@ -10,7 +10,7 @@ const mapsClient = appOnlyClient.readOnly;
 const router = express.Router();
 router.use(cors());
 
-async function searchGeo(client, req) {
+async function searchGeo(req, client = mapsClient) {
   const range = req.query.range;
   const coords = JSON.parse(req.query.position);
   const keyword = req.query.keyword;
@@ -29,12 +29,7 @@ async function searchGeo(client, req) {
 }
 
 router.get("/geo-keyword", async (req, res) => {
-  let result = await searchGeo(mapsClient, req);
-
-  console.log("data");
-  console.log(result.data);
-  console.log("/data");
-
+  let result = await searchGeo(req);
   res.send(result);
 });
 

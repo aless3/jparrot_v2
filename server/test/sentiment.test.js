@@ -67,12 +67,3 @@ test('check sentimentCount computes the data correctly using stored blobs', asyn
     expect(file1RealOutput).toEqual(file1ExpectedOutput);
     expect(file2RealOutput).toEqual(file2ExpectedOutput);
 });
-
-// test('check searchSentiment returns error when not authenticated', async () => {
-//     let req = {};
-//     req.query = {};
-//     req.query.keyword = "covid";
-//
-//     // we do not authenticate, searchTerms should return an error
-//     await expect(sentiment.searchSentiment(req)).rejects.toThrowError();
-// });

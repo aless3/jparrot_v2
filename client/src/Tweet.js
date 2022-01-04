@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+
 import {
   FaRetweet,
   FaReply,
@@ -10,9 +9,7 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet }) {
-  if (user == undefined) {
-    //console.log(user);
-    //console.log(tweet);
+  if (user === undefined) {
     console.error("UNDEFINED");
   } else {
     console.log("defined");

@@ -11,10 +11,13 @@ const terms = require("./routes/terms.js");
 app.use("/terms", terms.router);
 
 const streaming = require("./routes/streaming.js");
-app.use("/stream", streaming);
+app.use("/stream", streaming.router);
 
 const maps = require("./routes/maps.js");
 app.use("/map", maps.router);
+
+const sentiment = require("./routes/sentiment.js");
+app.use("/sentiment", sentiment.router);
 
 const index = require("./routes/index.js");
 app.use("/index", index);

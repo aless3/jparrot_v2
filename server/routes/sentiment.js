@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.use(cors());
 
-async function searchCounts(client, req) {
+async function searchCounts(req, client = sentimentClient) {
     let keyword = req.query.keyword;
 
     let positiveTweets = await client.v2.tweetCountRecent(
@@ -107,7 +107,7 @@ async function sentimentCount(counts){
 }
 
 router.get("/", async (req, res) => {
-    let counts = await searchCounts(sentimentClient, req);
+    let counts = await searchCounts(req);
     let result = await sentimentCount(counts);
     res.send(result);
 });
