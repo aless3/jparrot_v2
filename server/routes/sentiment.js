@@ -5,139 +5,42 @@ const {
 const express = require("express");
 const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
-const client = appOnlyClient.readOnly;
+const sentimentClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
 router.use(cors());
 
-// async function sentimentAnalysis(keyword) {
-//     let numTweets = 20;
-//     let numPos = 0;
-//     let numNeg = 0;
-//
-//
-//     let posTweets = (await client.v2.search(
-//         `${keyword} positive`,
-//         {
-//             "tweet.fields": ["created_at"],
-//             max_results: numTweets,
-//         }
-//     )).data.data;
-//
-//     if (posTweets !== undefined) {
-//         numPos = posTweets.length;
-//     }
-//
-//     let negTweets = (await client.v2.search(
-//         `${keyword} negative`,
-//         {
-//             "tweet.fields": ["created_at"],
-//             max_results: numTweets,
-//         }
-//     )).data.data;
-//
-//     if (negTweets !== undefined) {
-//         numNeg = negTweets.length;
-//     }
-//
-//     let result;
-//
-//     if (numPos < numTweets && numNeg < numTweets) { // too few tweets, analyze them this way
-//         if (numPos === 0 && numNeg === 0) { // absolutely no data
-//             result = 0;
-//             // console.log("no data");
-//         } else if (numPos > numNeg) { // more positive than negative data
-//             if (numNeg === 0) { // no negative data, max value
-//                 result = 7;
-//                 // console.log("no neg data");
-//             } else { // very few negative data
-//                 result = numPos / numNeg; // the result may exceed the range -7 to +7, we cap it later
-//                 // console.log("very few neg data");
-//             }
-//         } else if (numPos < numNeg) { // more negative than negative data
-//             if (numPos === 0) { // no positive data, min value
-//                 result = -7;
-//                 // console.log("no pos data");
-//             } else { // very few positive data
-//                 result = numNeg / numPos * -1; // the result may exceed the range -7 to +7, we cap it later
-//                 // console.log("very few pos data");
-//             }
-//         } else { // equal negative and positive, but very small sample
-//             result = 0;
-//             // console.log("same data");
-//         }
-//     } else { // yay tweets, analyze them this way
-//         let today = new Date();
-//         let sevenDaysAgo = new Date(today.getDate() - 7); // min date of a tweet: a week ago
-//
-//         let lastPosTweet = posTweets.at(-1);
-//         let lastPos = new Date(lastPosTweet.created_at);
-//
-//         let lastNegTweet = negTweets.at(-1);
-//         let lastNeg = new Date(lastNegTweet.created_at);
-//
-//         if (posTweets < numTweets) { // very few positive tweets: we cap the date at the min
-//             lastPos = sevenDaysAgo;
-//         }
-//
-//         if (negTweets < numTweets) { // very few negative tweets: we cap the date at the min
-//             lastNeg = sevenDaysAgo;
-//         }
-//
-//         let diffTime = Math.abs(lastPos - lastNeg);
-//
-//         let diff = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-//
-//         // console.log("diff days: ".concat(diff.toString()));
-//
-//
-//         if (diff === 0 && lastPos !== sevenDaysAgo && lastNeg !== sevenDaysAgo) { // so much tweets! check difference between hours instead of days
-//             let diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-//             diff = diffHours * 7 / 24; // map it between -7 and +7 instead of -24 and +24 (hours in a day) to keep consistency
-//
-//             // console.log("diff hours: ".concat(diff.toString()));
-//
-//             if (diff === 0) { // super hot topic! check difference between minutes instead of days or hours
-//                 let diffMinutes = Math.floor(diffTime / (1000 * 60));
-//                 diff = diffMinutes * 7 / 60; // map it between -7 and +7 instead of -60 and +60 (minutes in an hour) to keep consistency
-//
-//                 // console.log("diff minutes: ".concat(diff.toString()));
-//             }
-//         }
-//
-//         result = diff;
-//         // we used the Math.abs earlier, we set it to negative if the negative tweet is the most recent
-//         if (lastPos < lastNeg) { // the more recent the better
-//             result = result * -1;
-//         }
-//     }
-//
-//     // cap result between -7 and +7 if it exceeds those values
-//     if (result > 7) {
-//         result = 7;
-//     } else if (result < -7) {
-//         result = -7;
-//     }
-//
-//     return (result);
-// }
+async function searchCounts(client, req) {
+    let keyword = req.query.keyword;
 
-async function sentimentCount(keyword){
     let positiveTweets = await client.v2.tweetCountRecent(
-        `${keyword} (happy OR exciting OR excited OR favorite OR fav OR amazing OR lovely OR incredible)`,
+        `${keyword} (happy OR exciting OR excited OR favorite OR fav OR amazing OR lovely OR incredible) -horrible -worst -sucks -bad -disappointing`,
         {"granularity": "day"}
     );
 
     let negativeTweets = await client.v2.tweetCountRecent(
-        `${keyword} (horrible OR worst OR sucks OR bad OR disappointing)`,
+        `${keyword} (horrible OR worst OR sucks OR bad OR disappointing) -happy -exciting -excited -favorite -fav -amazing -lovely -incredible`,
         {"granularity": "day"}
     );
 
     let totalTweets = await client.v2.tweetCountRecent(
-        `${keyword}`,
+        `${keyword} -is:retweet`,
         {"granularity": "day"}
     );
+
+    let counts = {};
+    counts.positiveTweets = positiveTweets;
+    counts.negativeTweets = negativeTweets;
+    counts.totalTweets = totalTweets;
+
+    return counts;
+}
+
+async function sentimentCount(counts){
+    let positiveTweets = counts.positiveTweets;
+    let negativeTweets = counts.negativeTweets;
+    let totalTweets = counts.totalTweets;
 
     const result = {};
     result.days = [];
@@ -162,6 +65,7 @@ async function sentimentCount(keyword){
 
     result.positiveCount = posCount;
     result.negativeCount = negCount;
+    result.sentimentCount = posCount + negCount;
     result.totalCount = totCount;
 
     // sentiment is a value in the range -2 -> +2, below is a table for calculating it
@@ -169,8 +73,8 @@ async function sentimentCount(keyword){
     /*
     pos %   ->  val
     90-00   ->  +2
-    67-89   ->  +1
-    33-66   ->  +0
+    66-89   ->  +1
+    33-65   ->  +0
     10-32   ->  -1
     00-09   ->  -2
      */
@@ -182,7 +86,7 @@ async function sentimentCount(keyword){
     if(posPercentage > 90){
         sentiment = 2;
         sentimentName = "Very Positive";
-    }else if(posPercentage > 67){
+    }else if(posPercentage > 66){
         sentiment = 1;
         sentimentName = "Positive";
     }else if(posPercentage > 33){
@@ -199,18 +103,13 @@ async function sentimentCount(keyword){
     result.sentiment = sentiment;
     result.sentimentName = sentimentName;
 
-    return (result) ;
+    return result;
 }
 
 router.get("/", async (req, res) => {
-    let keyword = req.query.keyword;
-
-    let result = await sentimentCount(keyword);
-
-    console.log(result);
-
+    let counts = await searchCounts(sentimentClient, req);
+    let result = await sentimentCount(counts);
     res.send(result);
-
 });
 
-module.exports = router;
+module.exports = { router, searchCounts, sentimentCount };

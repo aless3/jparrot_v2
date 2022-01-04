@@ -5,31 +5,14 @@ const {
 const express = require("express");
 const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
-const client = appOnlyClient.readOnly;
+const termsClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
 router.use(cors());
 
-router.get("/", async (req, res) => {
-  let latitude = req.query.latitude;
-  let longitude = req.query.longitude;
-
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
-  console.log(req.query);
-  console.log("lat");
-  console.log("lat");
-  console.log("lat");
-
+function organizeTrendsOfPlace(trendsOfPlace){
   let r = [];
-
-  let place = (await client.v1.trendsClosest(latitude, longitude)).pop().woeid;
-  let trendsOfPlace = await client.v1.trendsByPlace(place);
 
   for (const { trends } of trendsOfPlace) {
     for (const trend of trends) {
@@ -42,7 +25,22 @@ router.get("/", async (req, res) => {
       }
     }
   }
-  res.send(r);
+
+  return r;
+}
+
+async function searchTerms(client, req) {
+  let latitude = req.query.latitude;
+  let longitude = req.query.longitude;
+
+  let place = (await client.v1.trendsClosest(latitude, longitude)).pop().woeid;
+  return client.v1.trendsByPlace(place);
+}
+
+router.get("/", async (req, res) => {
+  let trendsOfPlace = await searchTerms(termsClient, req);
+  let result = organizeTrendsOfPlace(trendsOfPlace)
+  res.send(result);
 });
 
-module.exports = router;
+module.exports = { router, organizeTrendsOfPlace, searchTerms };
