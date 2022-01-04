@@ -17,6 +17,6 @@
     },
     "opts": {
         "recursive": true,
-        "destination": "./documentation/"        
+        "destination": "./documentation/result/"        
     }
 }

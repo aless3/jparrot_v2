@@ -37,6 +37,15 @@ async function searchCounts(req, client = sentimentClient) {
     return counts;
 }
 
+/**
+ *  Sentiment Analysis function.
+ *  Takes a keyword and counts tweets with that keyword and positive/negative words
+ *  Result is dependent on percentage of tweets with positive/negative words
+ *
+ *  @async
+ *  @param counts - object containing 20 tweets per category: negative tweets, positive tweets and total tweets
+ *
+ */
 async function sentimentCount(counts){
     let positiveTweets = counts.positiveTweets;
     let negativeTweets = counts.negativeTweets;
