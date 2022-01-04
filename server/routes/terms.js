@@ -11,6 +11,11 @@ const router = express.Router();
 
 router.use(cors());
 
+/*
+manipola i dati, contando le occorrenza di una certa parola nei tweets
+(quanto un trend è popolare)
+se il trend è null o 1 lo ignora
+*/
 function organizeTrendsOfPlace(trendsOfPlace){
   let r = [];
 
@@ -29,6 +34,9 @@ function organizeTrendsOfPlace(trendsOfPlace){
   return r;
 }
 
+/*
+gestisce la richiesta con req
+*/
 async function searchTerms(req, client = termsClient) {
   let latitude = req.query.latitude;
   let longitude = req.query.longitude;

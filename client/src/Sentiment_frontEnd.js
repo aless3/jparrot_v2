@@ -62,7 +62,7 @@ function PieChart(data){
 
 }
 
-function LineChart(data){
+function LineChart(data) {
     let lineLabels = [];
 
     let positiveDataset = {};

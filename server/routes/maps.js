@@ -10,6 +10,10 @@ const mapsClient = appOnlyClient.readOnly;
 const router = express.Router();
 router.use(cors());
 
+/*
+funzione che prende la richiesta, ci tira fuori il range, le coordinate
+e la keyword e sputa il campo data della richiesta
+*/
 async function searchGeo(req, client = mapsClient) {
   const range = req.query.range;
   const coords = JSON.parse(req.query.position);

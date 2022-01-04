@@ -11,6 +11,10 @@ const router = express.Router();
 
 router.use(cors());
 
+/*
+usa l'oggetto rec e fa le call alle API di twitter per trovare
+i tweet positivi, negativi e totali
+*/
 async function searchCounts(req, client = sentimentClient) {
     let keyword = req.query.keyword;
 

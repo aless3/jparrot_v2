@@ -38,7 +38,7 @@ const resetRules = async (client = streamingClient) => {
  *  @param client - the client to use [optional, if not passed use streamingClient
  */
 const setRules = async (rules, client = streamingClient) => {
-    if(rules.length > 0){
+    if(rules.length > 0) {
         await client.v2.updateStreamRules({
             add: rules.map((keyword)=>{
                 return{value: keyword}
@@ -77,9 +77,6 @@ const deleteRules = async (args, client = streamingClient) => {
     }
 }
 
-
-
-
 /**
  *  Streaming function.
  *  Set rules, starts stream
@@ -115,17 +112,4 @@ const startStream = async (args, socket, client = streamingClient) => {
     }
 }
 
-io.on('connection', (socket)=>{
-    console.log('user connected')
-
-    socket.on('start-stream', ()=>{
-        console.log('stream starting')
-        startStream(['trump'], socket).then()
-    })
-    socket.on('end-stream', ()=>{
-        console.log('stream closing')
-        stream.close()
-    })
-})
-
-module.exports = { router, resetRules, setRules, getRules, deleteRules, startStream};
+module.exports = { stream, router, resetRules, setRules, getRules, deleteRules, startStream };
