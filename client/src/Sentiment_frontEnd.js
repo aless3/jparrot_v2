@@ -83,13 +83,14 @@ function LineChart(data) {
     negativeDataset.tension = 0.1;
 
     for (let i = 0; i < 8; i++) {
-        let date = data.days.at(i).date.substr(0, 10); // yyyy/mm/dd is 10 characters
+        console.log(data.days.length);
+        let date = data.days[i].date.substr(0, 10); // yyyy/mm/dd is 10 characters
         lineLabels.push(date);
 
-        let pos = data.days.at(i).pos_count;
+        let pos = data.days[i].pos_count;
         positiveDataset.data.push(pos);
 
-        let neg = data.days.at(i).neg_count;
+        let neg = data.days[i].neg_count;
         negativeDataset.data.push(neg);
     }
 

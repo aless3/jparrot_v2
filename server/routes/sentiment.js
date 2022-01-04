@@ -122,6 +122,7 @@ async function sentimentCount(counts){
 router.get("/", async (req, res) => {
     let counts = await searchCounts(req);
     let result = await sentimentCount(counts);
+    console.log(result);
     res.send(result);
 });
 
