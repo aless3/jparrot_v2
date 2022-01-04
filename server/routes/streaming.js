@@ -115,17 +115,17 @@ const startStream = async (args, socket, client = streamingClient) => {
     }
 }
 
-// io.on('connection', (socket)=>{
-//     console.log('user connected')
-//
-//     socket.on('start-stream', ()=>{
-//         console.log('stream starting')
-//         startStream(['trump'], socket).then()
-//     })
-//     socket.on('end-stream', ()=>{
-//         console.log('stream closing')
-//         stream.close()
-//     })
-// })
+io.on('connection', (socket)=>{
+    console.log('user connected')
+
+    socket.on('start-stream', ()=>{
+        console.log('stream starting')
+        startStream(['trump'], socket).then()
+    })
+    socket.on('end-stream', ()=>{
+        console.log('stream closing')
+        stream.close()
+    })
+})
 
 module.exports = { router, resetRules, setRules, getRules, deleteRules, startStream};
