@@ -16,7 +16,7 @@ test('check if getRecentTweetsCount can access the info needed', async () => {
     let expected = {};
     expected.data = expect.any(Array);
 
-    let counts = await sentiment.searchCounts(client, req);
+    let counts = await sentiment.searchCounts(req, client);
 
     expect(counts.positiveTweets).toStrictEqual(
         expect.objectContaining(expected)
@@ -46,7 +46,7 @@ test('check if sentimentCount computes the data obtained by getRecentTweetsCount
     expected.sentiment = expect.any(Number);
     expected.sentimentName = expect.any(String);
 
-    let counts = await sentiment.searchCounts(client, req);
+    let counts = await sentiment.searchCounts(req, client);
     let result = await sentiment.sentimentCount(counts);
     expect(result).toStrictEqual(
         expect.objectContaining(expected)

@@ -18,7 +18,7 @@ test('check searchMap get the correct data form', async () => {
     coords.lng = 11.317804500531713;
     req.query.position = JSON.stringify(coords);
 
-    let search = await maps.searchGeo(client, req);
+    let search = await maps.searchGeo(req, client);
 
     for (let datum of search.data){
         expect(datum).toStrictEqual(expect.objectContaining({

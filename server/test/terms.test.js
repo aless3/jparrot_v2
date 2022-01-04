@@ -22,7 +22,7 @@ test('check searchTerms returns an object usable by organizeTrendsOfPlace', asyn
     req.query.latitude = 12;
     req.query.longitude = 12;
 
-    let trendsOfPlace = await terms.searchTerms(client, req);
+    let trendsOfPlace = await terms.searchTerms(req, client);
 
     let expected = {};
     expected.name = expect.any(String);
