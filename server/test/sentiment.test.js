@@ -1,4 +1,5 @@
 const sentiment = require("../routes/sentiment.js");
+
 require("dotenv").config();
 const {
     TwitterApi

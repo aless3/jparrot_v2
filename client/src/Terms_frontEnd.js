@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import "./App.css";
 import axios from "axios";
 
-import { TagCloud } from "react-tagcloud";
+import { SimpleCloud } from "./SimpleCloud";
 
-function Terms_frontEnd() {
+const Terms_frontEnd = () => {
   const [data, setData] = useState([]);
 
   const searchTrending = async () => {
@@ -26,11 +26,9 @@ function Terms_frontEnd() {
           },
         });
 
-        setData(() => {
-          return result.data;
-        });
-
-        console.log(data);
+        if(result.data !== undefined){
+          setData((result.data));
+        }
       } catch (error) {
         console.error(error);
       }
@@ -47,26 +45,12 @@ function Terms_frontEnd() {
   };
 
   return (
-    <div className='container'>
+      <div className='container'>
 
-        <div className='cloud'>
-          <SimpleCloud values={data} />
-          <button onClick={searchTrending}>Reload</button>
-        </div>
+        <SimpleCloud values={data} className='cloud' />
+        <button onClick={searchTrending}>Load/Reload</button>
 
-    </div>
-  );
-}
-
-function SimpleCloud({ values }) {
-  return (
-    <TagCloud
-      minSize={10}
-      maxSize={60}
-      tags={values}
-      shuffle={true}
-      onClick={(tag) => alert(`'${tag.value}' was selected!`)}
-    />
+      </div>
   );
 }
 

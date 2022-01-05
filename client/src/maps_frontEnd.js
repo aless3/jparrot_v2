@@ -18,6 +18,9 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+import {ShowTweets} from "./ShowTweets";
+
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
@@ -25,6 +28,7 @@ let DefaultIcon = L.icon({
   iconAnchor: [12, 41],
 });
 L.Marker.prototype.options.icon = DefaultIcon;
+
 
 function Maps_frontEnd() {
   var marker = {};
@@ -52,8 +56,8 @@ function Maps_frontEnd() {
           keyword,
         },
       });
-      console.log(result);
-      if (result.data.data != undefined) {
+
+      if (result.data.data !== undefined) {
         setTweets(() => {
           return result.data.data;
         });
@@ -62,7 +66,6 @@ function Maps_frontEnd() {
         });
         setShowError(false);
         setShowTweets(true);
-        //console.log(result);
       } else {
         setShowTweets(false);
         setShowError(true);
@@ -121,14 +124,10 @@ function Maps_frontEnd() {
           setShowRange={setShowRange}
         />
       </MapContainer>
-      {showTweets && (
-        <div className='tweet-list'>
-          {tweets.map((tweet) => {
-            const user = users.filter((user) => user.id == tweet.author_id);
-            return <Tweet key={tweet.id} user={user[0]} tweet={tweet} />;
-          })}
-        </div>
-      )}
+
+      {showTweets &&
+          <ShowTweets tweets={tweets} users={users}/>
+      }
 
       {showError && <div className='errormsg'>No Tweets Found :C</div>}
     </div>

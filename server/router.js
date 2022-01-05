@@ -19,6 +19,9 @@ app.use("/map", maps.router);
 const sentiment = require("./routes/sentiment.js");
 app.use("/sentiment", sentiment.router);
 
+const keyword = require("./routes/keyword");
+app.use("/keyword", keyword.router);
+
 const index = require("./routes/index.js");
 app.use("/index", index);
 
