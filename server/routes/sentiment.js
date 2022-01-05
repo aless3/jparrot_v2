@@ -34,10 +34,12 @@ async function searchCounts(req, client = sentimentClient) {
             {"granularity": "day"}
         );
 
-        let counts = {};
+        let counts = {}
         counts.positiveTweets = positiveTweets;
         counts.negativeTweets = negativeTweets;
         counts.totalTweets = totalTweets;
+
+        return counts;
     } catch (e) {
         console.error(e);
     }
@@ -128,8 +130,13 @@ async function sentimentCount(counts){
 
 router.get("/", async (req, res) => {
     let counts = await searchCounts(req);
+
+    console.log("sent");
+    console.log(counts);
+    console.log("sent");
+
     let result = await sentimentCount(counts);
-    console.log(result);
+
     res.send(result);
 });
 

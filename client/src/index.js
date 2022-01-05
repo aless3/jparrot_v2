@@ -1,35 +1,41 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Terms from "./Terms_frontEnd";
-import Maps from "./maps_frontEnd";
-import Sentiment from "./Sentiment_frontEnd";
+import Terms from "./components/TermsFrontEnd";
+import Maps from "./components/MapsFrontEnd";
+import Keyword from "./components/KeywordFrontEnd";
+import Streaming from './components/Streaming';
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <div>
         <p>
-          <Link to='/map'>Maps</Link>
+          <Link to='/'>Keyword</Link>
         </p>
+
         <p>
-          <Link to='/sentiment'>Sent</Link>
+          <Link to='/map'>Map</Link>
         </p>
+
         <p>
           <Link to='/terms'>Terms</Link>
         </p>
+
         <p>
           <Link to='/stream'>Stream</Link>
         </p>
       </div>
       <Routes>
-        {/*<Route path='/' element={<App/>}/>*/}
+        <Route path='/' element={<Keyword/>}/>
         <Route path='/map' element={<Maps/>}/>
-        <Route path='/sentiment' element={<Sentiment/>}/>
         <Route path='/terms' element={<Terms/>}/>
-        {/*<Route path='/stream' element={<Streaming/>}/>*/}
+        <Route path='/stream' element={<Streaming/>}/>
+        <Route path='/streaming' element={<Streaming />} />
       </Routes>
     </Router>
   </React.StrictMode>,

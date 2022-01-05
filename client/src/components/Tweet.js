@@ -10,13 +10,11 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet }) {
-  if (user === undefined) {
-    console.error("UNDEFINED");
-  } else {
-    console.log("defined");
-  }
-
   try {
+    if (user === undefined || tweet === undefined) {
+      return null;
+    }
+
     const { name, username, profile_image_url } = user;
     const { created_at, text } = tweet;
     const { like_count, quote_count, reply_count, retweet_count } =
@@ -59,8 +57,8 @@ function Tweet({ user, tweet }) {
       </div>
     );
   } catch (error) {
-    console.error(error);
-    return <></>;
+    // console.error(error);
+    return null;
   }
 }
 

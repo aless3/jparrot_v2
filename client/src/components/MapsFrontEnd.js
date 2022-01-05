@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import "./App.css";
+import "../App.css";
 import Tweet from "./Tweet";
 import axios from "axios";
 import {
@@ -30,7 +30,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 
-function Maps_frontEnd() {
+function MapsFrontEnd() {
   var marker = {};
   const [range, setRange] = useState(1);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
@@ -62,6 +62,7 @@ function Maps_frontEnd() {
           return result.data.data;
         });
         setUsers(() => {
+          console.log(result.data);
           return result.data.includes.users;
         });
         setShowError(false);
@@ -136,7 +137,6 @@ function Maps_frontEnd() {
 
 function Mycomponent({ position, updatePosition, range, setShowRange }) {
   const [clicked, setClicked] = useState(false);
-  //const map = useMap();
   const map = useMapEvents({
     click(e) {
       updatePosition(e.latlng.lat, e.latlng.lng);
@@ -160,4 +160,4 @@ function Mycomponent({ position, updatePosition, range, setShowRange }) {
   );
 }
 
-export default Maps_frontEnd;
+export default MapsFrontEnd;

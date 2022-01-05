@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, {useEffect, useState} from "react";
+import "../App.css";
 import axios from "axios";
 
 import { SimpleCloud } from "./SimpleCloud";
 
-const Terms_frontEnd = () => {
+const TermsFrontEnd = () => {
   const [data, setData] = useState([]);
+  const [firstSearch, setFirstSearch] = useState(true);
 
   const searchTrending = async () => {
     const posOptions = {
@@ -42,7 +43,15 @@ const Terms_frontEnd = () => {
       navigator.geolocation.getCurrentPosition(posSuccess, posError, posOptions);
     }
 
+    setFirstSearch(false);
+
   };
+
+  useEffect(async () => {
+    if(firstSearch){
+      await searchTrending();
+    }
+  }, [data, firstSearch]);
 
   return (
       <div className='container'>
@@ -54,4 +63,4 @@ const Terms_frontEnd = () => {
   );
 }
 
-export default Terms_frontEnd;
+export default TermsFrontEnd;

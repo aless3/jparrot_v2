@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./App.css";
+import "../App.css";
 import axios from "axios";
 
 import { PieChartSentiment } from "./PieChartSentiment";
@@ -7,7 +7,7 @@ import { LineChartSentiment } from "./LineChartSentiment";
 import {ShowTweets} from "./ShowTweets";
 import { useLocation } from "react-router-dom";
 
-function Keyword_frontend (){
+function KeywordFrontEnd (){
 
     let prevKeyword;
     const { state } = useLocation();
@@ -79,6 +79,10 @@ function Keyword_frontend (){
                 setSentiment(result.data.sentiment);
                 setSentimentName(result.data.sentimentName);
                 setShowSentimentData(true);
+
+                console.log("fr")
+                console.log(result)
+                console.log("fr")
             }else {
                 console.log("data is undefined");
             }
@@ -94,6 +98,7 @@ function Keyword_frontend (){
 
     function populateLineChart(data){
         setLineData(data);
+        console.log(data)
         setShowLineData(true);
     }
 
@@ -192,4 +197,4 @@ function Keyword_frontend (){
 
 }
 
-export default Keyword_frontend;
+export default KeywordFrontEnd;
