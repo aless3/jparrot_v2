@@ -8,6 +8,7 @@ const {
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const client = appOnlyClient.readOnly;
 
+jest.setTimeout(15000);
 
 test('check if getRecentTweetsCount can access the info needed', async () => {
     let req = {};

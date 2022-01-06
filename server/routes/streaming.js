@@ -122,20 +122,6 @@ const startStream = async (args, socket, client = streamingClient) => {
     }
 }
 
-io.on('connection', (socket)=>{
-    console.log('user connected')
-
-    socket.on('start-stream', async ()=>{
-        console.log('stream starting')
-        await startStream(['trump'], socket)
-    })
-
-    socket.on('end-stream', ()=>{
-        console.log('stream closing')
-        closeStream()
-    })
-});
-
 const getStream = () => {
     return stream;
 }

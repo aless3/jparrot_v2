@@ -10,9 +10,6 @@ global.io = new Server(server);
 const terms = require("./routes/terms.js");
 app.use("/terms", terms.router);
 
-const streaming = require("./routes/streaming.js");
-app.use("/stream", streaming.router);
-
 const maps = require("./routes/maps.js");
 app.use("/map", maps.router);
 
@@ -27,17 +24,20 @@ app.use("/index", index);
 
 server.listen(8000, ()=>{console.log("listening on 8000")});
 
-/*
-io.on("connection", (socket) => {
-    console.log("user connected");
 
-    socket.on("start-stream", () => {
-        console.log("stream starting");
-        startStream(socket);
-    });
-    socket.on("end-stream", () => {
-        console.log("stream closing");
-        stream.close();
-    });
+const streaming = require("./routes/streaming.js");
+app.use("/stream", streaming.router);
+
+io.on('connection', (socket)=>{
+    console.log('user connected')
+
+    socket.on('start-stream', async ()=>{
+        console.log('stream starting')
+        await streaming.startStream(['trump'], socket)
+    })
+
+    socket.on('end-stream', ()=>{
+        console.log('stream closing')
+        streaming.closeStream()
+    })
 });
-*/
