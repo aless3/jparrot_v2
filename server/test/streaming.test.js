@@ -1,25 +1,11 @@
-
-
-
-
-
-
-
-// const { createServer } = require("http");
-// const { Server } = require("socket.io");
-// const Client = require("socket.io-client");
-//
-// let io, serverSocket, clientSocket;
-// const httpServer = createServer();
-// io = new Server(httpServer);
-
 const streaming = require("../routes/streaming.js");
-const
-    {
-        TwitterApi
-    } = require('twitter-api-v2');
 
-const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
+require("dotenv").config();
+const {
+    TwitterApi
+} = require("twitter-api-v2");
+
+const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const client = appOnlyClient.readOnly;
 
 test('check if getRules get the correct info', async () => {

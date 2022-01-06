@@ -102,13 +102,12 @@ const startStream = async (args, socket, client = streamingClient) => {
     try{
         stream = await client.v2.searchStream({
             expansions: ["author_id"],
-            // "tweet.fields": ["created_at", "text"],
-            // "user.fields": ["username", "name", "profile_image_url"],
+            "tweet.fields": ["created_at", "text"],
+            "user.fields": ["username", "name", "profile_image_url"],
         })
         active = true;
         stream.autoReconnect = true
         stream.on(ETwitterStreamEvent.Data, async tweet => {
-            //console.log(tweet)
             if(active) {
                 socket.emit('tweet', tweet)
                 i++
