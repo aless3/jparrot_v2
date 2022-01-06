@@ -31,6 +31,9 @@ export class PieChartSentiment extends React.Component {
     pieLabels = [`Positive Tweets`, `Negative Tweets`];
 
     computeDatasets(){
+
+        console.log(this.state);
+
         return [{
             label: "Percentage of negative and positive tweets in the last seven days",
             data: [this.props.positiveCount, this.props.negativeCount],
