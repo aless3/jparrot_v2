@@ -1,21 +1,13 @@
-const
-    {
-        ETwitterStreamEvent,
-        TwitterApi
-    } = require('twitter-api-v2');
+const { ETwitterStreamEvent, TwitterApi } = require("twitter-api-v2");
 
-const path = require('path')
-const express = require('express')
+const path = require("path");
+const express = require("express");
 
 const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 const streamingClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 let stream;
-
-router.get('/home', (req, res) =>{
-    res.sendFile(path.resolve(__dirname, '../index.html'))
-})
 
 /**
  *  Rule reset function.
@@ -24,11 +16,14 @@ router.get('/home', (req, res) =>{
  *
  */
 const resetRules = async (client = streamingClient) => {
-    let rules = await client.v2.streamRules()
-    if(rules.data?.length){
-        await deleteRules(rules.data.map(rule=>rule.id))
-    }
-}
+  let rules = await client.v2.streamRules();
+  if (rules.data?.length) {
+    await deleteRules(
+      rules.data.map((rule) => rule.id),
+      client
+    );
+  }
+};
 
 /**
  *  Rule insertion function.
@@ -38,14 +33,14 @@ const resetRules = async (client = streamingClient) => {
  *  @param client - the client to use [optional, if not passed use streamingClient
  */
 const setRules = async (rules, client = streamingClient) => {
-    if(rules.length > 0) {
-        await client.v2.updateStreamRules({
-            add: rules.map((keyword)=>{
-                return{value: keyword}
-            })
-        })
-    }
-}
+  if (rules.length > 0) {
+    await client.v2.updateStreamRules({
+      add: rules.map((keyword) => {
+        return { value: keyword };
+      }),
+    });
+  }
+};
 
 /**
  *  Rule output function.
@@ -55,8 +50,8 @@ const setRules = async (rules, client = streamingClient) => {
  *  @returns {Rules} - returns the tweet filtering rules
  */
 const getRules = async (client = streamingClient) => {
-    return client.v2.streamRules()
-}
+  return client.v2.streamRules();
+};
 
 /**
  *  Rule deletion function.
@@ -66,25 +61,27 @@ const getRules = async (client = streamingClient) => {
  *  @param client - the client to use [optional, if not passed use streamingClient
  */
 const deleteRules = async (args, client = streamingClient) => {
-    if(args.length > 0){
-        await client.v2.updateStreamRules({
-            delete:{
-                ids: args
-            }
-        })
-        // console.log('Rules Deleted')
-    }
-}
+  if (args.length > 0) {
+    await client.v2.updateStreamRules({
+      delete: {
+        ids: args,
+      },
+    });
+    // console.log('Rules Deleted')
+  }
+};
 
 const reloadRules = async (args, client = streamingClient) => {
-    try{
-        await resetRules(client)
-        await setRules(args, client)
-    }catch (error){
-        console.log('FROM RESET-AND-SET ')
-        console.log(error)
-    }
-}
+  try {
+    await resetRules(client);
+    await setRules(args, client);
+    return true;
+  } catch (error) {
+    console.log("FROM RESET-AND-SET ");
+    console.log(error);
+  }
+  return false;
+};
 
 /**
  *  Streaming function.
@@ -95,35 +92,42 @@ const reloadRules = async (args, client = streamingClient) => {
  *  @param client - the client to use [optional, if not passed use streamingClient
  */
 const startStream = async (args, socket, client = streamingClient) => {
-    let i = 0;
+  await reloadRules(args, client);
 
-    await reloadRules(args, client);
+  try {
+    stream = await client.v2.searchStream({
+      expansions: ["author_id"],
+      "tweet.fields": ["created_at", "text"],
+      "user.fields": ["username", "name", "profile_image_url"],
+    });
+    stream.autoReconnect = true;
+    stream.on(ETwitterStreamEvent.Data, async (tweet) => {
+      socket.emit("tweet", tweet);
+    });
+  } catch (error) {
+    console.log("FROM STREAMING");
+    console.log(error);
+  }
 
-    try{
-        stream = await client.v2.searchStream({
-            expansions: ["author_id"],
-            "tweet.fields": ["created_at", "text"],
-            "user.fields": ["username", "name", "profile_image_url"],
-        })
-        stream.autoReconnect = true
-        stream.on(ETwitterStreamEvent.Data, async tweet => {
-            socket.emit('tweet', tweet)
-            i++
-        })
-    } catch (error){
-        console.log('FROM STREAMING')
-        console.log(error)
-    }
-
-    return stream;
-}
+  return stream;
+};
 
 const getStream = () => {
-    return stream;
-}
+  return stream;
+};
 
 const closeStream = () => {
-    stream.close();
-}
+  stream.close();
+};
 
-module.exports = { router, resetRules, setRules, getRules, deleteRules, reloadRules, getStream, startStream, closeStream };
+module.exports = {
+  router,
+  resetRules,
+  setRules,
+  getRules,
+  deleteRules,
+  reloadRules,
+  getStream,
+  startStream,
+  closeStream,
+};
