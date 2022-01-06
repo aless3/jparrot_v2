@@ -26,9 +26,9 @@ const StreamingTweet = () => {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    socket.current = io('http://localhost:8000', { transports : ['websocket'] })
-    socket.current.on('connect', () => {
-      console.log(socket.current.id)
+    socket = io.connect('http://localhost:8000', { transports : ['websocket'], 'force new connection': true })
+    socket.on('connect', () => {
+      console.log(socket.id)
     })
   }, []);
 
@@ -45,28 +45,34 @@ const StreamingTweet = () => {
 
 
   useEffect(() => {
-    socket.current.on('tweet', (tweet) => {
+    socket.on('tweet', (tweet) => {
+
+      console.log(tweet);
+
+      // let text = tweet.data.text;
+      // let includes = tweet.includes.users[0];
+
       // setElementi([...elementi, tweet.data.text])
-      if(tweet.data !== undefined && tweet.includes !== undefined && tweet.includes.users !== undefined && tweet.includes.users[0] !== undefined){
-        let user = tweet.includes.users[0];
-        if(user.name !== undefined && user.username !== undefined && user.profile_image_url !== undefined){
-          // tweet and user are valid
-          setTweetsQ([...tweets, tweet.data])
-          setUsersQ([...users, user])
-
-          if(tweetsQ.length > 50 || usersQ.length > 50){
-            setTweets([...tweetsQ])
-            setUsers([...usersQ])
-
-            setTweetsQ([])
-            setUsersQ([])
-          }
-
-          // console.log(tweet.includes.users[0])
-        }
-          // name, username, profile_image_url
-
-      }
+      // if(tweet.data !== undefined && tweet.includes !== undefined && tweet.includes.users !== undefined && tweet.includes.users[0] !== undefined){
+      //   let user = tweet.includes.users[0];
+      //   if(user.name !== undefined && user.username !== undefined && user.profile_image_url !== undefined){
+      //     // tweet and user are valid
+      //     setTweetsQ([...tweets, tweet.data])
+      //     setUsersQ([...users, user])
+      //
+      //     if(tweetsQ.length > 50 || usersQ.length > 50){
+      //       setTweets([...tweetsQ])
+      //       setUsers([...usersQ])
+      //
+      //       setTweetsQ([])
+      //       setUsersQ([])
+      //     }
+      //
+      //     // console.log(tweet.includes.users[0])
+      //   }
+      //     // name, username, profile_image_url
+      //
+      // }
 
 
       // if(tweet.includes !== undefined && tweet.includes.users !== undefined)
@@ -76,19 +82,19 @@ const StreamingTweet = () => {
 
   async function start() {
     console.log(text)
-    await socket.current.emit('start-stream', text) //Funzia con una palora
+    await socket.emit('start-stream', text) //Funzia con una palora
     console.log('streaming started')
   }
 
   async function end(){
-    await socket.current.emit('end-stream')
+    await socket.emit('end-stream')
     console.log('streaming ended')
-    socket.current.disconnect()
-    console.log('disconnected')
+    // socket.disconnect()
+    // console.log('disconnected')
   }
 
   async function disconnect() {
-    socket.current.disconnect()
+    socket.disconnect()
     console.log('disconnected')
   }
 
@@ -100,7 +106,7 @@ const StreamingTweet = () => {
             <Col xs={3}>
               <Button variant="secondary" onClick={start}>Inizia</Button>{' '}
               <Button variant="secondary" onClick={end}>Ferma</Button>{' '}
-              <Button variant="secondary" onClick={disconnect}>Scollegati</Button>{' '}
+              {/*<Button variant="secondary" onClick={disconnect}>Scollegati</Button>{' '}*/}
             </Col>
             <Col>
               <InputGroup className="">
@@ -113,7 +119,7 @@ const StreamingTweet = () => {
             </Col>
           </Row>
         </Container>
-        <ShowTweets tweets={tweets} users={users} />
+        {/*<ShowTweets tweets={tweets} users={users} />*/}
         {/*<TweetList elementi={elementi}/>*/}
       </div>
   );

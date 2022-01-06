@@ -13,6 +13,7 @@
 <button id="btn2">scollegati</button>
 <p id="nuovo" style="border: solid 2px black; display: flex; flex-direction: column-reverse"></p>
 <script>
+    const { io } = require("socket.io-client");
     const socket = io('http://localhost:8000')
     const btn = document.getElementById('btn')
     const btn1 = document.getElementById('btn1')

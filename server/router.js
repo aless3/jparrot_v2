@@ -25,19 +25,6 @@ app.use("/keyword", keyword.router);
 const index = require("./routes/index.js");
 app.use("/index", index);
 
-io.on('connection', (socket)=>{
-    console.log('user connected')
-
-    socket.on('start-stream', ()=>{
-        console.log('stream starting')
-        streaming.startStream(['trump'], socket).then()
-    })
-    socket.on('end-stream', ()=>{
-        console.log('stream closing')
-        streaming.stream.close()
-    })
-});
-
 server.listen(8000, ()=>{console.log("listening on 8000")});
 
 /*

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { TagCloud } from "react-tagcloud";
 
 export function SimpleCloud ({values}){
-
     const navigate = useNavigate();
 
     const redirect = (value) => {

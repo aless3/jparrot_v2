@@ -62,7 +62,6 @@ function MapsFrontEnd() {
           return result.data.data;
         });
         setUsers(() => {
-          console.log(result.data);
           return result.data.includes.users;
         });
         setShowError(false);
@@ -144,6 +143,7 @@ function Mycomponent({ position, updatePosition, range, setShowRange }) {
       setShowRange(true);
     },
   });
+
   return (
     <>
       {clicked && (

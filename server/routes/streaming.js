@@ -1,8 +1,8 @@
 const
-{
-    ETwitterStreamEvent,
-    TwitterApi
-} = require('twitter-api-v2');
+    {
+        ETwitterStreamEvent,
+        TwitterApi
+    } = require('twitter-api-v2');
 
 const path = require('path')
 const express = require('express')
@@ -54,10 +54,10 @@ const setRules = async (rules, client = streamingClient) => {
  *  Returns all the rules applied for tweets filtering.
  *  @async
  *  @param client - the client to use [optional, if not passed use streamingClient
- *  @returns {Rules} - returns the tweet filtering rules 
+ *  @returns {Rules} - returns the tweet filtering rules
  */
 const getRules = async (client = streamingClient) => {
-     return client.v2.streamRules()
+    return client.v2.streamRules()
 }
 
 /**
@@ -77,6 +77,8 @@ const deleteRules = async (args, client = streamingClient) => {
         console.log('Rules Deleted')
     }
 }
+
+let active = false;
 
 /**
  *  Streaming function.
@@ -103,17 +105,43 @@ const startStream = async (args, socket, client = streamingClient) => {
             "tweet.fields": ["created_at", "text"],
             "user.fields": ["username", "name", "profile_image_url"],
         })
-        stream.autoReconnect = true
+        active = true;
+        // stream.autoReconnect = true
         stream.on(ETwitterStreamEvent.Data, async tweet => {
             //console.log(tweet)
-            socket.emit('tweet', tweet)
-            i++
-            console.log(`Data sent${i}`)
+            if(active) {
+                socket.emit('tweet', tweet)
+                i++
+                console.log(`Data sent${i}`)
+            }
         })
+
     } catch (error){
         console.log('FROM STREAMING')
         console.log(error)
     }
 }
 
-module.exports = { stream, router, resetRules, setRules, getRules, deleteRules, startStream };
+io.on('connection', (socket)=>{
+    console.log('user connected')
+
+    socket.on('start-stream', async ()=>{
+        console.log('stream starting')
+        await startStream(['trump'], socket)
+    })
+    socket.on('end-stream', ()=>{
+        console.log('stream closing')
+        closeStream()
+    })
+});
+
+const getStream = () => {
+    return stream;
+}
+
+const closeStream = () => {
+    // active = false;
+    stream.close();
+}
+
+module.exports = { router, resetRules, setRules, getRules, deleteRules, getStream, startStream, closeStream };

@@ -19,6 +19,7 @@
     "twitter-api-v2": "^1.6.5"
   },
   "devDependencies": {
+    "jest": "^27.4.7",
     "jest-sonar": "^0.2.12"
   }
 }

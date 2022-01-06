@@ -41,7 +41,6 @@ function KeywordFrontEnd (){
 
     async function searchKeyword () {
         try {
-            console.log(keyword);
             let result = await axios.get("http://localhost:8000/keyword", {
                 params: {
                     keyword
@@ -65,7 +64,6 @@ function KeywordFrontEnd (){
 
     async function searchSentiment () {
         try {
-            console.log(keyword);
             let result = await axios.get("http://localhost:8000/sentiment", {
                 params: {
                     keyword
@@ -79,10 +77,6 @@ function KeywordFrontEnd (){
                 setSentiment(result.data.sentiment);
                 setSentimentName(result.data.sentimentName);
                 setShowSentimentData(true);
-
-                console.log("fr")
-                console.log(result)
-                console.log("fr")
             }else {
                 console.log("data is undefined");
             }
@@ -98,7 +92,6 @@ function KeywordFrontEnd (){
 
     function populateLineChart(data){
         setLineData(data);
-        console.log(data)
         setShowLineData(true);
     }
 
