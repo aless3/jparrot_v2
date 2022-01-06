@@ -44,8 +44,6 @@ const setRules = async (rules, client = streamingClient) => {
                 return{value: keyword}
             })
         })
-        let streamRules = await client.v2.streamRules();
-        console.log(streamRules)
     }
 }
 
@@ -74,11 +72,19 @@ const deleteRules = async (args, client = streamingClient) => {
                 ids: args
             }
         })
-        console.log('Rules Deleted')
+        // console.log('Rules Deleted')
     }
 }
 
-let active = false;
+const reloadRules = async (args, client = streamingClient) => {
+    try{
+        await resetRules(client)
+        await setRules(args, client)
+    }catch (error){
+        console.log('FROM RESET-AND-SET ')
+        console.log(error)
+    }
+}
 
 /**
  *  Streaming function.
@@ -90,14 +96,8 @@ let active = false;
  */
 const startStream = async (args, socket, client = streamingClient) => {
     let i = 0;
-    try{
-        await resetRules()
-        await setRules(args)
 
-    }catch (error){
-        console.log('FROM RESET-AND-SET ')
-        console.log(error)
-    }
+    await reloadRules(args, client);
 
     try{
         stream = await client.v2.searchStream({
@@ -105,20 +105,17 @@ const startStream = async (args, socket, client = streamingClient) => {
             "tweet.fields": ["created_at", "text"],
             "user.fields": ["username", "name", "profile_image_url"],
         })
-        active = true;
         stream.autoReconnect = true
         stream.on(ETwitterStreamEvent.Data, async tweet => {
-            if(active) {
-                socket.emit('tweet', tweet)
-                i++
-                console.log(`Data sent${i}`)
-            }
+            socket.emit('tweet', tweet)
+            i++
         })
-
     } catch (error){
         console.log('FROM STREAMING')
         console.log(error)
     }
+
+    return stream;
 }
 
 const getStream = () => {
@@ -129,4 +126,4 @@ const closeStream = () => {
     stream.close();
 }
 
-module.exports = { router, resetRules, setRules, getRules, deleteRules, getStream, startStream, closeStream };
+module.exports = { router, resetRules, setRules, getRules, deleteRules, reloadRules, getStream, startStream, closeStream };
