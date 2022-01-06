@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import Card from "react-bootstrap/Card";
+import { Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import {
   FaRetweet,
   FaReply,
@@ -10,26 +14,32 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet }) {
-  try {
-    if (user === undefined || tweet === undefined) {
-      return null;
-    }
+  if (user == undefined) {
+    console.error("UNDEFINED");
+  } else {
+    console.log("defined");
+  }
 
+  try {
     const { name, username, profile_image_url } = user;
     const { created_at, text } = tweet;
-    const { like_count, quote_count, reply_count, retweet_count } =
-      tweet.public_metrics;
+    const { like_count, quote_count, reply_count, retweet_count } = tweet.public_metrics;
     return (
-      <div className='tweet-container'>
-        <div className='user-details'>
-          <img src={profile_image_url} alt={name} />
-          <div className='user-name'>
-            <div className='name'>{name}</div>
-            <div className='username'>@{username}</div>
-          </div>
-        </div>
-        <div className='tweet-body'>
-          <div className='text'>{text}</div>
+      <div>
+        <br />
+        <Container>
+        <Card className="mx-auto" border="light" style={{ width: '55vw' }}>
+    <Card.Header>
+    <Row>
+    <Col xs={1}><img className='userimg' src={profile_image_url} alt={name} /></Col>
+    <Col xs={11}><div className='name'>{name}</div><div className='username'>@{username}</div></Col>
+    </Row>
+    </Card.Header>
+    <Card.Body>
+      <Card.Title>
+          </Card.Title>
+      <Card.Text>
+      <div className='text'>{text}</div>
           <div className='tweet-details'>
             <div className='like'>
               <FaHeart />
@@ -53,13 +63,18 @@ function Tweet({ user, tweet }) {
               <div>{created_at.split("T")[1].split(".")[0]}</div>
             </div>
           </div>
-        </div>
+      </Card.Text>
+    </Card.Body>
+  </Card>
+  </Container>
       </div>
     );
   } catch (error) {
-    // console.error(error);
-    return null;
+    console.error(error);
+    return <></>;
   }
 }
 
 export default Tweet;
+
+

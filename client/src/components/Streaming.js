@@ -12,8 +12,10 @@ import "./Tweet.css";
 
 const Streaming = () => {
     return(
-      <div>
+      <div> 
+            <br />
             <h2 style={{textAlign: "center", color: "white"}}>Streaming</h2>
+            <br />
             <StreamingTweet></StreamingTweet>
       </div>
     )
