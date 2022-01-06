@@ -6,6 +6,8 @@ const { TwitterApi } = require("twitter-api-v2");
 const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 const client = appOnlyClient.readOnly;
 
+const mockSocket = require('mock-socket');
+
 beforeEach(async () => {
   await streaming.resetRules(client);
 });
@@ -31,7 +33,7 @@ test("check if setRules correctly sets the rules", async () => {
 
   for (const rule in expectedRules) {
     expect(rules.data).not.toBe(
-      expect.arrayContaining({
+      expect.objectContaining({
         id: expect.any(String),
         value: rule,
       })
@@ -79,3 +81,25 @@ test("reloadRules correctly reloads the rules", async () => {
 
   expect(result).toBeTruthy();
 });
+
+test('startStream correctly creates the stream', async () => {
+    let rules = ["covid", "bologna"];
+
+    let stream = await streaming.startStream(rules, mockSocket.WebSocket, client);
+
+    expect(stream).toBeTruthy();
+    expect(stream.autoReconnect).toBe(true);
+
+    streaming.closeStream();
+})
+
+test('getStream correctly gets the stream', async () => {
+    let rules = ["covid", "bologna"];
+
+    let expectedStream = await streaming.startStream(rules, mockSocket.WebSocket, client);
+    let stream = streaming.getStream();
+
+    expect(stream).toBe(expectedStream);
+
+    streaming.closeStream();
+})
