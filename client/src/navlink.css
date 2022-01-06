@@ -1,0 +1,16 @@
+.navbar {
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+}
+
+.nav-link {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 110%;
+    transition: transform .3s;
+    color: black;
+}
+
+.nav-link:hover {
+    transform: scale(1.1);
+}

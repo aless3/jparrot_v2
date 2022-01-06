@@ -96,9 +96,12 @@ const startStream = async (args, socket, client = streamingClient) => {
         console.log('FROM RESET-AND-SET ')
         console.log(error)
     }
+
     try{
         stream = await client.v2.searchStream({
-            'tweet.fields': ['author_id', 'text', 'geo']
+            expansions: ["author_id"],
+            "tweet.fields": ["created_at", "text"],
+            "user.fields": ["username", "name", "profile_image_url"],
         })
         stream.autoReconnect = true
         stream.on(ETwitterStreamEvent.Data, async tweet => {

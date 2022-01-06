@@ -2,7 +2,7 @@ import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 
-import Tweet from "./Tweet";
+import Tweet from "../src/components/Tweet";
 
 let container = null;
 beforeEach(() => {
@@ -19,13 +19,13 @@ afterEach(() => {
 });
 
 test("test for Tweet component", () => {
-  var user = {
+  let user = {
     name: "luca",
     username: "cane",
     profile_image_url: "",
   };
 
-  var tweet = {
+  let tweet = {
     created_at: "2021-09-15T23:05.0",
     text: "god i dead",
     public_metrics: {

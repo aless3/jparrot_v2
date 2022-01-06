@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, {useEffect, useState} from "react";
+import "../App.css";
 import axios from "axios";
 
-import { TagCloud } from "react-tagcloud";
+import { SimpleCloud } from "./SimpleCloud";
 
-function Terms_frontEnd() {
+const TermsFrontEnd = () => {
   const [data, setData] = useState([]);
+  const [firstSearch, setFirstSearch] = useState(true);
 
   const searchTrending = async () => {
     const posOptions = {
@@ -26,11 +27,9 @@ function Terms_frontEnd() {
           },
         });
 
-        setData(() => {
-          return result.data;
-        });
-
-        console.log(data);
+        if(result.data !== undefined){
+          setData((result.data));
+        }
       } catch (error) {
         console.error(error);
       }
@@ -44,30 +43,24 @@ function Terms_frontEnd() {
       navigator.geolocation.getCurrentPosition(posSuccess, posError, posOptions);
     }
 
+    setFirstSearch(false);
+
   };
 
+  useEffect(async () => {
+    if(firstSearch){
+      await searchTrending();
+    }
+  }, [data, firstSearch]);
+
   return (
-    <div className='container'>
+      <div className='container'>
 
-        <div className='cloud'>
-          <SimpleCloud values={data} />
-          <button onClick={searchTrending}>Reload</button>
-        </div>
+        <SimpleCloud values={data} className='cloud' />
+        <button onClick={searchTrending}>Load/Reload</button>
 
-    </div>
+      </div>
   );
 }
 
-function SimpleCloud({ values }) {
-  return (
-    <TagCloud
-      minSize={10}
-      maxSize={60}
-      tags={values}
-      shuffle={true}
-      onClick={(tag) => alert(`'${tag.value}' was selected!`)}
-    />
-  );
-}
-
-export default Terms_frontEnd;
+export default TermsFrontEnd;

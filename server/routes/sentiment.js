@@ -45,27 +45,33 @@ i tweet positivi, negativi e totali
 async function searchCounts(req, client = sentimentClient) {
     let keyword = req.query.keyword;
 
-    let positiveTweets = await client.v2.tweetCountRecent(
-        `${keyword} (happy OR exciting OR excited OR favorite OR fav OR amazing OR lovely OR incredible) -horrible -worst -sucks -bad -disappointing`,
-        {"granularity": "day"}
-    );
+    try{
+        let positiveTweets = await client.v2.tweetCountRecent(
+            `${keyword} (happy OR exciting OR excited OR favorite OR fav OR amazing OR lovely OR incredible) -horrible -worst -sucks -bad -disappointing`,
+            {"granularity": "day"}
+        );
 
-    let negativeTweets = await client.v2.tweetCountRecent(
-        `${keyword} (horrible OR worst OR sucks OR bad OR disappointing) -happy -exciting -excited -favorite -fav -amazing -lovely -incredible`,
-        {"granularity": "day"}
-    );
+        let negativeTweets = await client.v2.tweetCountRecent(
+            `${keyword} (horrible OR worst OR sucks OR bad OR disappointing) -happy -exciting -excited -favorite -fav -amazing -lovely -incredible`,
+            {"granularity": "day"}
+        );
 
-    let totalTweets = await client.v2.tweetCountRecent(
-        `${keyword} -is:retweet`,
-        {"granularity": "day"}
-    );
+        let totalTweets = await client.v2.tweetCountRecent(
+            `${keyword} -is:retweet`,
+            {"granularity": "day"}
+        );
 
-    let counts = {};
-    counts.positiveTweets = positiveTweets;
-    counts.negativeTweets = negativeTweets;
-    counts.totalTweets = totalTweets;
+        let counts = {}
+        counts.positiveTweets = positiveTweets;
+        counts.negativeTweets = negativeTweets;
+        counts.totalTweets = totalTweets;
 
-    return counts;
+        return counts;
+    } catch (e) {
+        console.error(e);
+    }
+
+    return undefined;
 }
 
 /**
@@ -78,7 +84,10 @@ async function searchCounts(req, client = sentimentClient) {
  *  @returns {Result} - Returns a Result object.
  *
  */
-async function sentimentCount(counts) {
+async function sentimentCount(counts){
+    if(counts === undefined){
+        return undefined;
+    }
     let positiveTweets = counts.positiveTweets;
     let negativeTweets = counts.negativeTweets;
     let totalTweets = counts.totalTweets;
@@ -149,8 +158,13 @@ async function sentimentCount(counts) {
 
 router.get("/", async (req, res) => {
     let counts = await searchCounts(req);
+
+    console.log("sent");
+    console.log(counts);
+    console.log("sent");
+
     let result = await sentimentCount(counts);
-    console.log(result);
+
     res.send(result);
 });
 

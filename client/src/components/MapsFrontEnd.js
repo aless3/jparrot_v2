@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import "./App.css";
+import "../App.css";
 import Tweet from "./Tweet";
 import axios from "axios";
 import {
@@ -18,6 +18,9 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+import {ShowTweets} from "./ShowTweets";
+
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
@@ -26,7 +29,8 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-function Maps_frontEnd() {
+
+function MapsFrontEnd() {
   var marker = {};
   const [range, setRange] = useState(1);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
@@ -52,17 +56,17 @@ function Maps_frontEnd() {
           keyword,
         },
       });
-      console.log(result);
-      if (result.data.data != undefined) {
+
+      if (result.data.data !== undefined) {
         setTweets(() => {
           return result.data.data;
         });
         setUsers(() => {
+          console.log(result.data);
           return result.data.includes.users;
         });
         setShowError(false);
         setShowTweets(true);
-        //console.log(result);
       } else {
         setShowTweets(false);
         setShowError(true);
@@ -121,14 +125,10 @@ function Maps_frontEnd() {
           setShowRange={setShowRange}
         />
       </MapContainer>
-      {showTweets && (
-        <div className='tweet-list'>
-          {tweets.map((tweet) => {
-            const user = users.filter((user) => user.id == tweet.author_id);
-            return <Tweet key={tweet.id} user={user[0]} tweet={tweet} />;
-          })}
-        </div>
-      )}
+
+      {showTweets &&
+          <ShowTweets tweets={tweets} users={users}/>
+      }
 
       {showError && <div className='errormsg'>No Tweets Found :C</div>}
     </div>
@@ -137,7 +137,6 @@ function Maps_frontEnd() {
 
 function Mycomponent({ position, updatePosition, range, setShowRange }) {
   const [clicked, setClicked] = useState(false);
-  //const map = useMap();
   const map = useMapEvents({
     click(e) {
       updatePosition(e.latlng.lat, e.latlng.lng);
@@ -161,4 +160,4 @@ function Mycomponent({ position, updatePosition, range, setShowRange }) {
   );
 }
 
-export default Maps_frontEnd;
+export default MapsFrontEnd;

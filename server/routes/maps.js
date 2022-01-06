@@ -19,17 +19,22 @@ async function searchGeo(req, client = mapsClient) {
   const coords = JSON.parse(req.query.position);
   const keyword = req.query.keyword;
 
-  return (await client.v2.search(
-      `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
-          range / 1000
-      }km] has:geo`,
-      {
-        expansions: ["author_id"],
-        "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
-        "user.fields": ["username", "name", "profile_image_url"],
-        max_results: 50,
-      }
-  )).data;
+  try{
+    return (await client.v2.search(
+        `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
+            range / 1000
+        }km] has:geo`,
+        {
+          expansions: ["author_id"],
+          "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
+          "user.fields": ["username", "name", "profile_image_url"],
+          max_results: 50,
+        }
+    )).data;
+  }catch (e) {
+    console.error(e);
+    return undefined;
+  }
 }
 
 router.get("/geo-keyword", async (req, res) => {
