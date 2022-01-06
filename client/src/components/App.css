@@ -1,0 +1,39 @@
+.container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    background-color: white;
+    border-radius: 3rem;
+    padding: 1rem;
+    width: 50%;
+  }
+  
+  input[type="range"] {
+    width: 100%;
+  }
+  
+  .input {
+    margin: 1rem;
+  }
+  
+  .input > * {
+    margin-top: 0rem;
+    margin-bottom: 0.2rem;
+  }
+  
+  .label {
+    margin-bottom: 1rem;
+  }
+  
+  .errormsg {
+    margin: 2rem;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.342);
+    font-size: xx-large;
+  }
+  
+  .tweet-list {
+    margin-top: 2rem;
+    height: 30rem;
+    overflow: scroll;
+  }
+  
