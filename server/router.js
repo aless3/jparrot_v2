@@ -22,22 +22,23 @@ app.use("/keyword", keyword.router);
 const index = require("./routes/index.js");
 app.use("/index", index);
 
-server.listen(8000, ()=>{console.log("listening on 8000")});
-
+server.listen(8000, () => {
+  console.log("listening on 8000");
+});
 
 const streaming = require("./routes/streaming.js");
 app.use("/stream", streaming.router);
 
-io.on('connection', (socket)=>{
-    console.log('user connected')
+io.on("connection", (socket) => {
+  console.log("user connected");
 
-    socket.on('start-stream', async ()=>{
-        console.log('stream starting')
-        await streaming.startStream(['trump'], socket)
-    })
+  socket.on("start-stream", async (text) => {
+    console.log("stream starting");
+    await streaming.startStream([text], socket);
+  });
 
-    socket.on('end-stream', ()=>{
-        console.log('stream closing')
-        streaming.closeStream()
-    })
+  socket.on("end-stream", () => {
+    console.log("stream closing");
+    streaming.closeStream();
+  });
 });
