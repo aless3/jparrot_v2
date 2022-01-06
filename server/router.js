@@ -40,15 +40,17 @@ io.on('connection', (socket)=>{
 
 server.listen(8000, ()=>{console.log("listening on 8000")});
 
-// io.on("connection", (socket) => {
-//   console.log("user connected");
+/*
+io.on("connection", (socket) => {
+    console.log("user connected");
 
-//   socket.on("start-stream", () => {
-//     console.log("stream starting");
-//     startStream(socket);
-//   });
-//   socket.on("end-stream", () => {
-//     console.log("stream closing");
-//     stream.close();
-//   });
-// });
+    socket.on("start-stream", () => {
+        console.log("stream starting");
+        startStream(socket);
+    });
+    socket.on("end-stream", () => {
+        console.log("stream closing");
+        stream.close();
+    });
+});
+*/

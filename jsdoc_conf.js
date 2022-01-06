@@ -1,4 +1,6 @@
-{
+'use strict';
+
+module.exports = {
     "plugins": [],
     "recurseDepth": 10,
     "source": {
@@ -17,6 +19,14 @@
     },
     "opts": {
         "recursive": true,
-        "destination": "./documentation/result/"        
+        "destination": "./documentation/result/",
+        "template": "./documentation/template/docdash/"
+    },
+    "swaggerDefinition": {
+    "info": {
+        "title": "My sample api",
+        "version": "1.0.0"
     }
+    },
+    "apis": ["server/routes/index.js"]
 }

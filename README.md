@@ -17,11 +17,7 @@ Documentation generated using [jsdoc](https://jsdoc.app).
 Generate using:
 
 ```bash
-jsdoc -c jsdoc_conf.json -t ./documentation/template/docdash/
+jsdoc -c jsdoc_conf.js
 ```
 
 This will create a documentation/ folder inside the project folder.
-
-
-
-jsdoc -c jsdoc_conf.json

@@ -1,3 +1,20 @@
+/**
+ * @typedef {object} Result
+ * @property {int} positiveCount - Positive tweets counter
+ * @property {int} negativeCount - Negative tweets counter
+ * @property {int} sentimentCount - (Positive + negative) tweets counter
+ * @property {int} totalCount - Total tweets counter
+ */
+
+ /**
+  * @typedef {object} SentimentTweets
+  * @property {int} positiveCount - Positive tweets counter
+  * @property {int} negativeCount - Negative tweets counter
+  * @property {int} sentimentCount - (Positive + negative) tweets counter
+  * @property {int} totalCount - Total tweets counter
+  */
+
+
 const {
     TwitterApi
 } = require("twitter-api-v2");
@@ -11,6 +28,16 @@ const router = express.Router();
 
 router.use(cors());
 
+/**
+ *  twitter api to function.
+ *  Takes a keyword and counts tweets with that keyword and positive/negative words
+ *  Result is dependent on percentage of tweets with positive/negative words
+ *
+ *  @async
+ *  @param counts - object containing 20 tweets per category: negative tweets, positive tweets and total tweets
+ *  @returns {SentimentTweets} - Returns a SentimentTweets object.
+ *
+ */
 /*
 usa l'oggetto rec e fa le call alle API di twitter per trovare
 i tweet positivi, negativi e totali
@@ -54,6 +81,7 @@ async function searchCounts(req, client = sentimentClient) {
  *
  *  @async
  *  @param counts - object containing 20 tweets per category: negative tweets, positive tweets and total tweets
+ *  @returns {Result} - Returns a Result object.
  *
  */
 async function sentimentCount(counts){
