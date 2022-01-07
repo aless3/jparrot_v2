@@ -1,6 +1,5 @@
 const { ETwitterStreamEvent, TwitterApi } = require("twitter-api-v2");
 
-const path = require("path");
 const express = require("express");
 
 const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
@@ -13,7 +12,7 @@ let stream;
  *  Rule reset function.
  *  Deletes all set rules.
  *  @async
- *
+ *  @param client - the client to use [optional, if not passed use streamingClient]
  */
 const resetRules = async (client = streamingClient) => {
   let rules = await client.v2.streamRules();
@@ -30,7 +29,7 @@ const resetRules = async (client = streamingClient) => {
  *  Add rules passed by argument. (WHAT DOES IT DO WITH ALREADY EXISTING RULES?)
  *  @async
  *  @param rules - the list of rule strings to add to the rules applied for tweets filtering.
- *  @param client - the client to use [optional, if not passed use streamingClient
+ *  @param client - the client to use [optional, if not passed use streamingClient]
  */
 const setRules = async (rules, client = streamingClient) => {
   if (rules.length > 0) {
@@ -46,8 +45,8 @@ const setRules = async (rules, client = streamingClient) => {
  *  Rule output function.
  *  Returns all the rules applied for tweets filtering.
  *  @async
- *  @param client - the client to use [optional, if not passed use streamingClient
- *  @returns {Rules} - returns the tweet filtering rules
+ *  @param client - the client to use [optional, if not passed use streamingClient]
+ *  @returns {Promise} - returns the tweet filtering rules as a Promise<StreamingV2GetRulesResult>
  */
 const getRules = async (client = streamingClient) => {
   return client.v2.streamRules();
@@ -58,7 +57,7 @@ const getRules = async (client = streamingClient) => {
  *  Delete rules passed by argument, keeps all others.
  *  @async
  *  @param args - the list of rule IDs to remove from the rules applied for tweets filtering.
- *  @param client - the client to use [optional, if not passed use streamingClient
+ *  @param client - the client to use [optional, if not passed use streamingClient]
  */
 const deleteRules = async (args, client = streamingClient) => {
   if (args.length > 0) {
@@ -67,10 +66,18 @@ const deleteRules = async (args, client = streamingClient) => {
         ids: args,
       },
     });
-    // console.log('Rules Deleted')
   }
 };
 
+
+/**
+ *  Rule reset and insertion function.
+ *  Reset rules and add the new ones.
+ *  @async
+ *  @param args - the list of rule IDs to insert after the reset.
+ *  @param client - the client to use [optional, if not passed use streamingClient]
+ *  @return {boolean} - returns true if successful, false otherwise.
+ */
 const reloadRules = async (args, client = streamingClient) => {
   try {
     await resetRules(client);
@@ -89,7 +96,8 @@ const reloadRules = async (args, client = streamingClient) => {
  *  @async
  *  @param args - the list of rules to set for tweets filtering
  *  @param socket - the io socket to emit data to
- *  @param client - the client to use [optional, if not passed use streamingClient
+ *  @param client - the client to use [optional, if not passed use streamingClient]
+ *  @returns {stream} - returns the created stream
  */
 const startStream = async (args, socket, client = streamingClient) => {
   await reloadRules(args, client);
@@ -112,10 +120,19 @@ const startStream = async (args, socket, client = streamingClient) => {
   return stream;
 };
 
+/**
+ *  Streaming function.
+ *  Get the stream variable
+ *  @returns {stream} - returns the stream
+ */
 const getStream = () => {
   return stream;
 };
 
+/**
+ *  Streaming function.
+ *  Close stream
+ */
 const closeStream = () => {
   stream.close();
 };
