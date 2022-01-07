@@ -1,0 +1,42 @@
+.item1 {
+  grid-area: term;
+}
+
+.item2 {
+  grid-area: search;
+  color: white;
+}
+
+.item3 {
+  grid-area: sentiment;
+  color: white;
+}
+
+.item4 {
+  grid-area: graficoa;
+}
+
+.item5 {
+  grid-area: graficob;
+}
+
+.item6 {
+  grid-area: tweet;
+}
+
+.searchedView {
+  display: grid;
+  grid-template-areas:
+    "term term"
+    "search sentiment"
+    "graficoa graficob"
+    "tweet tweet";
+  grid-gap: 10px;
+  padding: 10px;
+}
+
+.grid-container div {
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}
