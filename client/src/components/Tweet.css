@@ -1,3 +1,9 @@
+.card-container {
+  width: 80% !important;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   transition: transform 0.2s;
@@ -21,16 +27,6 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.user-details {
-  display: flex;
-  height: 40%;
-  align-items: center;
-}
-.user-details > img {
-  height: 70%;
-  border-radius: 100%;
-}
-
 .user-name {
   width: 50%;
   margin-left: 1rem;
@@ -50,18 +46,18 @@
 .tweet-details {
   margin-top: 1rem;
   display: flex;
+  justify-content: space-between;
 }
 
 .tweet-details > div {
-  margin-left: 2rem;
-  margin-right: 1rem;
   display: flex;
+  align-items: center;
 }
 
-.tweet-details > div > div {
-  margin-right: 2rem;
+.date > div {
+  margin-left: 0.3rem;
 }
 
 .iconed {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 }
