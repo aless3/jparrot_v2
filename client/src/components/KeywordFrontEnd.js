@@ -1,14 +1,16 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 import axios from "axios";
+import { Col, Container } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
 import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
 import TweetList from "./TweetList";
 import { SimpleCloud } from "./SimpleCloud";
+import "./KeywordFrontEnd.css";
 
 function KeywordFrontEnd() {
-
   const [termsData, setTermsData] = useState([]);
   const [firstTermsSearch, setFirstTermsSearch] = useState(true);
 
@@ -31,7 +33,7 @@ function KeywordFrontEnd() {
   const [firstSearch, setFirstSearch] = useState(false);
 
   useEffect(async () => {
-    if(firstTermsSearch){
+    if (firstTermsSearch) {
       await searchTrending();
     }
   }, [termsData, firstTermsSearch]);
@@ -40,7 +42,7 @@ function KeywordFrontEnd() {
     const posOptions = {
       enableHighAccuracy: true,
       timeout: 5000,
-      maximumAge: 0
+      maximumAge: 0,
     };
 
     async function posSuccess(pos) {
@@ -51,13 +53,12 @@ function KeywordFrontEnd() {
         const result = await axios.get("http://localhost:8000/terms", {
           params: {
             latitude,
-            longitude
+            longitude,
           },
         });
 
-        if(result.data !== undefined){
-
-          setTermsData(result.data)
+        if (result.data !== undefined) {
+          setTermsData(result.data);
           // setTermsLoaded(true)
         }
       } catch (error) {
@@ -69,12 +70,15 @@ function KeywordFrontEnd() {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
-    if('geolocation' in navigator){
-      navigator.geolocation.getCurrentPosition(posSuccess, posError, posOptions);
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        posSuccess,
+        posError,
+        posOptions
+      );
     }
 
     setFirstTermsSearch(false);
-
   };
 
   async function searchKeyword() {
@@ -167,16 +171,19 @@ function KeywordFrontEnd() {
   }
 
   return (
-    <div className='container'>
-      <div className='term-container'>
+    <Container>
+      <div className="term-container">
         <button onClick={searchTrending}>Load/Reload</button>
-            <div className='term-cloud'>
-              <SimpleCloud values={termsData} setter={setKeyword} className='cloud' />
-            </div>
+        <div className="term-cloud">
+          <SimpleCloud
+            values={termsData}
+            setter={setKeyword}
+            className="cloud"
+          />
+        </div>
       </div>
 
-
-      <div className='label'>Insert keyword</div>
+      <div className="label">Insert keyword</div>
       <input
         type="text"
         value={keyword}
@@ -189,48 +196,58 @@ function KeywordFrontEnd() {
 
       {firstSearch && (
         <div className={"searchedView"}>
-          <button onClick={toggleShowSentiment}>Toggle Show Sentiment</button>
-          {showSentimentData && (
-            <div className="sentiment">
-              <p>
-                The sentiment value of tweets with this keyword is{" "}
-                <b>{sentimentName}</b> (value: {sentiment})
-              </p>
-            </div>
-          )}
-
           <button onClick={toggleShowCharts}>Toggle Show Charts</button>
           {showCharts && (
-            <div className="charts">
-              <button onClick={toggleShowLineChart}>Toggle Line Chart</button>
-              {showLineData && (
-                <div className="line-chart">
-                  <LineChartSentiment data={lineData} />
+            <Row className="charts">
+              <Col xs={8}>
+                <button onClick={toggleShowLineChart}>Toggle Line Chart</button>
+                {showLineData && (
+                  <div className="line-chart">
+                    <LineChartSentiment data={lineData} />
+                  </div>
+                )}
+              </Col>
+
+              <Col xs={4}>
+                <button onClick={toggleShowPieChart}>Toggle Pie Chart</button>
+                {showPieData && (
+                  <div className="pie-chart">
+                    <PieChartSentiment
+                      positiveCount={pieData.positiveCount}
+                      negativeCount={pieData.negativeCount}
+                    />
+                  </div>
+                )}
+              </Col>
+            </Row>
+          )}
+          <Row>
+            <Col xs={8}>
+              <button onClick={toggleShowTweets}>Toggle Show Tweets</button>
+              {showTweets && (
+                <div className="tweets">
+                  {/* <ShowTweets tweets={tweets} users={users} /> */}
+                  <TweetList tweets={tweets} stream={false} />
                 </div>
               )}
-
-              <button onClick={toggleShowPieChart}>Toggle Pie Chart</button>
-              {showPieData && (
-                <div className="pie-chart">
-                  <PieChartSentiment
-                    positiveCount={pieData.positiveCount}
-                    negativeCount={pieData.negativeCount}
-                  />
+            </Col>
+            <Col xs={4}>
+              <button onClick={toggleShowSentiment}>
+                Toggle Show Sentiment
+              </button>
+              {showSentimentData && (
+                <div className="sentiment">
+                  <p>
+                    The sentiment value of tweets with this keyword is{" "}
+                    <b>{sentimentName}</b> (value: {sentiment})
+                  </p>
                 </div>
               )}
-            </div>
-          )}
-
-          <button onClick={toggleShowTweets}>Toggle Show Tweets</button>
-          {showTweets && (
-            <div className="tweets">
-              {/* <ShowTweets tweets={tweets} users={users} /> */}
-              <TweetList tweets={tweets} stream={false} />
-            </div>
-          )}
+            </Col>
+          </Row>
         </div>
       )}
-    </div>
+    </Container>
   );
 }
 
