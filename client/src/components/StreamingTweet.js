@@ -18,6 +18,7 @@ const StreamingTweet = () => {
   const [text, setText] = useState("");
   const [tweets, setTweets] = useState([]);
   const [showText, setShowText] = useState(false);
+  const [showTweets, setShowTweets] = useState(false);
 
   const handleChangeOn = () => {
     if (!showText) {
@@ -42,6 +43,7 @@ const StreamingTweet = () => {
     console.log("streaming started");
     socket.current.on("tweet", (tweet) => {
       setTweets((tweets) => [tweet, ...tweets]);
+      setShowTweets(true);
     });
   }
 
@@ -81,7 +83,7 @@ const StreamingTweet = () => {
       <div className='d-flex justify-content-center'>
         {showText && <h4 className='pulser'>Sto cercando i tweet</h4>}
       </div>
-      <TweetList elementi={tweets}></TweetList>
+      {showTweets && <TweetList tweets={tweets} stream={true}></TweetList>}
     </div>
   );
 };

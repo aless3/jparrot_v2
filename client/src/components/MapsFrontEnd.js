@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import Button from 'react-bootstrap/Button';
-import FormControl from 'react-bootstrap/FormControl';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
+import React, { useState, useEffect, useRef } from "react";
+import Button from "react-bootstrap/Button";
+import FormControl from "react-bootstrap/FormControl";
+import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
 import Tweet from "./Tweet";
 import axios from "axios";
+import TweetList from "./TweetList";
 import "./MapsFrontEnd.css";
 import {
   MapContainer,
@@ -35,9 +36,9 @@ function MapsFrontEnd() {
   const [showRange, setShowRange] = useState(false);
   const [showTweets, setShowTweets] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [tweets, setTweets] = useState([]);
-  const [users, setUsers] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [tweets, setTweets] = useState();
+  const tmp = useRef(null);
 
   const searchTweets = async () => {
     try {
@@ -50,12 +51,8 @@ function MapsFrontEnd() {
       });
       console.log(result);
       if (result.data.data != undefined) {
-        setTweets(() => {
-          return result.data.data;
-        });
-        setUsers(() => {
-          return result.data.includes.users;
-        });
+        setTweets(result.data);
+        console.log(tweets);
         setShowError(false);
         setShowTweets(true);
       } else {
@@ -67,7 +64,6 @@ function MapsFrontEnd() {
     }
   };
 
-  
   const updatePosition = (lat, lng) => {
     setPosition(() => {
       return { lat: lat, lng: lng };
@@ -75,77 +71,91 @@ function MapsFrontEnd() {
   };
   return (
     <div className='container'>
-      <br/>
-      <Row className="mx-auto">
-    <Col>
-    <Card id="cardinput" border="light" className="mx-auto" style={{ width: '50vw' }}>
-    <Card.Header>Scegli una posizione sulla mappa</Card.Header>
-    <Card.Body>
-      <Card.Title>   
-           
-        {showRange && (
-        <div className='input'>
-          <Form.Label>Scegli un'area</Form.Label>
-          <Form.Range onChange={e => setRange(e.target.value)} className="slider" value={range} min='1' max='40000'/>
-          <p>Metri: {range} </p>
-          <br/>
-          <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationFormik03">
-            <FormControl
-            value={keyword}
-            onChange={(e) => {
-              setKeyword(e.target.value);
-            }}
-            aria-label="Username"
-              aria-describedby="basic-addon1" placeholder="Inserisci una parola chiave  "
+      <br />
+      <Row className='mx-auto'>
+        <Col>
+          <Card
+            id='cardinput'
+            border='light'
+            className='mx-auto'
+            style={{ width: "50vw" }}
+          >
+            <Card.Header>Scegli una posizione sulla mappa</Card.Header>
+            <Card.Body>
+              <Card.Title>
+                {showRange && (
+                  <div className='input'>
+                    <Form.Label>Scegli un'area</Form.Label>
+                    <Form.Range
+                      onChange={(e) => setRange(e.target.value)}
+                      className='slider'
+                      value={range}
+                      min='1'
+                      max='40000'
+                    />
+                    <p>Metri: {range} </p>
+                    <br />
+                    <Row className='mb-3'>
+                      <Form.Group
+                        as={Col}
+                        md='6'
+                        controlId='validationFormik03'
+                      >
+                        <FormControl
+                          value={keyword}
+                          onChange={(e) => {
+                            setKeyword(e.target.value);
+                          }}
+                          aria-label='Username'
+                          aria-describedby='basic-addon1'
+                          placeholder='Inserisci una parola chiave  '
+                        />
+                      </Form.Group>
+                      <Form.Group
+                        as={Col}
+                        md='6'
+                        controlId='validationFormik03'
+                      >
+                        <Button
+                          onClick={searchTweets}
+                          variant='outline-primary'
+                        >
+                          Cerca
+                        </Button>{" "}
+                      </Form.Group>
+                    </Row>
+                  </div>
+                )}
+              </Card.Title>
+              <Card.Text></Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <br />
+      <Row className='mx-auto'>
+        <MapContainer
+          className='mapcontainer mx-auto'
+          style={{ height: "50vmin", width: "110vmin" }}
+          center={[44.494887, 11.3426163]}
+          zoom={13}
+          scrollWheelZoom={true}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationFormik03">
-            <Button onClick={searchTweets} variant="outline-primary">Cerca</Button>{' '}
-            </Form.Group>
-            </Row>
-        </div>
-      )}</Card.Title>
-      <Card.Text>
-      </Card.Text>
-    </Card.Body>
-  </Card>
-    </Col>
-  </Row>
-      
-  <br />
-      <Row className="mx-auto">
-      <MapContainer
-        className="mapcontainer mx-auto"
-        style={{ height: "50vmin", width: "110vmin",}}
-        center={[44.494887, 11.3426163]}
-        zoom={13}
-        scrollWheelZoom={true}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        />
 
-        <Mycomponent
-          position={position}
-          updatePosition={updatePosition}
-          range={range}
-          setShowRange={setShowRange}
-        />
-      </MapContainer>
+          <Mycomponent
+            position={position}
+            updatePosition={updatePosition}
+            range={range}
+            setShowRange={setShowRange}
+          />
+        </MapContainer>
       </Row>
-      <Row className="mx-auto">
-      {showTweets && (
-        <div className='tweet-list mx-auto'>
-          {tweets.map((tweet) => {
-            const user = users.filter((user) => user.id == tweet.author_id);
-            return <Tweet key={tweet.id} user={user[0]} tweet={tweet} />;
-          })}
-        </div>
-      )}
-
-      </Row>
+      <Row>{showTweets && <TweetList tweets={tweets} stream={false} />}</Row>
 
       {showError && <div className='errormsg'>No Tweets Found :C</div>}
     </div>

@@ -1,36 +1,41 @@
-import React from 'react'
-import { Card } from 'react-bootstrap';
-import { Container } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
-import { Col } from 'react-bootstrap';
+import React from "react";
+import { Card } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import { Row } from "react-bootstrap";
+import { Col } from "react-bootstrap";
+import Tweet from "./Tweet";
 
-const TweetList = (tweet) => {
-    const tweets = tweet.elementi;
-    const lista = tweets.map((elemento) =>
-    <div>
-        <br />
-        <Container>
-        <Card className="mx-auto" border="light" style={{ width: '55vw' }}>
-    <Card.Header>
-    <Row>
-    <Col xs={1}><img className='userimg' src={elemento.includes.users.filter((user) => user.id == elemento.data.author_id)[0].profile_image_url} alt={elemento.includes.users.filter((user) => user.id == elemento.data.author_id)[0].name} /></Col>
-    <Col xs={11}><div className='name'>{elemento.includes.users.filter((user) => user.id == elemento.data.author_id)[0].name}</div><div className='username'>@{elemento.includes.users.filter((user) => user.id == elemento.data.author_id)[0].username}</div></Col>
-    </Row>
-    </Card.Header>
-    <Card.Body>
-      <Card.Title>
-      {elemento.data.text}
-      </Card.Title>
-    </Card.Body>
-  </Card>
-  </Container>
-      </div>
-    );
-    return (
-        <>
-        <ul>{lista}</ul>
-        </>
-    )
-}
+import "./TweetList.css";
+
+const TweetList = ({ tweets, stream }) => {
+  return (
+    <div className='tweet-list'>
+      {stream
+        ? tweets.map((tweet) => {
+            return (
+              <Tweet
+                key={tweet.data.id}
+                user={tweet.includes.users[0]}
+                tweet={tweet.data}
+                stream={stream}
+              />
+            );
+          })
+        : tweets.data.map((tweet) => {
+            const user = tweets.includes.users.filter(
+              (user) => user.id == tweet.author_id
+            );
+            return (
+              <Tweet
+                key={tweet.id}
+                user={user[0]}
+                tweet={tweet}
+                stream={stream}
+              />
+            );
+          })}
+    </div>
+  );
+};
 
 export default TweetList;
