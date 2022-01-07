@@ -4,6 +4,8 @@ import Terms from "./components/TermsFrontEnd";
 import Maps from "./components/MapsFrontEnd";
 import Keyword from "./components/KeywordFrontEnd";
 import Streaming from './components/Streaming';
+import Competition from "./components/CompetitionFrontEnd";
+
 import "./navlink.css";
 
 
@@ -18,6 +20,7 @@ class App extends Component {
             <li><Link to={'/map'} className="nav-link">Mappe</Link></li>
             <li><Link to={'/terms'} className="nav-link">Terms</Link></li>
             <li><Link to={'/stream'} className="nav-link">Stream</Link></li>
+            <li><Link to={'/competition'} className="nav-link">Competition</Link></li>
           </ul>
           </nav>
          
@@ -27,6 +30,7 @@ class App extends Component {
             <Route path='/terms' element={<Terms/>}/>
             <Route path='/stream' element={<Streaming/>}/>
             <Route path='/streaming' element={<Streaming />} />
+            <Route path='/competition' element={<Competition />} />
           </Routes>
         </div>
       </Router>  

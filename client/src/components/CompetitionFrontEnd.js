@@ -7,19 +7,17 @@ import TweetList from "./TweetList";
 function CompetitionFrontEnd (){
 
     const [hashtag, setHashtag] = useState("");
-    const [author, setAuthor] = useState("");
+    const [maxResults, setMaxResults] = useState(50);
 
     const [tweets, setTweets] = useState([]);
     const [showTweets, setShowTweets] = useState(false);
 
     async function searchCompetitors () {
         try {
-            setHashtag("#covid")
-            setAuthor("twitter")
             let result = await axios.get("http://localhost:8000/competition", {
                 params: {
                     hashtag,
-                    author
+                    maxResults
                 },
             });
 
@@ -37,6 +35,13 @@ function CompetitionFrontEnd (){
         }
     }
 
+    const setMaxResultsHandler = (max) => {
+        let number = parseInt(max);
+        if(!isNaN(number)){
+            setMaxResults(number)
+        }
+    }
+
     return (
         <div className='container'>
             <div className='label'>Insert keyword</div>
@@ -50,9 +55,9 @@ function CompetitionFrontEnd (){
 
             <input
                 type='text'
-                value={author}
+                value={maxResults}
                 onChange={(e) => {
-                    setAuthor(e.target.value);
+                    setMaxResultsHandler(e.target.value);
                 }}
             />
 

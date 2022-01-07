@@ -125,10 +125,13 @@ function organizeReplies(replies) {
 
         for (const i of listIndices) {
             let tweet = replies.data[i];
+            if(tweet === undefined){
+                continue;
+            }
+
             let user = replies.includes.users.filter(
                 (u) => u.id === tweet.author_id
             );
-
             user = user[0];
 
             result.data.push(tweet)
