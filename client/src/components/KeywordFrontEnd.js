@@ -92,6 +92,11 @@ function KeywordFrontEnd() {
     await searchKeyword();
     await searchSentiment();
     setFirstSearch(true);
+    setShowCharts(true);
+    setShowLineData(true);
+    setShowTweets(true);
+    setShowPieData(true);
+    setShowSentimentData(true);
   }
 
   function toggleShowCharts() {
@@ -120,10 +125,10 @@ function KeywordFrontEnd() {
   }
 
   return (
-    <div className='container'>
-      <div className='label'>Insert keyword</div>
+    <div className="container">
+      <div className="label">Insert keyword</div>
       <input
-        type='text'
+        type="text"
         value={keyword}
         onChange={(e) => {
           setKeyword(e.target.value);
@@ -136,7 +141,7 @@ function KeywordFrontEnd() {
         <div className={"searchedView"}>
           <button onClick={toggleShowSentiment}>Toggle Show Sentiment</button>
           {showSentimentData && (
-            <div className='sentiment'>
+            <div className="sentiment">
               <p>
                 The sentiment value of tweets with this keyword is{" "}
                 <b>{sentimentName}</b> (value: {sentiment})
@@ -146,17 +151,17 @@ function KeywordFrontEnd() {
 
           <button onClick={toggleShowCharts}>Toggle Show Charts</button>
           {showCharts && (
-            <div className='charts'>
+            <div className="charts">
               <button onClick={toggleShowLineChart}>Toggle Line Chart</button>
               {showLineData && (
-                <div className='line-chart'>
+                <div className="line-chart">
                   <LineChartSentiment data={lineData} />
                 </div>
               )}
 
               <button onClick={toggleShowPieChart}>Toggle Pie Chart</button>
               {showPieData && (
-                <div className='pie-chart'>
+                <div className="pie-chart">
                   <PieChartSentiment
                     positiveCount={pieData.positiveCount}
                     negativeCount={pieData.negativeCount}
@@ -168,7 +173,7 @@ function KeywordFrontEnd() {
 
           <button onClick={toggleShowTweets}>Toggle Show Tweets</button>
           {showTweets && (
-            <div className='tweets'>
+            <div className="tweets">
               {/* <ShowTweets tweets={tweets} users={users} /> */}
               <TweetList tweets={tweets} stream={false} />
             </div>
