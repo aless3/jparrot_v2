@@ -19,6 +19,9 @@ app.use("/sentiment", sentiment.router);
 const keyword = require("./routes/keyword");
 app.use("/keyword", keyword.router);
 
+const competition = require("./routes/competition");
+app.use("/competition", competition.router)
+
 const index = require("./routes/index.js");
 app.use("/index", index);
 
