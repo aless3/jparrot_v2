@@ -1,23 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState} from "react";
 import "../App.css";
 import axios from "axios";
 
 import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
-import { useLocation } from "react-router-dom";
 import TweetList from "./TweetList";
+import {SimpleCloud} from "./SimpleCloud";
 
 function KeywordFrontEnd() {
-  let prevKeyword;
-  const { state } = useLocation();
 
-  try {
-    prevKeyword = state.prevKeyword;
-  } catch (e) {
-    prevKeyword = "";
-  }
+  const [termsData, setTermsData] = useState([]);
+  const [firstTermsSearch, setFirstTermsSearch] = useState(true);
 
-  const [keyword, setKeyword] = useState(prevKeyword);
+  const [keyword, setKeyword] = useState("");
 
   const [showLineData, setShowLineData] = useState(false);
   const [lineData, setLineData] = useState({});
@@ -34,6 +29,53 @@ function KeywordFrontEnd() {
   const [sentimentName, setSentimentName] = useState("Neutral");
 
   const [firstSearch, setFirstSearch] = useState(false);
+
+  useEffect(async () => {
+    if(firstTermsSearch){
+      await searchTrending();
+    }
+  }, [termsData, firstTermsSearch]);
+
+  const searchTrending = async () => {
+    const posOptions = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    async function posSuccess(pos) {
+      let latitude = pos.coords.latitude;
+      let longitude = pos.coords.longitude;
+
+      try {
+        const result = await axios.get("http://localhost:8000/terms", {
+          params: {
+            latitude,
+            longitude
+          },
+        });
+
+        if(result.data !== undefined){
+
+          setTermsData(result.data)
+          // setTermsLoaded(true)
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function posError(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    if('geolocation' in navigator){
+      navigator.geolocation.getCurrentPosition(posSuccess, posError, posOptions);
+    }
+
+    setFirstTermsSearch(false);
+
+  };
 
   async function searchKeyword() {
     try {
@@ -92,6 +134,7 @@ function KeywordFrontEnd() {
     await searchKeyword();
     await searchSentiment();
     setFirstSearch(true);
+    setShowTweets(true);
   }
 
   function toggleShowCharts() {
@@ -121,6 +164,14 @@ function KeywordFrontEnd() {
 
   return (
     <div className='container'>
+      <div className='term-container'>
+        <button onClick={searchTrending}>Load/Reload</button>
+            <div className='term-cloud'>
+              <SimpleCloud values={termsData} setter={setKeyword} className='cloud' />
+            </div>
+      </div>
+
+
       <div className='label'>Insert keyword</div>
       <input
         type='text'
