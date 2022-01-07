@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import io from "socket.io-client";
-import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
@@ -9,11 +8,10 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import "./StreamingTweet.css";
 import "bootstrap/dist/css/bootstrap.css";
-import Tweet from "./Tweet";
 import TweetList from "./TweetList";
 
 const StreamingTweet = () => {
-  var socket = useRef(null);
+  let socket = useRef(null);
 
   const [text, setText] = useState("");
   const [tweets, setTweets] = useState([]);
@@ -42,7 +40,7 @@ const StreamingTweet = () => {
     await socket.current.emit("start-stream", text); //Funzia con una palora
     console.log("streaming started");
     socket.current.on("tweet", (tweet) => {
-      setTweets((tweets) => [tweet, ...tweets]);
+      setTweets((ts) => [tweet, ...ts]);
       setShowTweets(true);
     });
   }
@@ -83,7 +81,7 @@ const StreamingTweet = () => {
       <div className='d-flex justify-content-center'>
         {showText && <h4 className='pulser'>Sto cercando i tweet</h4>}
       </div>
-      {showTweets && <TweetList tweets={tweets} stream={true}></TweetList>}
+      {showTweets && <TweetList tweets={tweets} stream={true} />}
     </div>
   );
 };

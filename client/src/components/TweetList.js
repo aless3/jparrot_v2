@@ -1,8 +1,4 @@
 import React from "react";
-import { Card } from "react-bootstrap";
-import { Container } from "react-bootstrap";
-import { Row } from "react-bootstrap";
-import { Col } from "react-bootstrap";
 import Tweet from "./Tweet";
 
 import "./TweetList.css";
@@ -23,7 +19,7 @@ const TweetList = ({ tweets, stream }) => {
           })
         : tweets.data.map((tweet) => {
             const user = tweets.includes.users.filter(
-              (user) => user.id == tweet.author_id
+              (u) => u.id === tweet.author_id
             );
             return (
               <Tweet

@@ -4,7 +4,6 @@ import axios from "axios";
 
 import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
-import { ShowTweets } from "./ShowTweets";
 import { useLocation } from "react-router-dom";
 import TweetList from "./TweetList";
 
@@ -27,7 +26,6 @@ function KeywordFrontEnd() {
   const [pieData, setPieData] = useState({});
 
   const [tweets, setTweets] = useState([]);
-  //const [users, setUsers] = useState([]);
   const [showTweets, setShowTweets] = useState(false);
   const [showCharts, setShowCharts] = useState(false);
 
@@ -47,12 +45,8 @@ function KeywordFrontEnd() {
 
       if (result.data !== undefined) {
         setTweets(() => {
-          // return result.data.data;
           return result.data;
         });
-        // setUsers(() => {
-        //     return result.data.includes.users;
-        // });
       } else {
         console.log("data is undefined");
       }

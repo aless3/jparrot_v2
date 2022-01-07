@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import Card from "react-bootstrap/Card";
-import { Col } from "react-bootstrap";
-import { Row } from "react-bootstrap";
-import { Container } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
+
 import {
   FaRetweet,
   FaReply,
@@ -14,7 +12,7 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet, stream }) {
-  if (user == undefined) {
+  if (user === undefined) {
     console.error("UNDEFINED");
   } else {
     console.log("defined");
@@ -41,7 +39,6 @@ function Tweet({ user, tweet, stream }) {
             </Row>
           </Card.Header>
           <Card.Body>
-            <Card.Title></Card.Title>
             <Card.Text as='div'>
               <div className='text'>{text}</div>
               <div className='tweet-details'>

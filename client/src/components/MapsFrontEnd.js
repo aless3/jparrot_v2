@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
-import Tweet from "./Tweet";
 import axios from "axios";
 import TweetList from "./TweetList";
 import "./MapsFrontEnd.css";
@@ -30,15 +29,13 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 function MapsFrontEnd() {
-  var marker = {};
-  const [range, setRange] = useState(1);
+  const [range, setRange] = useState("");
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
   const [showRange, setShowRange] = useState(false);
   const [showTweets, setShowTweets] = useState(false);
   const [showError, setShowError] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [tweets, setTweets] = useState();
-  const tmp = useRef(null);
 
   const searchTweets = async () => {
     try {
@@ -50,7 +47,7 @@ function MapsFrontEnd() {
         },
       });
       console.log(result);
-      if (result.data.data != undefined) {
+      if (result.data.data !== undefined) {
         setTweets(result.data);
         console.log(tweets);
         setShowError(false);
@@ -127,7 +124,6 @@ function MapsFrontEnd() {
                   </div>
                 )}
               </Card.Title>
-              <Card.Text></Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -147,7 +143,7 @@ function MapsFrontEnd() {
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
 
-          <Mycomponent
+          <MarkerPosition
             position={position}
             updatePosition={updatePosition}
             range={range}
@@ -162,15 +158,16 @@ function MapsFrontEnd() {
   );
 }
 
-function Mycomponent({ position, updatePosition, range, setShowRange }) {
+function MarkerPosition({ position, updatePosition, range, setShowRange }) {
   const [clicked, setClicked] = useState(false);
-  const map = useMapEvents({
+  useMapEvents({
     click(e) {
       updatePosition(e.latlng.lat, e.latlng.lng);
       setClicked(true);
       setShowRange(true);
     },
   });
+
   return (
     <>
       {clicked && (
@@ -180,7 +177,7 @@ function Mycomponent({ position, updatePosition, range, setShowRange }) {
             pathOptions={{ color: "blue", stroke: false }}
             radius={range}
           />
-          <Marker position={position}></Marker>
+          <Marker position={position}/>
         </>
       )}
     </>
