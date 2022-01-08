@@ -129,13 +129,15 @@ async function sentimentCount(counts) {
   let sentimentName;
 
   let posPercentage = (100 * posCount) / (posCount + negCount);
+  let zero = (posCount === 0 && negCount === 0)
+
   if (posPercentage > 90) {
     sentiment = 2;
     sentimentName = "Very Positive";
   } else if (posPercentage > 66) {
     sentiment = 1;
     sentimentName = "Positive";
-  } else if (posPercentage > 33) {
+  } else if (posPercentage > 33 || zero) {
     sentiment = 0;
     sentimentName = "Neutral";
   } else if (posPercentage > 10) {
