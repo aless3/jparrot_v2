@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import axios from "axios";
-import { Col, Container } from "react-bootstrap";
+import { Col, Container, Button } from "react-bootstrap";
 import { Row } from "react-bootstrap";
+import FormControl from "react-bootstrap/FormControl";
+import FormLabel from "react-bootstrap/FormLabel";
 
 import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
@@ -172,75 +174,128 @@ function KeywordFrontEnd() {
 
   return (
     <Container>
-      <div className="term-container">
-        <button onClick={searchTrending}>Load/Reload</button>
-        <div className="term-cloud">
+      <br />
+      <div>
+        <h2 style={{ textAlign: "center", color: "white" }}>
+          Ricerca per keyword
+        </h2>
+        <br />
+        <h3 style={{ textAlign: "center", color: "white" }}>Termcloud</h3>
+        <div className="d-flex justify-content-center">
           <SimpleCloud
             values={termsData}
             setter={setKeyword}
             className="cloud"
           />
         </div>
+        <div className="d-flex justify-content-center">
+          <Button variant="outline-light" onClick={searchTrending}>
+            Load/Reload
+          </Button>
+        </div>
       </div>
+      <hr />
 
-      <div className="label">Insert keyword</div>
-      <input
-        type="text"
-        value={keyword}
-        onChange={(e) => {
-          setKeyword(e.target.value);
-        }}
-      />
-
-      <button onClick={search}>Search</button>
+      <Row>
+        <Col md={{ span: 5, offset: 3 }}>
+          <FormControl
+            type="text"
+            value={keyword}
+            placeholder="Inserisci la keyword..."
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+          />
+        </Col>
+        <Col>
+          <Button variant="outline-light" onClick={search}>
+            Cerca
+          </Button>{" "}
+        </Col>
+      </Row>
 
       {firstSearch && (
         <div className={"searchedView"}>
-          <button onClick={toggleShowCharts}>Toggle Show Charts</button>
+          <br />
+          <div className="d-flex justify-content-center">
+            <Button variant="outline-light" onClick={toggleShowCharts}>
+              Toggle Show Charts
+            </Button>
+            <Button variant="outline-light" onClick={toggleShowSentiment}>
+              Toggle Show Sentiment
+            </Button>
+            <Button variant="outline-light" onClick={toggleShowLineChart}>
+              Toggle Line Chart
+            </Button>
+            <Button variant="outline-light" onClick={toggleShowPieChart}>
+              Toggle Pie Chart
+            </Button>
+            <Button variant="outline-light" onClick={toggleShowTweets}>
+              Toggle Show Tweets
+            </Button>
+          </div>
+          <br />
           {showCharts && (
             <Row className="charts">
               <Col xs={8}>
-                <button onClick={toggleShowLineChart}>Toggle Line Chart</button>
                 {showLineData && (
-                  <div className="line-chart">
-                    <LineChartSentiment data={lineData} />
+                  <div>
+                    <h3 style={{ textAlign: "center", color: "white" }}>
+                      Line Chart
+                    </h3>
+                    <div className="line-chart">
+                      <LineChartSentiment data={lineData} />
+                    </div>
                   </div>
                 )}
               </Col>
 
               <Col xs={4}>
-                <button onClick={toggleShowPieChart}>Toggle Pie Chart</button>
                 {showPieData && (
-                  <div className="pie-chart">
-                    <PieChartSentiment
-                      positiveCount={pieData.positiveCount}
-                      negativeCount={pieData.negativeCount}
-                    />
+                  <div>
+                    <h3 style={{ textAlign: "center", color: "white" }}>
+                      Pie Chart
+                    </h3>
+                    <div className="pie-chart">
+                      <PieChartSentiment
+                        positiveCount={pieData.positiveCount}
+                        negativeCount={pieData.negativeCount}
+                      />
+                    </div>
                   </div>
                 )}
               </Col>
             </Row>
           )}
+          <br />
           <Row>
             <Col xs={8}>
-              <button onClick={toggleShowTweets}>Toggle Show Tweets</button>
               {showTweets && (
-                <div className="tweets">
-                  {/* <ShowTweets tweets={tweets} users={users} /> */}
-                  <TweetList tweets={tweets} stream={false} />
+                <div>
+                  <h3 style={{ textAlign: "center", color: "white" }}>
+                    Tweets
+                  </h3>
+                  <br />
+                  <div className="tweets">
+                    {/* <ShowTweets tweets={tweets} users={users} /> */}
+                    <TweetList tweets={tweets} stream={false} />
+                  </div>
                 </div>
               )}
             </Col>
             <Col xs={4}>
-              <button onClick={toggleShowSentiment}>
-                Toggle Show Sentiment
-              </button>
               {showSentimentData && (
-                <div className="sentiment">
-                  <p>
-                    The sentiment value of tweets with this keyword is{" "}
-                    <b>{sentimentName}</b> (value: {sentiment})
-                  </p>
+                <div>
+                  <h3 style={{ textAlign: "center", color: "white" }}>
+                    Sentiment
+                  </h3>
+                  <br />
+                  <div className="sentiment">
+                    <h4 style={{ textAlign: "center", color: "white" }}>
+                      The sentiment value of tweets with this keyword is{" "}
+                      <b>{sentimentName}</b> (value: {sentiment})
+                    </h4>
+                  </div>
                 </div>
               )}
             </Col>
