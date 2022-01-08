@@ -2,7 +2,7 @@ const { ETwitterStreamEvent, TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
 
-const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
+const appOnlyClient = new TwitterApi(process.env.CORE_NEW);
 const streamingClient = appOnlyClient.readOnly;
 
 const router = express.Router();
@@ -100,7 +100,7 @@ const reloadRules = async (args, client = streamingClient) => {
  *  @returns {stream} - returns the created stream
  */
 const startStream = async (args, socket, client = streamingClient) => {
-  await reloadRules(args, client);
+  reloadRules(args, client);
 
   try {
     stream = await client.v2.searchStream({
@@ -134,7 +134,9 @@ const getStream = () => {
  *  Close stream
  */
 const closeStream = () => {
-  stream.close();
+  if(!stream === undefined){
+    stream.close();
+  }
 };
 
 module.exports = {
