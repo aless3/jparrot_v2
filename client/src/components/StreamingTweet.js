@@ -19,15 +19,11 @@ const StreamingTweet = () => {
   const [showTweets, setShowTweets] = useState(false);
 
   const handleChangeOn = () => {
-    if (!showText) {
-      setShowText(true);
-    }
+    setShowText(true);
   };
 
   const handleChangeOff = () => {
-    if (showText) {
-      setShowText(false);
-    }
+    setShowText(false);
   };
 
   async function start() {
@@ -37,6 +33,7 @@ const StreamingTweet = () => {
     socket.current.on("connect", () => {
       console.log(socket.current.id);
     });
+
     await socket.current.emit("start-stream", text); //Funzia con una palora
     console.log("streaming started");
     socket.current.on("tweet", (tweet) => {
@@ -58,10 +55,10 @@ const StreamingTweet = () => {
       <Container>
         <Row>
           <Col xs={2}>
-            <Button variant='secondary' onClick={start}>
+            <Button variant='outline-light' onClick={start}>
               Inizia
             </Button>{" "}
-            <Button variant='secondary' onClick={end}>
+            <Button variant='outline-light' onClick={end}>
               Ferma
             </Button>{" "}
           </Col>

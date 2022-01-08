@@ -134,7 +134,7 @@ const getStream = () => {
  *  Close stream
  */
 const closeStream = () => {
-  if(!stream === undefined){
+  if(stream !== undefined){
     stream.close();
   }
 };
