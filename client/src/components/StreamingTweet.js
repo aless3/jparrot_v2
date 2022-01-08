@@ -58,19 +58,19 @@ const StreamingTweet = () => {
       <Container>
         <Row>
           <Col xs={2}>
-            <Button variant='secondary' onClick={start}>
+            <Button variant="outline-light" onClick={start}>
               Inizia
             </Button>{" "}
-            <Button variant='secondary' onClick={end}>
+            <Button variant="outline-light" onClick={end}>
               Ferma
             </Button>{" "}
           </Col>
           <Col>
-            <InputGroup className=''>
+            <InputGroup className="">
               <FormControl
-                aria-label='Default'
-                aria-describedby='inputGroup-sizing-default'
-                placeholder='Inserisci la keyword...'
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                placeholder="Inserisci la keyword..."
                 onChange={(e) => setText(e.target.value)}
               />
             </InputGroup>
@@ -78,8 +78,8 @@ const StreamingTweet = () => {
         </Row>
       </Container>
       <br />
-      <div className='d-flex justify-content-center'>
-        {showText && <h4 className='pulser'>Sto cercando i tweet</h4>}
+      <div className="d-flex justify-content-center">
+        {showText && <h4 className="pulser">Sto cercando i tweet</h4>}
       </div>
       {showTweets && <TweetList tweets={tweets} stream={true} />}
     </div>
