@@ -67,55 +67,57 @@ function MapsFrontEnd() {
     });
   };
   return (
-    <div className='container'>
+    <div className="container">
       <br />
-      <Row className='mx-auto'>
+      <h2 style={{ textAlign: "center", color: "white" }}>Mappe</h2>
+      <br />
+      <Row className="mx-auto">
         <Col>
           <Card
-            id='cardinput'
-            border='light'
-            className='mx-auto'
+            id="cardinput"
+            border="light"
+            className="mx-auto"
             style={{ width: "50vw" }}
           >
             <Card.Header>Scegli una posizione sulla mappa</Card.Header>
             <Card.Body>
               <Card.Title>
                 {showRange && (
-                  <div className='input'>
+                  <div className="input">
                     <Form.Label>Scegli un'area</Form.Label>
                     <Form.Range
                       onChange={(e) => setRange(e.target.value)}
-                      className='slider'
+                      className="slider"
                       value={range}
-                      min='1'
-                      max='40000'
+                      min="1"
+                      max="40000"
                     />
                     <p>Metri: {range} </p>
                     <br />
-                    <Row className='mb-3'>
+                    <Row className="mb-3">
                       <Form.Group
                         as={Col}
-                        md='6'
-                        controlId='validationFormik03'
+                        md="6"
+                        controlId="validationFormik03"
                       >
                         <FormControl
                           value={keyword}
                           onChange={(e) => {
                             setKeyword(e.target.value);
                           }}
-                          aria-label='Username'
-                          aria-describedby='basic-addon1'
-                          placeholder='Inserisci una parola chiave  '
+                          aria-label="Username"
+                          aria-describedby="basic-addon1"
+                          placeholder="Inserisci una parola chiave  "
                         />
                       </Form.Group>
                       <Form.Group
                         as={Col}
-                        md='6'
-                        controlId='validationFormik03'
+                        md="6"
+                        controlId="validationFormik03"
                       >
                         <Button
                           onClick={searchTweets}
-                          variant='outline-primary'
+                          variant="outline-primary"
                         >
                           Cerca
                         </Button>{" "}
@@ -130,9 +132,9 @@ function MapsFrontEnd() {
       </Row>
 
       <br />
-      <Row className='mx-auto'>
+      <Row className="mx-auto">
         <MapContainer
-          className='mapcontainer mx-auto'
+          className="mapcontainer mx-auto"
           style={{ height: "50vmin", width: "110vmin" }}
           center={[44.494887, 11.3426163]}
           zoom={13}
@@ -140,7 +142,7 @@ function MapsFrontEnd() {
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
           <MarkerPosition
@@ -153,7 +155,7 @@ function MapsFrontEnd() {
       </Row>
       <Row>{showTweets && <TweetList tweets={tweets} stream={false} />}</Row>
 
-      {showError && <div className='errormsg'>No Tweets Found :C</div>}
+      {showError && <div className="errormsg">No Tweets Found :C</div>}
     </div>
   );
 }
@@ -177,7 +179,7 @@ function MarkerPosition({ position, updatePosition, range, setShowRange }) {
             pathOptions={{ color: "blue", stroke: false }}
             radius={range}
           />
-          <Marker position={position}/>
+          <Marker position={position} />
         </>
       )}
     </>
