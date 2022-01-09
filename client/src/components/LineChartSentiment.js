@@ -25,10 +25,6 @@ ChartJS.register(
 );
 
 export class LineChartSentiment extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   computeData() {
     let lineLabels = [];
 
@@ -49,7 +45,6 @@ export class LineChartSentiment extends React.Component {
     negativeDataset.tension = 0.1;
 
     for (let i = 0; i < 8; i++) {
-      console.log(this.props.data.days.length);
       let date = this.props.data.days[i].date.substr(0, 10); // yyyy/mm/dd is 10 characters
       lineLabels.push(date);
 

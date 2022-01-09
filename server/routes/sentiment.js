@@ -18,7 +18,7 @@ const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
 const cors = require("cors");
-const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
+const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 const sentimentClient = appOnlyClient.readOnly;
 
 const router = express.Router();
@@ -89,6 +89,11 @@ async function sentimentCount(counts) {
   let negativeTweets = counts.negativeTweets;
   let totalTweets = counts.totalTweets;
 
+  console.log("positiveTweets")
+  console.log(counts)
+  console.log("positiveTweets")
+
+
   const result = {};
   result.days = [];
 
@@ -155,8 +160,8 @@ async function sentimentCount(counts) {
 }
 
 router.get("/", async (req, res) => {
-  let counts = searchCounts(req);
-  let result = sentimentCount(counts);
+  let counts = await searchCounts(req);
+  let result = await sentimentCount(counts);
 
   res.send(result);
 });
