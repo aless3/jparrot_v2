@@ -89,11 +89,6 @@ async function sentimentCount(counts) {
   let negativeTweets = counts.negativeTweets;
   let totalTweets = counts.totalTweets;
 
-  console.log("positiveTweets")
-  console.log(counts)
-  console.log("positiveTweets")
-
-
   const result = {};
   result.days = [];
 
