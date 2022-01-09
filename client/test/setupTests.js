@@ -1,5 +1,5 @@
-jest.mock("axios");
 
+jest.mock("axios");
 const axios = require("axios");
 
 const keywordFile = require("../blobs/KeywordAxiosFedez.json");
@@ -26,3 +26,4 @@ axios.get.mockImplementation((url) => {
     }
     return Promise.resolve(result);
 });
+
