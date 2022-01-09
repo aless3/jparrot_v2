@@ -3,6 +3,11 @@ import "../App.css";
 import axios from "axios";
 import { Col, Row, Container, Button } from "react-bootstrap";
 import FormControl from "react-bootstrap/FormControl";
+import Neutral from "../icons/neutral.png"
+import Sad from "../icons/sad.png"
+import Pain from "../icons/pain.png"
+import Happy from "../icons/happy.png"
+import Smile from "../icons/smile.png"
 
 import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
@@ -25,6 +30,7 @@ function KeywordFrontEnd() {
   const [tweets, setTweets] = useState([]);
   const [showTweets, setShowTweets] = useState(false);
   const [showCharts, setShowCharts] = useState(false);
+  const [emoijSt,setEmoijSt] = useState (Pain);
 
   const [showSentimentData, setShowSentimentData] = useState(false);
   const [sentiment, setSentiment] = useState(0);
@@ -32,11 +38,24 @@ function KeywordFrontEnd() {
 
   const [firstSearch, setFirstSearch] = useState(false);
 
+  function emoijImage () {
+    if (sentiment == 2) { setEmoijSt(Happy)}
+    if (sentiment == 1) { setEmoijSt(Smile)}
+    if (sentiment == 0) { setEmoijSt(Neutral)}
+    if (sentiment == -1) { setEmoijSt(Sad)}
+    if (sentiment == -2) { setEmoijSt(Pain)}
+  }
+
   useEffect(async () => {
     if (firstTermsSearch) {
       await searchTrending();
     }
   }, [termsData, firstTermsSearch]);
+
+  useEffect(()=> {
+    emoijImage();
+  })
+
 
   const searchTrending = async () => {
     const posOptions = {
@@ -79,6 +98,7 @@ function KeywordFrontEnd() {
     }
 
     setFirstTermsSearch(false);
+
   };
 
   async function searchKeyword() {
@@ -112,7 +132,6 @@ function KeywordFrontEnd() {
       if (result.data !== undefined) {
         populateLineChart(result.data);
         populatePieChart(result.data);
-
         setSentiment(result.data.sentiment);
         setSentimentName(result.data.sentimentName);
         setShowSentimentData(true);
@@ -186,6 +205,7 @@ function KeywordFrontEnd() {
             className="cloud"
           />
         </div>
+        <br/>
         <div className="d-flex justify-content-center">
           <Button variant="outline-light" onClick={searchTrending}>
             Load/Reload
@@ -293,6 +313,14 @@ function KeywordFrontEnd() {
                       The sentiment value of tweets with this keyword is{" "}
                       <b>{sentimentName}</b> (value: {sentiment})
                     </h4>
+                    <br/>
+                    <div className="d-flex justify-content-center">
+                    <img
+                        style={{width:"77%", height:"77%"}}
+                        src={emoijSt}
+                        alt={emoijSt}
+                    />
+                    </div>
                   </div>
                 </div>
               )}
