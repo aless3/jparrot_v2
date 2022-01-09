@@ -14,6 +14,7 @@ import {
   Marker,
   Circle,
   useMapEvents,
+  Popup
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
@@ -151,10 +152,22 @@ function MapsFrontEnd() {
             range={range}
             setShowRange={setShowRange}
           />
+          {showTweets && tweets.data.map((tweet)=>{
+            if(tweet.geo.coordinates){
+              console.log(tweet)
+              const username = tweets.includes.users.filter(user => user.id === tweet.author_id)[0].username
+              return <Marker position={[tweet.geo.coordinates.coordinates[1], tweet.geo.coordinates.coordinates[0]]}>
+                <Popup>{username}</Popup>
+              </Marker>
+            }
+            else{
+              return <></>
+            }
+          })}
         </MapContainer>
       </Row>
       <Row>{showTweets && <TweetList tweets={tweets} stream={false} />}</Row>
-
+      <Row>{}</Row>
       {showError && <div className="errormsg">No Tweets Found :C</div>}
     </div>
   );
@@ -169,7 +182,6 @@ function MarkerPosition({ position, updatePosition, range, setShowRange }) {
       setShowRange(true);
     },
   });
-
   return (
     <>
       {clicked && (
