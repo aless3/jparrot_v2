@@ -12,8 +12,9 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet, stream }) {
-  if (user === undefined) {
+if (user === undefined || tweet === undefined) {
     console.error("UNDEFINED");
+    return null;
   } else {
     console.log("defined");
   }
@@ -75,7 +76,7 @@ function Tweet({ user, tweet, stream }) {
     );
   } catch (error) {
     console.error(error);
-    return <></>;
+    return null;
   }
 }
 
