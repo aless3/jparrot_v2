@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import axios from "axios";
-import { Col, Container, Button } from "react-bootstrap";
-import { Row } from "react-bootstrap";
+import { Col, Row, Container, Button } from "react-bootstrap";
 import FormControl from "react-bootstrap/FormControl";
-import FormLabel from "react-bootstrap/FormLabel";
 
 import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
