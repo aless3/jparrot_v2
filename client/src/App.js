@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Terms from "./components/TermsFrontEnd";
 import Maps from "./components/MapsFrontEnd";
 import Keyword from "./components/KeywordFrontEnd";
 import Streaming from "./components/Streaming";
