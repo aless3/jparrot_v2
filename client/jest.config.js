@@ -7,7 +7,8 @@ const config = {
     //    "\\.(css|less)$": "<rootDir>/assets/css/mocks/styleMock.js",
   },
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["./setupAfterEnv.js"],
+  setupFiles: ["./test/setupTests.js"],
+  setupFilesAfterEnv: ["./test/setupAfterEnv.js"],
   reporters: ['default',
     ['jest-sonar', {
       outputDirectory: './coverage',

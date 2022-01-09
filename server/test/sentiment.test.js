@@ -57,7 +57,6 @@ test('check sentimentCount computes the data correctly using stored blobs', asyn
     const file1Input = require('../blobs/sentimentCount_covid_input.json');
     const file2Input = require('../blobs/sentimentCount_fedez_input.json');
 
-
     const file1ExpectedOutput = require('../blobs/sentimentCount_covid_output.json');
     const file2ExpectedOutput = require('../blobs/sentimentCount_fedez_output.json');
 

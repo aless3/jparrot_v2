@@ -41,7 +41,7 @@ async function searchReplies(req, client = competitionClient){
 
         // build the correct query
         let query = baseQuery;
-        query.concat(hashtag)
+        query = query.concat(hashtag)
 
         const search = await client.v2.search(query, {
             expansions: ["author_id"],
@@ -99,7 +99,7 @@ function organizeReplies(replies) {
     errorResult.includes = {}
     errorResult.includes.users = []
 
-    if(replies.meta.result_count === 0){
+    if(replies === undefined || replies.meta === undefined || replies.meta.result_count === 0){
         return undefined;
     }
     try {
