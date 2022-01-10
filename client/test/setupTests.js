@@ -10,15 +10,15 @@ axios.get.mockImplementation((url) => {
     let result = {
         data: undefined,
     };
-    if (url === "http://localhost:8000/keyword") {
+    if (url.includes("keyword")) {
         return {
             data: keywordFile
         };
-    } else if (url === "http://localhost:8000/sentiment") {
+    } else if (url.includes("sentiment")) {
         return {
             data: sentimentFile
         };
-    } else if (url === "http://localhost:8000/terms") {
+    } else if (url.includes("terms")) {
         return {
             data: termsFile
         };
