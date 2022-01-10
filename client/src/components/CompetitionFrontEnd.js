@@ -68,6 +68,7 @@ function CompetitionFrontEnd() {
       <br />
       <div className='d-flex justify-content-center gap-3'>
         <Form.Control
+          id='keywordText'
           style={{ width: "40%" }}
           type='text'
           value={hashtag}
@@ -77,6 +78,7 @@ function CompetitionFrontEnd() {
           placeholder='Inserisci la keyword...'
         />
         <Form.Select
+          id='keywordSelect'
           style={{ width: "10%" }}
           type='text'
           value={maxResults}
