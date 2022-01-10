@@ -10,3 +10,6 @@
 
 # scans
 .scannerwork/
+
+# .DS_Store macos files
+**/.DS_Store
