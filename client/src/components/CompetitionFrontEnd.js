@@ -76,14 +76,6 @@ function CompetitionFrontEnd() {
           }}
           placeholder='Inserisci la keyword...'
         />
-        {/* <Form.Control
-          style={{ width: "10%" }}
-          type='text'
-          value={maxResults}
-          onChange={(e) => {
-            setMaxResultsHandler(e.target.value);
-          }}
-        /> */}
         <Form.Select
           style={{ width: "10%" }}
           type='text'
@@ -107,18 +99,6 @@ function CompetitionFrontEnd() {
           Search
         </Button>
       </div>
-
-      {/* {showTweets && (
-        <div className={"searchedView"}>
-          <div className="tweets">
-            <TweetList tweets={tweets} stream={false} />
-          </div>
-        </div>
-      )}
-      <br/>
-      <br/>
-      <br/>
-      {firstSearch && <Podium></Podium>} */}
       {showTweets && <Podium tweets={tweets} />}
     </div>
   );
