@@ -92,7 +92,9 @@ test('check organizeReplies correctly organizes the replies correctly using stor
 
     let realOutput = competition.organizeReplies(input)
 
-    expect(realOutput).toEqual(expectedOutput);
+    expect(realOutput).toEqual(
+        expect.objectContaining(expectedOutput)
+    );
 });
 
 test('check if searchReplies can correctly access the info needed', async () => {
@@ -104,7 +106,7 @@ test('check if searchReplies can correctly access the info needed', async () => 
 
     let search = await competition.searchReplies(req, client);
 
-    let expected = '#competition #competitor #jparrot_v2 #uniboswe2021 #test\n' + 'test per competition.test.js'
+    let expected = '#competition #jparrot_v2 #uniboswe2021 #test'
 
     expect(search.data[0].text).toEqual(
         expect.stringContaining(expected)

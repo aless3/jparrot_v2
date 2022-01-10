@@ -5,8 +5,6 @@ const { TwitterApi } = require("twitter-api-v2");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const client = appOnlyClient.readOnly;
 
-jest.setTimeout(10000);
-
 test("check searchMap get the correct data form", async () => {
   let req = {};
   req.query = {};

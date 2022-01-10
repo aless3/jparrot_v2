@@ -1,4 +1,3 @@
-
 jest.mock("axios");
 const axios = require("axios");
 
@@ -8,6 +7,8 @@ const termsFile = require("../blobs/TermsAxios.json");
 const competitionFile1 = require("../blobs/CompetitionTest1.json")
 const competitionFile2 = require("../blobs/CompetitionTest2.json")
 let competitionUpdate = false;
+
+jest.setTimeout(30000);
 
 axios.get.mockImplementation((url) => {
     let result = {
