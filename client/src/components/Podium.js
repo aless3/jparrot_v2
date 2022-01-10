@@ -1,71 +1,64 @@
-import React from 'react'
-import { Container, Row } from 'react-bootstrap'
-import Card from "react-bootstrap/Card"
-import Col from "react-bootstrap/Col"
-import TweetList from './TweetList'
-import "./Podium.css"
+import React from "react";
+import PodiumPlace from "./PodiumPlace";
+import Tweet from "./Tweet";
+import "./Podium.css";
 
-const Podium = () => {
-    return (
-        <Container>
-            <Row className="d-flex align-items-end">
-                <Col xs={4}>
-                <Card border="light" style={{ width:"20vw", top: "7em"}}>
-                    <Card.Header>Header</Card.Header>
-                        <Card.Body>
-                            <Card.Title>Light Card Title</Card.Title>
-                        <Card.Text>
-                        Some quick example text to build on Some Some quick example text to build on Some Some quick example text to build on Some quick example text to build o n Some quick example texaquick example texaquick example texaquick example texaquick example texaquick example example mple 321
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                </Col>
-                <Col xs={4}>
-                <Card border="light" style={{ width:"20vw",top: "0.5em"}}>
-                    <Card.Header>Header</Card.Header>
-                        <Card.Body>
-                            <Card.Title>Light Card Title</Card.Title>
-                        <Card.Text>
-                        Some quick example text to build on Some Some quick example text to build on Some Some quick example text to build on Some quick example text to build o n Some quick example texaquick example texaquick example texaquick example texaquick example texaquick example example mple 321 
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                </Col>
-                <Col xs={4}>
-                <Card border="light" style={{ width:"20vw", top: "14em"}}>
-                    <Card.Header>Header</Card.Header>
-                        <Card.Body>
-                            <Card.Title>Light Card Title</Card.Title>
-                        <Card.Text>
-                        Some quick example text to build on Some Some quick example text to build on Some Some quick example text to build on Some quick example text to build o n Some quick example texaquick example texaquick example texaquick example texaquick example texaquick example
-                        example mple 321
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                </Col>
-            </Row>
-            <br/>
-            <br/>
-            <Row className="d-flex align-items-end">
-                <Col xs={4}>
-                    <div className="">
-                        <div className="second"></div>
-                    </div>
-                </Col>
-                <Col xs={4}>
-                    <div className="">
-	                    <div className="first"></div>
-                    </div>
-                </Col>
-                <Col xs={4} style={{ width:"20vw"}}>
-                    <div className="">
-	                    <div className="third"></div>
-                    </div>
-                </Col>
-            </Row>
-            <br/>
-        </Container>
-    )
-}
+const Podium = ({ tweets }) => {
+  return (
+    <>
+      <div style={{ marginTop: "5rem" }} className='podium-container'>
+        {tweets && tweets.data[1] && (
+          <PodiumPlace
+            tweet={tweets.data[1]}
+            user={
+              tweets.includes.users.filter(
+                (user) => user.id === tweets.data[1].author_id
+              )[0]
+            }
+            place={2}
+            height={18}
+          />
+        )}
+        {tweets && tweets.data[0] && (
+          <PodiumPlace
+            tweet={tweets.data[0]}
+            user={
+              tweets.includes.users.filter(
+                (user) => user.id === tweets.data[0].author_id
+              )[0]
+            }
+            place={1}
+            height={23}
+          />
+        )}
+        {tweets && tweets.data[2] && (
+          <PodiumPlace
+            tweet={tweets.data[2]}
+            user={
+              tweets.includes.users.filter(
+                (user) => user.id === tweets.data[2].author_id
+              )[0]
+            }
+            place={3}
+            height={13}
+          />
+        )}
+      </div>
+      {tweets && tweets.data[3] && (
+        <div className='honor-mention'>
+          <div className='honor-title'>Honorable mention</div>
+          <Tweet
+            tweet={tweets.data[3]}
+            user={
+              tweets.includes.users.filter(
+                (user) => user.id === tweets.data[3].author_id
+              )[0]
+            }
+          />
+        </div>
+      )}
+    </>
+  );
+};
 
-export default Podium
+export default Podium;

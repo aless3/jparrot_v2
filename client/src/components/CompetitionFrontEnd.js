@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../App.css";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import { Form } from "react-bootstrap";
 
-import TweetList from "./TweetList";
 import Podium from "./Podium";
 
 function CompetitionFrontEnd() {
@@ -14,6 +13,7 @@ function CompetitionFrontEnd() {
   const [tweets, setTweets] = useState([]);
   const [showTweets, setShowTweets] = useState(false);
   const [firstSearch, setFirstSearch] = useState(false);
+  const interval = useRef(null);
 
   async function searchCompetitors() {
     try {
@@ -28,8 +28,10 @@ function CompetitionFrontEnd() {
         setTweets(() => {
           return result.data;
         });
-
-        setFirstSearch(true);
+        if (!firstSearch) {
+          setFirstSearch(true);
+        }
+        setShowTweets(true);
       } else {
         console.log("data is undefined");
       }
@@ -45,36 +47,54 @@ function CompetitionFrontEnd() {
     }
   };
 
+  const setUpInterval = () => {
+    interval.current = setInterval(async () => {
+      await searchCompetitors();
+    }, 3000);
+  };
+
+  useEffect(() => {
+    return () => {
+      clearInterval(interval.current);
+    };
+  }, []);
+
   return (
-    <div className="container">
+    <div className='container'>
       <br />
       <h2 style={{ textAlign: "center", color: "white" }}>Competition</h2>
       <br />
-      <div className="d-flex justify-content-center gap-3">
+      <div className='d-flex justify-content-center gap-3'>
         <Form.Control
           style={{ width: "40%" }}
-          type="text"
+          type='text'
           value={hashtag}
           onChange={(e) => {
             setHashtag(e.target.value);
           }}
-          placeholder="Inserisci la keyword..."
+          placeholder='Inserisci la keyword...'
         />
         <Form.Control
           style={{ width: "10%" }}
-          type="text"
+          type='text'
           value={maxResults}
           onChange={(e) => {
             setMaxResultsHandler(e.target.value);
           }}
         />
 
-        <Button variant="outline-light" onClick={searchCompetitors}>
+        <Button
+          variant='outline-light'
+          onClick={async () => {
+            setUpInterval();
+            await searchCompetitors();
+          }}
+        >
           Search
         </Button>
       </div>
 
-      {showTweets && (
+      {/* {showTweets && (
         <div className={"searchedView"}>
           <div className="tweets">
             <TweetList tweets={tweets} stream={false} />
@@ -84,7 +104,8 @@ function CompetitionFrontEnd() {
       <br/>
       <br/>
       <br/>
-      {firstSearch && <Podium></Podium>}
+      {firstSearch && <Podium></Podium>} */}
+      {showTweets && <Podium tweets={tweets} />}
     </div>
   );
 }

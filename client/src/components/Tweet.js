@@ -12,13 +12,6 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet, stream }) {
-if (user === undefined || tweet === undefined) {
-    console.error("UNDEFINED");
-    return null;
-  } else {
-    console.log("defined");
-  }
-
   try {
     const { name, username, profile_image_url } = user;
     const { created_at, text } = tweet;
@@ -30,12 +23,12 @@ if (user === undefined || tweet === undefined) {
         <Card border='light'>
           <Card.Header>
             <Row>
-              <Col xs={1}>
+              <Col xs={3} className='tweet-top'>
                 <img className='userimg' src={profile_image_url} alt={name} />
-              </Col>
-              <Col xs={11}>
-                <div className='name'>{name}</div>
-                <div className='username'>@{username}</div>
+                <div>
+                  <div className='name'>{name}</div>
+                  <div className='username'>@{username}</div>
+                </div>
               </Col>
             </Row>
           </Card.Header>
@@ -47,19 +40,19 @@ if (user === undefined || tweet === undefined) {
                   <>
                     <div className='like'>
                       <FaHeart />
-                      <div className='iconed'>{like_count}</div>
+                      <div className='icon-container'>{like_count}</div>
                     </div>
                     <div className='reply'>
                       <FaReply />
-                      <div className='iconed'>{reply_count}</div>
+                      <div className='icon-container'>{reply_count}</div>
                     </div>
                     <div className='retweet'>
                       <FaRetweet />
-                      <div className='iconed'>{retweet_count}</div>
+                      <div className='icon-container'>{retweet_count}</div>
                     </div>
                     <div className='quote'>
                       <FaQuoteRight />
-                      <div className='iconed'>{quote_count}</div>
+                      <div className='icon-container'>{quote_count}</div>
                     </div>
                   </>
                 )}

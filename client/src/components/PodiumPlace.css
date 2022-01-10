@@ -1,0 +1,20 @@
+.podium-element{
+  width: 33%;
+}
+
+.pedestal{
+  margin-top: 2rem;
+  box-shadow: 0 0 30px -7px #000000;
+  background-color: aqua;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.pedestal > h1 {
+  color: white;
+  font-size:xx-large;
+}

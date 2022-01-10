@@ -1,4 +1,4 @@
-.first {
+/* .first {
     background-color: #47c0e9;
     width: 20vw;
     height: 20vw;
@@ -43,4 +43,27 @@
   .thirdClassified {
     
     width: 20vw;
-  }
+  } */
+
+.podium-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100% !important;
+}
+
+.honor-mention {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.honor-title {
+  text-align: center;
+  background-color: #005c99;
+  color: white;
+  font-size: xx-large;
+  box-shadow: 0 0 30px -7px #000000;
+  border-radius: 1rem;
+  height: 100%;
+}

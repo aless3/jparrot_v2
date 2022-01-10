@@ -22,9 +22,14 @@
   font-size: large;
 }
 
+.tweet-top {
+  display: flex;
+}
+
 .userimg {
   border-radius: 50%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-right: 1rem;
 }
 
 .user-name {
@@ -47,17 +52,19 @@
   margin-top: 1rem;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .tweet-details > div {
   display: flex;
   align-items: center;
+  margin-right: 1rem;
 }
 
 .date > div {
   margin-left: 0.3rem;
 }
 
-.iconed {
+.icon-container {
   margin-left: 0.5rem;
 }
