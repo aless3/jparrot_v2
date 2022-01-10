@@ -44,10 +44,12 @@ function CompetitionFrontEnd() {
     let number = parseInt(max);
     if (!isNaN(number)) {
       setMaxResults(number);
+      console.log(number);
     }
   };
 
   const setUpInterval = () => {
+    clearInterval(interval.current);
     interval.current = setInterval(async () => {
       await searchCompetitors();
     }, 3000);
@@ -74,14 +76,26 @@ function CompetitionFrontEnd() {
           }}
           placeholder='Inserisci la keyword...'
         />
-        <Form.Control
+        {/* <Form.Control
           style={{ width: "10%" }}
           type='text'
           value={maxResults}
           onChange={(e) => {
             setMaxResultsHandler(e.target.value);
           }}
-        />
+        /> */}
+        <Form.Select
+          style={{ width: "10%" }}
+          type='text'
+          value={maxResults}
+          onChange={(e) => {
+            setMaxResultsHandler(e.target.value);
+          }}
+        >
+          <option value='50'>50</option>
+          <option value='100'>100</option>
+          <option value='150'>150</option>
+        </Form.Select>
 
         <Button
           variant='outline-light'

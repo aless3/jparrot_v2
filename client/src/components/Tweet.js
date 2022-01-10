@@ -12,8 +12,8 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet, stream }) {
-  if(!user || !tweet){
-    console.log("user and/or tweet is null")
+  if (!user || !tweet) {
+    console.log("user and/or tweet is null");
     return null;
   }
   try {
@@ -27,7 +27,7 @@ function Tweet({ user, tweet, stream }) {
         <Card border='light'>
           <Card.Header>
             <Row>
-              <Col xs={3} className='tweet-top'>
+              <Col className='tweet-top'>
                 <img className='userimg' src={profile_image_url} alt={name} />
                 <div>
                   <div className='name'>{name}</div>

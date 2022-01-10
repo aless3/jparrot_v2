@@ -46,7 +46,7 @@ const Podium = ({ tweets }) => {
       </div>
       {tweets && tweets.data[3] && (
         <div className='honor-mention'>
-          <div className='honor-title'>Honorable mention</div>
+          <h2 className='honor-title'> Honorable mention</h2>
           <Tweet
             tweet={tweets.data[3]}
             user={

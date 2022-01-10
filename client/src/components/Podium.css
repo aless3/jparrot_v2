@@ -60,10 +60,9 @@
 
 .honor-title {
   text-align: center;
-  background-color: #005c99;
   color: white;
   font-size: xx-large;
-  box-shadow: 0 0 30px -7px #000000;
-  border-radius: 1rem;
   height: 100%;
+  font-family: Apple-System, Arial, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, STXihei, sans-serif;
 }
