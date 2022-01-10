@@ -1,12 +1,12 @@
 const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
-const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const mapsClient = appOnlyClient.readOnly;
 
 const router = express.Router();
-router.use(cors());
+
+
 
 /*
 funzione che prende la richiesta, ci tira fuori il range, le coordinate

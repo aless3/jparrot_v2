@@ -3,13 +3,10 @@ const {
 } = require("twitter-api-v2");
 
 const express = require("express");
-const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const termsClient = appOnlyClient.readOnly;
 
 const router = express.Router();
-
-router.use(cors());
 
 /*
 manipola i dati, contando le occorrenza di una certa parola nei tweets

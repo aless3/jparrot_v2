@@ -3,13 +3,10 @@ const {
 } = require("twitter-api-v2");
 
 const express = require("express");
-const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
 const competitionClient = appOnlyClient.readOnly;
 
 const router = express.Router();
-
-router.use(cors());
 
 function hasWhiteSpace(s) {
     return /\s/g.test(s);

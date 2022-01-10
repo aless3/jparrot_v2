@@ -1,4 +1,4 @@
-/** @module sentyment */
+/** @module sentiment */
 
 /**
  * @typedef {object} Result
@@ -19,22 +19,20 @@
 const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
-const cors = require("cors");
 const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 const sentimentClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
-router.use(cors());
-
 /**
  *  @function
  *  @name searchCounts
- *  @description - twitter api to function.
+ *  @description - Twitter api to function.
  *  Takes a keyword stored inside the request object and returns tweets with that keyword and positive or negative words.
  *  @async
- *  @param counts - object containing 20 tweets per category: negative tweets, positive tweets and total tweets
  *  @returns {SentimentTweets} - Returns a SentimentTweets object.
+ * @param req - the request sent from the frontend
+ * @param client - the client to use [optional, if not passed use streamingClient]
  */
 async function searchCounts(req, client = sentimentClient) {
   let keyword = req.query.keyword;
