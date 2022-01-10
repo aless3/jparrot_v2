@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { Form } from "react-bootstrap";
 
 import TweetList from "./TweetList";
+import Podium from "./Podium";
 
 function CompetitionFrontEnd() {
   const [hashtag, setHashtag] = useState("");
@@ -12,6 +13,7 @@ function CompetitionFrontEnd() {
 
   const [tweets, setTweets] = useState([]);
   const [showTweets, setShowTweets] = useState(false);
+  const [firstSearch, setFirstSearch] = useState(false);
 
   async function searchCompetitors() {
     try {
@@ -27,7 +29,7 @@ function CompetitionFrontEnd() {
           return result.data;
         });
 
-        setShowTweets(true);
+        setFirstSearch(true);
       } else {
         console.log("data is undefined");
       }
@@ -79,6 +81,10 @@ function CompetitionFrontEnd() {
           </div>
         </div>
       )}
+      <br/>
+      <br/>
+      <br/>
+      {firstSearch && <Podium></Podium>}
     </div>
   );
 }

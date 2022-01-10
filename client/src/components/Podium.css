@@ -1,0 +1,46 @@
+.first {
+    background-color: #47c0e9;
+    width: 20vw;
+    height: 20vw;
+    padding: 50px;
+    -webkit-box-shadow: 0px 0px 30px -7px #000000;
+    -moz-box-shadow: 0px 0px 30px -7px #000000;
+    -o-box-shadow: 0px 0px 30px -7px #000000;
+    box-shadow: 0px 0px 30px -7px #000000;
+    z-index: 1;
+    border-radius: 2px;
+    transition: transform .3s;
+  }
+  
+  .second {
+    background-color: #159FCB;
+    width: 20vw;
+    height: 15vw;
+    padding: 50px;
+    border-radius: 2px;
+    transition: transform .3s;
+  }
+  
+  .third {
+    background-color: #159FCB;
+    width: 20vw;
+    height: 10vw;
+    padding: 50px;
+    border-radius: 2px;
+    transition: transform .3s;
+  }
+
+  .firstClassified {
+    
+    width: 20vw;
+  }
+
+  .secondClassified {
+    
+    width: 20vw;
+  }
+
+  .thirdClassified {
+    
+    width: 20vw;
+  }
