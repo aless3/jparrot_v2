@@ -12,6 +12,10 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet, stream }) {
+  if(!user || !tweet){
+    console.log("user and/or tweet is null")
+    return null;
+  }
   try {
     const { name, username, profile_image_url } = user;
     const { created_at, text } = tweet;

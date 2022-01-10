@@ -16,7 +16,7 @@ function hasWhiteSpace(s) {
 }
 
 async function searchReplies(req, client = competitionClient){
-    let baseQuery = "#competition #competitor #jparrot_v2 #uniboswe2021 is:reply ";
+    let baseQuery = "#competition #jparrot_v2 #uniboswe2021 is:reply ";
     let max_results;
 
     // if max_results is set, use it, else use 200 as default
@@ -135,7 +135,9 @@ function organizeReplies(replies) {
             user = user[0];
 
             result.data.push(tweet)
-            result.includes.users.push(user)
+            if(!result.includes.users.includes(user)){
+                result.includes.users.push(user)
+            }
         }
 
         return result;
