@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#deleteRules">deleteRules</a></li><li><a href="global.html#getRules">getRules</a></li><li><a href="global.html#resetRules">resetRules</a></li><li><a href="global.html#sentimentCount">sentimentCount</a></li><li><a href="global.html#setRules">setRules</a></li><li><a href="global.html#startStream">startStream</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sentyment.html">sentyment</a><ul class='methods'><li data-type='method'><a href="module-sentyment.html#searchCounts#~searchCounts">searchCounts</a></li><li data-type='method'><a href="module-sentyment.html#sentimentCount#~sentimentCount">sentimentCount</a></li></ul></li><li><a href="module-streaming.html">streaming</a><ul class='methods'><li data-type='method'><a href="module-streaming.html#closeStream#~closeStream">closeStream</a></li><li data-type='method'><a href="module-streaming.html#deleteRules#~deleteRules">deleteRules</a></li><li data-type='method'><a href="module-streaming.html#getRules#~getRules">getRules</a></li><li data-type='method'><a href="module-streaming.html#getStream#~getStream">getStream</a></li><li data-type='method'><a href="module-streaming.html#resetRules#~resetRules">resetRules</a></li><li data-type='method'><a href="module-streaming.html#setRules#~setRules">setRules</a></li><li data-type='method'><a href="module-streaming.html#startStream#~startStream">startStream</a></li></ul></li></ul>
     
 </nav>
 
@@ -46,10 +46,10 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const
-{
-    ETwitterStreamEvent,
-    TwitterApi
-} = require('twitter-api-v2');
+    {
+        ETwitterStreamEvent,
+        TwitterApi
+    } = require('twitter-api-v2');
 
 const path = require('path')
 const express = require('express')
@@ -65,10 +65,15 @@ router.get('/home', (req, res) =>{
 })
 
 /**
- *  Rule reset function.
+ *  @module streaming
+ */
+ 
+/**
+ *  @function
+ *  @name resetRules
+ *  @description - Rule reset function.
  *  Deletes all set rules.
  *  @async
- *
  */
 const resetRules = async (client = streamingClient) => {
     let rules = await client.v2.streamRules()
@@ -78,7 +83,9 @@ const resetRules = async (client = streamingClient) => {
 }
 
 /**
- *  Rule insertion function.
+ *  @function
+ *  @name setRules
+ *  @description - Rule insertion function.
  *  Add rules passed by argument. (WHAT DOES IT DO WITH ALREADY EXISTING RULES?)
  *  @async
  *  @param rules - the list of rule strings to add to the rules applied for tweets filtering.
@@ -97,18 +104,22 @@ const setRules = async (rules, client = streamingClient) => {
 }
 
 /**
- *  Rule output function.
+ *  @function
+ *  @name getRules
+ *  @description - Rule output function.
  *  Returns all the rules applied for tweets filtering.
  *  @async
  *  @param client - the client to use [optional, if not passed use streamingClient
- *  @returns {Rules} - returns the tweet filtering rules 
+ *  @returns {Rules} - returns the tweet filtering rules
  */
 const getRules = async (client = streamingClient) => {
-     return client.v2.streamRules()
+    return client.v2.streamRules()
 }
 
 /**
- *  Rule deletion function.
+ *  @function
+ *  @name deleteRules
+ *  @description - Rule deletion function.
  *  Delete rules passed by argument, keeps all others.
  *  @async
  *  @param args - the list of rule IDs to remove from the rules applied for tweets filtering.
@@ -125,8 +136,12 @@ const deleteRules = async (args, client = streamingClient) => {
     }
 }
 
+let active = false;
+
 /**
- *  Streaming function.
+ *  @function
+ *  @name startStream
+ *  @description - Streaming function.
  *  Set rules, starts stream
  *  @async
  *  @param args - the list of rules to set for tweets filtering
@@ -143,24 +158,54 @@ const startStream = async (args, socket, client = streamingClient) => {
         console.log('FROM RESET-AND-SET ')
         console.log(error)
     }
+
     try{
         stream = await client.v2.searchStream({
-            'tweet.fields': ['author_id', 'text', 'geo']
+            expansions: ["author_id"],
+            "tweet.fields": ["created_at", "text"],
+            "user.fields": ["username", "name", "profile_image_url"],
         })
+        active = true;
         stream.autoReconnect = true
         stream.on(ETwitterStreamEvent.Data, async tweet => {
-            //console.log(tweet)
-            socket.emit('tweet', tweet)
-            i++
-            console.log(`Data sent${i}`)
+            if(active) {
+                socket.emit('tweet', tweet)
+                i++
+                console.log(`Data sent${i}`)
+            }
         })
+
     } catch (error){
         console.log('FROM STREAMING')
         console.log(error)
     }
 }
 
-module.exports = { stream, router, resetRules, setRules, getRules, deleteRules, startStream };
+/**
+ *  @function
+ *  @name getStream
+ *  @returns {TwitterV2apiHandler} - Returns the stream
+ *  @description - Get stream handler function.
+ *  Get the twitter v2 api stream handler. This function makes it possible
+ *  to obtain the stream object from outside this file
+ */
+const getStream = () => {
+    return stream;
+}
+
+/**
+ *  @function
+ *  @name closeStream
+ *  @description - Close stream handler function.
+ *  Close the twitter v2 api stream handler. This function makes it possible
+ *  to close the stream object from outside this file
+ */
+const closeStream = () => {
+    stream.close();
+}
+
+
+module.exports = { router, resetRules, setRules, getRules, deleteRules, getStream, startStream, closeStream };
 </code></pre>
         </article>
     </section>
@@ -175,7 +220,7 @@ module.exports = { stream, router, resetRules, setRules, getRules, deleteRules, 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jan 04 2022 17:39:06 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Mon Jan 10 2022 12:10:05 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

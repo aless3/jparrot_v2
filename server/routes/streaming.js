@@ -18,10 +18,15 @@ router.get('/home', (req, res) =>{
 })
 
 /**
- *  Rule reset function.
+ *  @module streaming
+ */
+ 
+/**
+ *  @function
+ *  @name resetRules
+ *  @description - Rule reset function.
  *  Deletes all set rules.
  *  @async
- *
  */
 const resetRules = async (client = streamingClient) => {
     let rules = await client.v2.streamRules()
@@ -31,7 +36,9 @@ const resetRules = async (client = streamingClient) => {
 }
 
 /**
- *  Rule insertion function.
+ *  @function
+ *  @name setRules
+ *  @description - Rule insertion function.
  *  Add rules passed by argument. (WHAT DOES IT DO WITH ALREADY EXISTING RULES?)
  *  @async
  *  @param rules - the list of rule strings to add to the rules applied for tweets filtering.
@@ -50,7 +57,9 @@ const setRules = async (rules, client = streamingClient) => {
 }
 
 /**
- *  Rule output function.
+ *  @function
+ *  @name getRules
+ *  @description - Rule output function.
  *  Returns all the rules applied for tweets filtering.
  *  @async
  *  @param client - the client to use [optional, if not passed use streamingClient
@@ -61,7 +70,9 @@ const getRules = async (client = streamingClient) => {
 }
 
 /**
- *  Rule deletion function.
+ *  @function
+ *  @name deleteRules
+ *  @description - Rule deletion function.
  *  Delete rules passed by argument, keeps all others.
  *  @async
  *  @param args - the list of rule IDs to remove from the rules applied for tweets filtering.
@@ -81,7 +92,9 @@ const deleteRules = async (args, client = streamingClient) => {
 let active = false;
 
 /**
- *  Streaming function.
+ *  @function
+ *  @name startStream
+ *  @description - Streaming function.
  *  Set rules, starts stream
  *  @async
  *  @param args - the list of rules to set for tweets filtering
@@ -121,12 +134,28 @@ const startStream = async (args, socket, client = streamingClient) => {
     }
 }
 
+/**
+ *  @function
+ *  @name getStream
+ *  @returns {TwitterV2apiHandler} - Returns the stream
+ *  @description - Get stream handler function.
+ *  Get the twitter v2 api stream handler. This function makes it possible
+ *  to obtain the stream object from outside this file
+ */
 const getStream = () => {
     return stream;
 }
 
+/**
+ *  @function
+ *  @name closeStream
+ *  @description - Close stream handler function.
+ *  Close the twitter v2 api stream handler. This function makes it possible
+ *  to close the stream object from outside this file
+ */
 const closeStream = () => {
     stream.close();
 }
+
 
 module.exports = { router, resetRules, setRules, getRules, deleteRules, getStream, startStream, closeStream };

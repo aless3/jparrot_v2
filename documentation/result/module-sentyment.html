@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>sentyment - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -29,13 +29,13 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-streaming.html">streaming</a><ul class='methods'><li data-type='method'><a href="module-streaming.html#closeStream#~closeStream">closeStream</a></li><li data-type='method'><a href="module-streaming.html#deleteRules#~deleteRules">deleteRules</a></li><li data-type='method'><a href="module-streaming.html#getRules#~getRules">getRules</a></li><li data-type='method'><a href="module-streaming.html#getStream#~getStream">getStream</a></li><li data-type='method'><a href="module-streaming.html#resetRules#~resetRules">resetRules</a></li><li data-type='method'><a href="module-streaming.html#setRules#~setRules">setRules</a></li><li data-type='method'><a href="module-streaming.html#startStream#~startStream">startStream</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#sentimentCount">sentimentCount</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sentyment.html">sentyment</a><ul class='methods'><li data-type='method'><a href="module-sentyment.html#searchCounts#~searchCounts">searchCounts</a></li><li data-type='method'><a href="module-sentyment.html#sentimentCount#~sentimentCount">sentimentCount</a></li></ul></li><li><a href="module-streaming.html">streaming</a><ul class='methods'><li data-type='method'><a href="module-streaming.html#closeStream#~closeStream">closeStream</a></li><li data-type='method'><a href="module-streaming.html#deleteRules#~deleteRules">deleteRules</a></li><li data-type='method'><a href="module-streaming.html#getRules#~getRules">getRules</a></li><li data-type='method'><a href="module-streaming.html#getStream#~getStream">getStream</a></li><li data-type='method'><a href="module-streaming.html#resetRules#~resetRules">resetRules</a></li><li data-type='method'><a href="module-streaming.html#setRules#~setRules">setRules</a></li><li data-type='method'><a href="module-streaming.html#startStream#~startStream">startStream</a></li></ul></li></ul>
     
 </nav>
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">sentyment</h1>
     
 
     
@@ -47,11 +47,6 @@
 
 <header>
     
-        <h2>
-        
-            
-        
-        </h2>
         
     
 </header>
@@ -62,9 +57,52 @@
         
             
 
-<dl class="details">
+            
+        
+        </div>
     
 
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="~searchCounts"><span class="type-signature">(async, inner) </span>searchCounts<span class="signature">(counts)</span><span class="type-signature"> &rarr; {SentimentTweets}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>- twitter api to function.
+ Takes a keyword stored inside the request object and returns tweets with that keyword and positive or negative words.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sentiment.js.html">sentiment.js</a>, <a href="sentiment.js.html#line30">line 30</a>
+    </li></ul></dd>
     
 
     
@@ -101,36 +139,104 @@
 
 
 
-            
 
-            
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-        </div>
-    
+        <th>Name</th>
+        
 
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>counts</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object containing 20 tweets per category: negative tweets, positive tweets and total tweets</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Returns a SentimentTweets object.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">SentimentTweets</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
             
 
     
 
-    <h4 class="name" id="sentimentCount"><span class="type-signature">(async) </span>sentimentCount<span class="signature">(counts)</span><span class="type-signature"> &rarr; {<a href="global.html#Result">Result</a>}</span></h4>
+    <h4 class="name" id="~sentimentCount"><span class="type-signature">(async, inner) </span>sentimentCount<span class="signature">(counts)</span><span class="type-signature"> &rarr; {Result}</span></h4>
 
     
 
@@ -140,15 +246,15 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li>Sentiment Analysis function.
- Takes a keyword and counts tweets with that keyword and positive/negative words
+    <dd class="tag-description"><ul class="dummy"><li>- Sentiment Analysis function.
+ Takes a tweets array and counts tweets with that keyword and positive/negative words
  Result is dependent on percentage of tweets with positive/negative words</li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sentiment.js.html">sentiment.js</a>, <a href="sentiment.js.html#line84">line 84</a>
+        <a href="sentiment.js.html">sentiment.js</a>, <a href="sentiment.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -268,7 +374,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="global.html#Result">Result</a></span>
+<span class="param-type">Result</span>
 
 
     </dd>
@@ -286,7 +392,7 @@
 
         
                 
-<h4 class="name" id="Result">Result</h4>
+<h4 class="name" id="~Result">Result</h4>
 
 
 
@@ -298,7 +404,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sentiment.js.html">sentiment.js</a>, <a href="sentiment.js.html#line1">line 1</a>
+        <a href="sentiment.js.html">sentiment.js</a>, <a href="sentiment.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -477,7 +583,7 @@
 
             
                 
-<h4 class="name" id="SentimentTweets">SentimentTweets</h4>
+<h4 class="name" id="~SentimentTweets">SentimentTweets</h4>
 
 
 
@@ -489,7 +595,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sentiment.js.html">sentiment.js</a>, <a href="sentiment.js.html#line9">line 9</a>
+        <a href="sentiment.js.html">sentiment.js</a>, <a href="sentiment.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -684,7 +790,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jan 06 2022 18:34:17 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Mon Jan 10 2022 12:10:05 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
