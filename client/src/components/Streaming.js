@@ -1,12 +1,4 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import {
-  FaRetweet,
-  FaReply,
-  FaHeart,
-  FaQuoteRight,
-  FaCalendar,
-} from "react-icons/fa";
+import React from "react";
 import StreamingTweet from "./StreamingTweet";
 import "./Tweet.css";
 
@@ -16,7 +8,7 @@ const Streaming = () => {
             <br />
             <h2 style={{textAlign: "center", color: "white"}}>Streaming</h2>
             <br />
-            <StreamingTweet></StreamingTweet>
+            <StreamingTweet/>
       </div>
     )
   }

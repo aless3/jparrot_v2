@@ -1,0 +1,63 @@
+.card-container {
+  width: 80% !important;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.07);
+}
+
+#cardinput {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transform: scale(1);
+}
+
+.name {
+  font-size: large;
+}
+
+.userimg {
+  border-radius: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.user-name {
+  width: 50%;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.user-name > .username {
+  color: rgba(0, 0, 0, 0.74);
+}
+
+.tweet-body {
+  height: 50%;
+}
+
+.tweet-details {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tweet-details > div {
+  display: flex;
+  align-items: center;
+}
+
+.date > div {
+  margin-left: 0.3rem;
+}
+
+.iconed {
+  margin-left: 0.5rem;
+}

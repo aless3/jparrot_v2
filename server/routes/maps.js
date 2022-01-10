@@ -1,6 +1,4 @@
-const {
-  TwitterApi
-} = require("twitter-api-v2");
+const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
 const cors = require("cors");
@@ -19,19 +17,22 @@ async function searchGeo(req, client = mapsClient) {
   const coords = JSON.parse(req.query.position);
   const keyword = req.query.keyword;
 
-  try{
-    return (await client.v2.search(
-        `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
-            range / 1000
-        }km] has:geo`,
-        {
-          expansions: ["author_id"],
-          "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
-          "user.fields": ["username", "name", "profile_image_url"],
-          max_results: 50,
-        }
-    )).data;
-  }catch (e) {
+  try {
+    let res = await client.v2.searchAll(
+      `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
+        range / 1000
+      }km] has:geo`,
+      {
+        expansions: ["author_id"],
+        "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
+        "user.fields": ["username", "name", "profile_image_url"],
+        max_results: 500,
+      }
+    );
+
+    await res.fetchLast(500);
+    return res.data;
+  } catch (e) {
     console.error(e);
     return undefined;
   }

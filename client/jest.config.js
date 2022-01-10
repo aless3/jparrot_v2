@@ -4,10 +4,11 @@ const config = {
   verbose: true,
   moduleNameMapper: {
     ".(css|less)$": "<rootDir>/assets/css/mocks/styleMock.js",
-    //    "\\.(css|less)$": "<rootDir>/assets/css/mocks/styleMock.js",
+    ".(png)$": "<rootDir>/assets/css/mocks/pngMock.js",
   },
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["./setupAfterEnv.js"],
+  setupFiles: ["./test/setupTests.js"],
+  setupFilesAfterEnv: ["./test/setupAfterEnv.js"],
   reporters: ['default',
     ['jest-sonar', {
       outputDirectory: './coverage',

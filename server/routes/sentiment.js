@@ -20,7 +20,7 @@ const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
 const cors = require("cors");
-const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
+const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 const sentimentClient = appOnlyClient.readOnly;
 
 const router = express.Router();
@@ -126,13 +126,15 @@ async function sentimentCount(counts) {
   let sentimentName;
 
   let posPercentage = (100 * posCount) / (posCount + negCount);
+  let zero = (posCount === 0 && negCount === 0)
+
   if (posPercentage > 90) {
     sentiment = 2;
     sentimentName = "Very Positive";
   } else if (posPercentage > 66) {
     sentiment = 1;
     sentimentName = "Positive";
-  } else if (posPercentage > 33) {
+  } else if (posPercentage > 33 || zero) {
     sentiment = 0;
     sentimentName = "Neutral";
   } else if (posPercentage > 10) {

@@ -1,0 +1,40 @@
+.tweets {
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+}
+
+.tweets::-webkit-scrollbar {
+  width: 1em;
+}
+
+.tweets::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+.tweets::-webkit-scrollbar-thumb {
+  background-color: white;
+  outline: 1px solid white;
+  border-radius: 3%;
+}
+
+.line-chart {
+  border-radius: 0.35%;
+  border-style: solid;
+  border-color: white;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin: 2%;
+}
+
+.pie-chart {
+  width: 90%;
+  height: 78%;
+  overflow: visible;
+  border-radius: 0.35%;
+  border-style: solid;
+  border-color: white;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin: 4%;
+}
