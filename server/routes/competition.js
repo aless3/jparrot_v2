@@ -232,7 +232,16 @@ function organizeReplies(replies, wrongAnswers = []) {
 
 router.get("/", async (req, res) => {
     let replies = await searchReplies(req);
-    let result = organizeReplies(replies);
+    let result;
+
+    // if correctAnswer is set, use it, else undefined
+    let wrongAnswers;
+    try {
+        wrongAnswers = req.query.wrongAnswers;
+        result = organizeReplies(replies, wrongAnswers);
+    } catch (e) {
+        result = organizeReplies(replies);
+    }
 
     res.send(result);
 });
