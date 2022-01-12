@@ -161,11 +161,13 @@ function organizeAnswers(replies, wrongAnswers = []) {
         lists.listIndices = [-1, -1, -1, -1];
 
         for (let i = 0; i < replies.data.length; i++) {
-            let reply = {};
-            reply.value = (new Date(replies.data[i].created_at)).getTime();
-            reply.index = i;
+            if(!containsWrongsAnswers(replies.data[i].text, wrongAnswers)){
+                let reply = {};
+                reply.value = (new Date(replies.data[i].created_at)).getTime();
+                reply.index = i;
 
-            lists = updateLists(lists, reply)
+                lists = updateLists(lists, reply)
+            }
         }
 
         let listIndices = lists.listIndices.reverse();
