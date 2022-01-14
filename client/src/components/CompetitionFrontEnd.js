@@ -16,6 +16,7 @@ function CompetitionFrontEnd() {
   const [firstSearch, setFirstSearch] = useState(false);
   const [showMultiple, setShowMultiple] = useState(false);
   const [showOpen, setShowOpen] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [rawError, setRawError] = useState("");
   const interval = useRef(null);
@@ -41,6 +42,17 @@ function CompetitionFrontEnd() {
   async function searchCompetitors() {
     try {
       const wrongAnswers = setError(rawError);
+
+      if (wrongAnswers.length && !correctAnswer) {
+        clearInterval(interval.current);
+        setShowTweets(false);
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 5000);
+        return;
+      }
+
       let result = await axios.get("http://localhost:8000/competition", {
         params: {
           hashtag,
@@ -49,11 +61,12 @@ function CompetitionFrontEnd() {
           ...(wrongAnswers.length ? { wrongAnswers } : { wrongAnswers: null }),
         },
       });
-
+      setUpInterval();
       if (result.data !== undefined) {
         setTweets(() => {
           return result.data;
         });
+
         if (!firstSearch) {
           setFirstSearch(true);
         }
@@ -136,7 +149,6 @@ function CompetitionFrontEnd() {
         <Button
           variant='outline-light'
           onClick={async () => {
-            setUpInterval();
             await searchCompetitors();
           }}
         >
@@ -158,6 +170,13 @@ function CompetitionFrontEnd() {
         </ButtonGroup>
       </div>
       <br />
+      {showError && (
+        <div style={{ color: "red", textAlign: "center" }}>
+          Devi impostare la risposta corretta quando inserisci risposte
+          sbagliate
+        </div>
+      )}
+
       <div className='d-flex justify-content-around'>
         {showOpen && (
           <FormControl
