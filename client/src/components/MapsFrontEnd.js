@@ -111,12 +111,14 @@ function MapsFrontEnd() {
                         oneTap
                         style={{ width: 300 }}
                         onChange={(date) => {
-                          setStart(
-                            date.toISOString().split(".")[0].concat("Z")
-                          );
-                          console.log(
-                            date.toISOString().split(".")[0].concat("Z")
-                          );
+                          if (date) {
+                            setStart(
+                              date.toISOString().split(".")[0].concat("Z")
+                            );
+                            console.log(
+                              date.toISOString().split(".")[0].concat("Z")
+                            );
+                          }
                         }}
                         disabledDate={(date) => {
                           return new Date().getTime() < date.getTime()
@@ -130,7 +132,11 @@ function MapsFrontEnd() {
                         oneTap
                         style={{ width: 300 }}
                         onChange={(date) => {
-                          setEnd(date.toISOString().split(".")[0].concat("Z"));
+                          if (date) {
+                            setEnd(
+                              date.toISOString().split(".")[0].concat("Z")
+                            );
+                          }
                         }}
                         disabledDate={(date) => {
                           return new Date().getTime() < date.getTime()
