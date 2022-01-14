@@ -251,24 +251,9 @@ function organizeReplies(replies, correctAnswer, wrongAnswers) {
     }
 }
 
-
 router.get("/", async (req, res) => {
     let replies = await searchReplies(req);
-    let result;
-
-    // if correctAnswer is set, use it, else null
-    let correctAnswer = req.query.correctAnswer;
-    if(!correctAnswer){
-        correctAnswer = null
-    }
-
-    // if wrongAnswers is set, use it, else undefined
-    let wrongAnswers = req.query.wrongAnswers;
-    if(!wrongAnswers){
-        wrongAnswers = null
-    }
-
-    result = organizeReplies(replies, correctAnswer, wrongAnswers);
+    let result = organizeReplies(replies, req.query.correctAnswer, req.query.wrongAnswers);
 
     res.send(result);
 });

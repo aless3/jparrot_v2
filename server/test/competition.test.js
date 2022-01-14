@@ -19,18 +19,6 @@ test('check hasWhiteSpace correctly detects spaces', () => {
     expect(competition.hasWhiteSpace(s)).toBeTruthy();
 });
 
-test('check containsWrongsAnswers correctly detects wrong answers', () => {
-    let text = "old pond frog leaps in water's sound"
-    let wrong = ["the first cold shower"]
-    expect(competition.containsWrongsAnswers(text, wrong)).toBeFalsy();
-
-    wrong = ["the first cold shower", "old pond frog"]
-    expect(competition.containsWrongsAnswers(text, wrong)).toBeTruthy();
-
-    wrong = ["the first cold shower", "old pond frog!"]
-    expect(competition.containsWrongsAnswers(text, wrong)).toBeFalsy();
-});
-
 test('check buildQuery correctly builds the query', () => {
     let hashtag = "#test"
     let expectedQuery = "#competition #jparrot_v2 #uniboswe2021 is:reply #test";
@@ -42,6 +30,37 @@ test('check buildQuery correctly builds the query', () => {
     expectedQuery = "#competition #jparrot_v2 #uniboswe2021 is:reply #test the cat is on the table";
 
     expect(competition.buildQuery(hashtag, correctAnswer)).toEqual(expectedQuery)
+});
+
+test('check if searchReplies can correctly access the info needed', async () => {
+    let req = {}
+    req.query = {
+        hashtag: "#test",
+        max_results: 10,
+        correctAnswer: null,
+        wrongAnswers: null
+    }
+
+    let search = await competition.searchReplies(req, client);
+
+    let expected = '#competition #jparrot_v2 #uniboswe2021 #test'
+
+    expect(search.data[0].text).toEqual(
+        expect.stringContaining(expected)
+    )
+
+});
+
+test('check if searchReplies can correctly detect if the hashtag has spaces and is invalid', async () => {
+    let req = {}
+    req.query = {
+        hashtag: " space ",
+        max_results: 10
+    }
+
+    let search = await competition.searchReplies(req, client)
+
+    expect(search).toBeFalsy()
 });
 
 test('check updateLists returns the correctly updated object', () => {
@@ -110,15 +129,28 @@ test('check updateLists returns the correctly updated object', () => {
     expect(lists).toEqual(expected)
 });
 
-test('check organizeCompetition correctly organizes the replies correctly using stored blobs', () => {
-    const input = require('../blobs/organizeCompetition_input.json');
-    const expectedOutput = require('../blobs/organizeCompetition_output.json');
+test('check containsWrongsAnswers correctly detects wrong answers', () => {
+    let text = "old pond frog leaps in water's sound"
+    let wrong = ["the first cold shower"]
+    expect(competition.containsWrongsAnswers(text, wrong)).toBeFalsy();
 
-    let realOutput = competition.organizeCompetition(input)
+    wrong = ["the first cold shower", "old pond frog"]
+    expect(competition.containsWrongsAnswers(text, wrong)).toBeTruthy();
 
-    expect(realOutput).toEqual(
-        expect.objectContaining(expectedOutput)
-    );
+    wrong = ["the first cold shower", "old pond frog!"]
+    expect(competition.containsWrongsAnswers(text, wrong)).toBeFalsy();
+});
+
+test('check containsCorrectAnswer correctly detects if the text contains the correct answer', () => {
+    let text = "old pond frog leaps in water's sound"
+    let wrong = "the first cold shower"
+    expect(competition.containsCorrectAnswer(text, wrong)).toBeFalsy();
+
+    wrong = "old pond frog"
+    expect(competition.containsCorrectAnswer(text, wrong)).toBeTruthy();
+
+    wrong = "old pond frog!"
+    expect(competition.containsCorrectAnswer(text, wrong)).toBeFalsy();
 });
 
 test('check extractIndices correctly extracts indices', () => {
@@ -136,16 +168,41 @@ test('check extractIndices correctly extracts indices', () => {
     expect(realOutput.includes.users).toEqual(expectedOutput.includes.users)
 });
 
-// test('check organizeCompetition correctly organizes the replies correctly using stored blobs', () => {
-//     const input = require('../blobs/organizeCompetition_input.json');
-//     const expectedOutput = require('../blobs/organizeCompetition_output.json');
-//
-//     let realOutput = competition.organizeCompetition(input)
-//
-//     expect(realOutput).toEqual(
-//         expect.objectContaining(expectedOutput)
-//     );
-// });
+test('check organizeAnswers correctly organizes the replies correctly using stored blobs - open-ended', () => {
+    const input = require('../blobs/organizeAnswers_open_input.json');
+    const ca = require('../blobs/organizeAnswers_open_ca.json')
+    const expectedOutput = require('../blobs/organizeAnswers_open_output.json');
+
+    let realOutput = competition.organizeAnswers(input, ca)
+
+    expect(realOutput).toEqual(
+        expect.objectContaining(expectedOutput)
+    );
+});
+
+test('check organizeAnswers correctly organizes the replies correctly using stored blobs - multiple choice', () => {
+    const input = require('../blobs/organizeAnswers_mChoice_input.json');
+    const ca = require('../blobs/organizeAnswers_mChoice_ca.json')
+    const wa = require('../blobs/organizeAnswers_mChoice_wa.json')
+    const expectedOutput = require('../blobs/organizeAnswers_mChoice_output.json');
+
+    let realOutput = competition.organizeAnswers(input, ca, wa)
+
+    expect(realOutput).toEqual(
+        expect.objectContaining(expectedOutput)
+    );
+});
+
+test('check organizeCompetition correctly organizes the replies correctly using stored blobs', () => {
+    const input = require('../blobs/organizeCompetition_input.json');
+    const expectedOutput = require('../blobs/organizeCompetition_output.json');
+
+    let realOutput = competition.organizeCompetition(input)
+
+    expect(realOutput).toEqual(
+        expect.objectContaining(expectedOutput)
+    );
+});
 
 test('check organizeReplies correctly returns an empty result on error', () => {
     let errorResult = {}
@@ -159,64 +216,38 @@ test('check organizeReplies correctly returns an empty result on error', () => {
     expect(output).toEqual(errorResult)
 });
 
-test('check organizeReplies correctly correctly computes data for competition using stored blobs', () => {
-    const input = require('../blobs/organizeAnswers_input.json');
-    const wa = require('../blobs/organizeAnswers_wa.json');
+test('check organizeReplies correctly correctly computes data for competition using stored blobs - multiple choice', () => {
+    const input = require('../blobs/organizeAnswers_mChoice_input.json');
+    const ca = require('../blobs/organizeAnswers_mChoice_ca.json')
+    const wa = require('../blobs/organizeAnswers_mChoice_wa.json')
+    const expectedOutput = require('../blobs/organizeAnswers_mChoice_output.json');
 
-    let realOutput = competition.organizeAnswers(input, wa)
+    let realOutput = competition.organizeReplies(input, ca, wa)
 
-    let date0 = new Date(realOutput.data[0].created_at)
-    let date1 = new Date(realOutput.data[1].created_at)
-    let date2 = new Date(realOutput.data[2].created_at)
-    let date3 = new Date(realOutput.data[3].created_at)
-
-    expect(date0.getTime() < date1.getTime()).toBeTruthy()
-    expect(date1.getTime() < date2.getTime()).toBeTruthy()
-    expect(date2.getTime() < date3.getTime()).toBeTruthy()
+    expect(realOutput).toEqual(
+        expect.objectContaining(expectedOutput)
+    );
 });
 
-test('check organizeReplies correctly correctly computes data with answers', () => {
+test('check organizeReplies correctly correctly computes data for competition using stored blobs - open-ended', () => {
+    const input = require('../blobs/organizeAnswers_open_input.json');
+    const ca = require('../blobs/organizeAnswers_open_ca.json')
+    const expectedOutput = require('../blobs/organizeAnswers_open_output.json');
+
+    let realOutput = competition.organizeReplies(input, ca, null)
+
+    expect(realOutput).toEqual(
+        expect.objectContaining(expectedOutput)
+    );
+});
+
+test('check organizeReplies correctly correctly computes data for competition using stored blobs - like competition', () => {
     const input = require('../blobs/organizeCompetition_input.json');
-    const wa = require('../blobs/organizeAnswers_wa.json');
+    const expectedOutput = require('../blobs/organizeCompetition_output.json');
 
-    let realOutput = competition.organizeAnswers(input, wa)
+    let realOutput = competition.organizeCompetition(input)
 
-
-    let date0 = new Date(realOutput.data[0].created_at)
-    let date1 = new Date(realOutput.data[1].created_at)
-    let date2 = new Date(realOutput.data[2].created_at)
-    let date3 = new Date(realOutput.data[3].created_at)
-
-    expect(date0.getTime() < date1.getTime()).toBeTruthy()
-    expect(date1.getTime() < date2.getTime()).toBeTruthy()
-    expect(date2.getTime() < date3.getTime()).toBeTruthy()
-});
-
-test('check if searchReplies can correctly access the info needed', async () => {
-    let req = {}
-    req.query = {
-        hashtag: "#test",
-        max_results: 10
-    }
-
-    let search = await competition.searchReplies(req, client);
-
-    let expected = '#competition #jparrot_v2 #uniboswe2021 #test'
-
-    expect(search.data[0].text).toEqual(
-        expect.stringContaining(expected)
-    )
-
-});
-
-test('check if searchReplies can correctly detect if the hashtag has spaces and is invalid', async () => {
-    let req = {}
-    req.query = {
-        hashtag: " space ",
-        max_results: 10
-    }
-
-    let search = await competition.searchReplies(req, client)
-
-    expect(search).toBeFalsy()
+    expect(realOutput).toEqual(
+        expect.objectContaining(expectedOutput)
+    );
 });
