@@ -16,17 +16,22 @@ async function searchGeo(req, client = mapsClient) {
   const keyword = req.query.keyword;
   const start = req.query.start;
   const end = req.query.end;
+
+  console.log(start)
+  console.log(end)
+
+
   const query = `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
     range / 1000
-  }km] has:geo ${start ? `start_time:${start}` : ""} ${
-    end ? `end_time:${end}` : ""
-  }`;
+  }km] has:geo `;
   try {
     let res = await client.v2.searchAll(query, {
       expansions: ["author_id"],
       "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
       "user.fields": ["username", "name", "profile_image_url"],
       max_results: 500,
+      start_time: start,
+      end_time: end
     });
 
     await res.fetchLast(500);
