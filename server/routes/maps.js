@@ -17,10 +17,6 @@ async function searchGeo(req, client = mapsClient) {
   const start = req.query.start;
   const end = req.query.end;
 
-  console.log(start)
-  console.log(end)
-
-
   const query = `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
     range / 1000
   }km] has:geo`;
