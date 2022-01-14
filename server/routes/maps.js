@@ -23,7 +23,7 @@ async function searchGeo(req, client = mapsClient) {
 
   const query = `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
     range / 1000
-  }km] has:geo `;
+  }km] has:geo`;
   try {
     let res = await client.v2.searchAll(query, {
       expansions: ["author_id"],
@@ -34,7 +34,6 @@ async function searchGeo(req, client = mapsClient) {
       end_time: end
     });
 
-    await res.fetchLast(500);
     return res.data;
   } catch (e) {
     console.error(e);
