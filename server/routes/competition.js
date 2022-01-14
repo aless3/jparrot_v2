@@ -59,12 +59,12 @@ async function searchReplies(req, client = competitionClient){
 
         let query = buildQuery(hashtag, correctAnswer);
 
-    const search = await client.v2.searchAll(query, {
-      expansions: ["author_id"],
-      "tweet.fields": ["created_at", "public_metrics", "text", "entities"],
-      "user.fields": ["username", "name", "profile_image_url"],
-      max_results: max_results,
-    });
+        const search = await client.v2.searchAll(query, {
+            expansions: ["author_id"],
+            "tweet.fields": ["created_at", "public_metrics", "text", "entities"],
+            "user.fields": ["username", "name", "profile_image_url"],
+            max_results: max_results,
+        });
 
 
         // fetchLast twice to have all results
@@ -120,8 +120,6 @@ function containsWrongsAnswers(text, wrongAnswers = []) {
     return false
 }
 
-
-// && containsCorrectAnswers(text, correctAnswer)
 function containsCorrectAnswer(text, correctAnswer = null) {
     try {
         if(text.includes(correctAnswer)){
@@ -135,11 +133,11 @@ function containsCorrectAnswer(text, correctAnswer = null) {
 }
 
 function extractIndices(replies, listIndices) {
-  let result = {};
-  result.data = [];
+    let result = {};
+    result.data = [];
 
-  result.includes = {};
-  result.includes.users = [];
+    result.includes = {};
+    result.includes.users = [];
 
     for (const i of listIndices) {
         let tweet = replies.data[i];
@@ -161,8 +159,8 @@ function extractIndices(replies, listIndices) {
     return result
 }
 
-function organizeAnswers(replies, wrongAnswers = [], correctAnswer) {
-  let isWrongArray = Array.isArray(wrongAnswers);
+function organizeAnswers(replies, correctAnswer, wrongAnswers = []) {
+    let isWrongArray = Array.isArray(wrongAnswers);
 
     if(!isWrongArray){
         return undefined;
@@ -174,15 +172,15 @@ function organizeAnswers(replies, wrongAnswers = [], correctAnswer) {
         lists.listLikes = [-1, -1, -1, -1];
         lists.listIndices = [-1, -1, -1, -1];
 
-    for (let i = 0; i < replies.data.length; i++) {
-      let cleanedText = replies.data[i].text;
-      replies.data[i].entities.hashtags.map((hash) => {
-        cleanedText = cleanedText.replace("#" + hash.tag, "");
-      });
-      if (!containsWrongsAnswers(cleanedText, wrongAnswers)) {
-        let reply = {};
-        reply.value = new Date(replies.data[i].created_at).getTime();
-        reply.index = i;
+        for (let i = 0; i < replies.data.length; i++) {
+            let cleanedText = replies.data[i].text;
+            replies.data[i].entities.hashtags.map((hash) => {
+                cleanedText = cleanedText.replace("#" + hash.tag, "");
+            });
+            if (!containsWrongsAnswers(cleanedText, wrongAnswers) && containsCorrectAnswer(cleanedText, correctAnswer)) {
+                let reply = {};
+                reply.value = new Date(replies.data[i].created_at).getTime();
+                reply.index = i;
 
                 lists = updateLists(lists, reply)
             }
@@ -220,7 +218,7 @@ function organizeCompetition(replies){
     }
 }
 
-function organizeReplies(replies, wrongAnswers = []) {
+function organizeReplies(replies, correctAnswer, wrongAnswers) {
     let errorResult = {}
     errorResult.data = []
 
@@ -233,11 +231,15 @@ function organizeReplies(replies, wrongAnswers = []) {
 
     try {
         let result;
-        if(wrongAnswers === []){
+
+        if(wrongAnswers && correctAnswer){
+            result = organizeAnswers(replies, correctAnswer, wrongAnswers)
+        }else if(correctAnswer) {
+            result = organizeAnswers(replies, correctAnswer)
+        } else {
             result = organizeCompetition(replies)
-        }else {
-            result = organizeAnswers(replies, wrongAnswers)
         }
+
         if(!result){
             result = errorResult
         }
@@ -254,14 +256,19 @@ router.get("/", async (req, res) => {
     let replies = await searchReplies(req);
     let result;
 
-    // if correctAnswer is set, use it, else undefined
-    let wrongAnswers;
-    try {
-        wrongAnswers = req.query.wrongAnswers;
-        result = organizeReplies(replies, wrongAnswers);
-    } catch (e) {
-        result = organizeReplies(replies);
+    // if correctAnswer is set, use it, else null
+    let correctAnswer = req.query.correctAnswer;
+    if(!correctAnswer){
+        correctAnswer = null
     }
+
+    // if wrongAnswers is set, use it, else undefined
+    let wrongAnswers = req.query.wrongAnswers;
+    if(!wrongAnswers){
+        wrongAnswers = null
+    }
+
+    result = organizeReplies(replies, correctAnswer, wrongAnswers);
 
     res.send(result);
 });
