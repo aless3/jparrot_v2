@@ -120,6 +120,20 @@ function containsWrongsAnswers(text, wrongAnswers = []) {
     return false
 }
 
+
+// && containsCorrectAnswers(text, correctAnswer)
+function containsCorrectAnswer(text, correctAnswer = null) {
+    try {
+        if(text.includes(correctAnswer)){
+            return true
+        }
+    }catch (e) {
+        return true
+    }
+
+    return false
+}
+
 function extractIndices(replies, listIndices){
     let result = {}
     result.data = []
@@ -248,4 +262,4 @@ router.get("/", async (req, res) => {
     res.send(result);
 });
 
-module.exports = { router, searchReplies, organizeReplies, organizeCompetition, organizeAnswers, hasWhiteSpace, updateLists, containsWrongsAnswers, buildQuery, extractIndices };
+module.exports = { router, searchReplies, organizeReplies, organizeCompetition, organizeAnswers, hasWhiteSpace, updateLists, containsCorrectAnswers: containsCorrectAnswer, containsWrongsAnswers, buildQuery, extractIndices };
