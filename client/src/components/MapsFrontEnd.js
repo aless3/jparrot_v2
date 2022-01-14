@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
+import DatePicker from "rsuite/DatePicker";
 import axios from "axios";
 import TweetList from "./TweetList";
 import "./MapsFrontEnd.css";
@@ -14,7 +15,7 @@ import {
   Marker,
   Circle,
   useMapEvents,
-  Popup
+  Popup,
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
@@ -37,14 +38,22 @@ function MapsFrontEnd() {
   const [showError, setShowError] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [tweets, setTweets] = useState();
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
 
   const searchTweets = async () => {
+    if (range == "") {
+      setRange(1);
+    }
     try {
       const result = await axios.get("http://localhost:8000/map/geo-keyword", {
         params: {
           range,
           position,
           keyword,
+          start,
+          ...(start ? { start } : {}),
+          ...(end ? { end } : {}),
         },
       });
       console.log(result);
@@ -68,59 +77,95 @@ function MapsFrontEnd() {
     });
   };
   return (
-    <div className="container">
+    <div className='container'>
       <br />
       <h2 style={{ textAlign: "center", color: "white" }}>Mappe</h2>
       <br />
-      <Row className="mx-auto">
+      <Row className='mx-auto'>
         <Col>
           <Card
-            id="cardinput"
-            border="light"
-            className="mx-auto"
+            id='cardinput'
+            border='light'
+            className='mx-auto'
             style={{ width: "50vw" }}
           >
-            <Card.Header>Scegli una posizione sulla mappa</Card.Header>
+            <Card.Header>Select a position in the man</Card.Header>
             <Card.Body>
               <Card.Title>
                 {showRange && (
-                  <div className="input">
-                    <Form.Label>Scegli un'area</Form.Label>
+                  <div className='input'>
+                    <Form.Label>Select an area</Form.Label>
                     <Form.Range
                       onChange={(e) => setRange(e.target.value)}
-                      className="slider"
+                      className='slider'
                       value={range}
-                      min="1"
-                      max="40000"
+                      min='1'
+                      max='40000'
                     />
-                    <p>Metri: {range} </p>
+                    <p>Meters: {range} </p>
                     <br />
-                    <Row className="mb-3">
+                    <Row className='mb-3 dates'>
+                      <p>from</p>
+                      <DatePicker
+                        format='dd-MM-yyyy HH:mm:ss'
+                        oneTap
+                        style={{ width: 300 }}
+                        onChange={(date) => {
+                          setStart(
+                            date.toISOString().split(".")[0].concat("Z")
+                          );
+                          console.log(
+                            date.toISOString().split(".")[0].concat("Z")
+                          );
+                        }}
+                        disabledDate={(date) => {
+                          return new Date().getTime() < date.getTime()
+                            ? true
+                            : false;
+                        }}
+                      />
+                      <p>to</p>
+                      <DatePicker
+                        format='dd-MM-yyyy HH:mm:ss'
+                        oneTap
+                        style={{ width: 300 }}
+                        onChange={(date) => {
+                          setEnd(date.toISOString().split(".")[0].concat("Z"));
+                        }}
+                        disabledDate={(date) => {
+                          return new Date().getTime() < date.getTime()
+                            ? true
+                            : false;
+                        }}
+                      />
+                    </Row>
+                    <Row className='mb-3'>
                       <Form.Group
                         as={Col}
-                        md="6"
-                        controlId="validationFormik03"
+                        md='6'
+                        controlId='validationFormik03'
                       >
                         <FormControl
                           value={keyword}
                           onChange={(e) => {
                             setKeyword(e.target.value);
                           }}
-                          aria-label="Username"
-                          aria-describedby="basic-addon1"
-                          placeholder="Inserisci una parola chiave  "
+                          aria-label='Username'
+                          aria-describedby='basic-addon1'
+                          placeholder='Input a keyword  '
                         />
                       </Form.Group>
+
                       <Form.Group
                         as={Col}
-                        md="6"
-                        controlId="validationFormik03"
+                        md='6'
+                        controlId='validationFormik03'
                       >
                         <Button
                           onClick={searchTweets}
-                          variant="outline-primary"
+                          variant='outline-primary'
                         >
-                          Cerca
+                          Search
                         </Button>{" "}
                       </Form.Group>
                     </Row>
@@ -133,17 +178,17 @@ function MapsFrontEnd() {
       </Row>
 
       <br />
-      <Row className="mx-auto">
+      <Row className='mx-auto'>
         <MapContainer
-          className="mapcontainer mx-auto"
-          style={{ height: "50vmin", width: "110vmin" }}
+          className='mapcontainer mx-auto'
+          style={{ height: "50vmin", width: "110vmin", zIndex: "1" }}
           center={[44.494887, 11.3426163]}
           zoom={13}
           scrollWheelZoom={true}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
 
           <MarkerPosition
@@ -152,23 +197,32 @@ function MapsFrontEnd() {
             range={range}
             setShowRange={setShowRange}
           />
-          {showTweets && tweets.data.map((tweet)=>{
-            if(tweet.geo.coordinates){
-              console.log(tweet)
-              const username = tweets.includes.users.filter(user => user.id === tweet.author_id)[0].username
-              return <Marker position={[tweet.geo.coordinates.coordinates[1], tweet.geo.coordinates.coordinates[0]]}>
-                <Popup>{username}</Popup>
-              </Marker>
-            }
-            else{
-              return <></>
-            }
-          })}
+          {showTweets &&
+            tweets.data.map((tweet) => {
+              if (tweet.geo.coordinates) {
+                console.log(tweet);
+                const username = tweets.includes.users.filter(
+                  (user) => user.id === tweet.author_id
+                )[0].username;
+                return (
+                  <Marker
+                    position={[
+                      tweet.geo.coordinates.coordinates[1],
+                      tweet.geo.coordinates.coordinates[0],
+                    ]}
+                  >
+                    <Popup>{username}</Popup>
+                  </Marker>
+                );
+              } else {
+                return <></>;
+              }
+            })}
         </MapContainer>
       </Row>
       <Row>{showTweets && <TweetList tweets={tweets} stream={false} />}</Row>
       <Row>{}</Row>
-      {showError && <div className="errormsg">No Tweets Found :C</div>}
+      {showError && <div className='errormsg'>No Tweets Found :C</div>}
     </div>
   );
 }

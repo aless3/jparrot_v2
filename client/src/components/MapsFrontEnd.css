@@ -7,3 +7,9 @@
 .widthRange {
   width: 100%;
 }
+
+.dates {
+  font-size: medium;
+  display: flex;
+  margin-left: 1rem;
+}

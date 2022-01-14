@@ -16,32 +16,37 @@ function CompetitionFrontEnd() {
   const [firstSearch, setFirstSearch] = useState(false);
   const [showMultiple, setShowMultiple] = useState(false);
   const [showOpen, setShowOpen] = useState(false);
+  const [correctAnswer, setCorrectAnswer] = useState("");
+  const [rawError, setRawError] = useState("");
   const interval = useRef(null);
 
   function showM() {
-    if (!showMultiple) {
-      setShowMultiple(true);
-    }
+    setShowOpen(true);
+    setShowMultiple(true);
   }
 
   function showO() {
-    if (!showOpen) {
-      setShowOpen(true);
-    }
+    setShowOpen(true);
     setShowMultiple(false);
+    setRawError("");
   }
 
   function dshowMO() {
     setShowOpen(false);
     setShowMultiple(false);
+    setCorrectAnswer("");
+    setRawError("");
   }
 
   async function searchCompetitors() {
     try {
+      const wrongAnswers = setError(rawError);
       let result = await axios.get("http://localhost:8000/competition", {
         params: {
           hashtag,
           maxResults,
+          ...(correctAnswer ? { correctAnswer } : { correctAnswer: null }),
+          ...(wrongAnswers.length ? { wrongAnswers } : { wrongAnswers: null }),
         },
       });
 
@@ -69,6 +74,17 @@ function CompetitionFrontEnd() {
     }
   };
 
+  const setError = (errors) => {
+    let arr = [];
+    errors.split(", ").forEach((el) => {
+      console.log(el);
+      if (el) {
+        arr.push(el);
+      }
+    });
+    return arr;
+  };
+
   const setUpInterval = () => {
     clearInterval(interval.current);
     interval.current = setInterval(async () => {
@@ -83,37 +99,42 @@ function CompetitionFrontEnd() {
   }, []);
 
   return (
-    <div className="container">
+    <div className='container'>
       <br />
       <h2 style={{ textAlign: "center", color: "white" }}>Competition</h2>
       <br />
-      <div className="d-flex justify-content-center gap-3">
+      <div className='d-flex justify-content-center gap-3'>
         <Form.Control
-          id="keywordText"
+          id='keywordText'
           style={{ width: "40%" }}
-          type="text"
+          type='text'
           value={hashtag}
           onChange={(e) => {
             setHashtag(e.target.value);
           }}
-          placeholder="Inserisci la keyword..."
+          placeholder='Inserisci la keyword...'
         />
         <Form.Select
-          id="keywordSelect"
+          id='keywordSelect'
           style={{ width: "10%" }}
-          type="text"
+          type='text'
           value={maxResults}
           onChange={(e) => {
             setMaxResultsHandler(e.target.value);
           }}
         >
-          <option value="100">100</option>
-          <option value="150">150</option>
-          <option value="200">200</option>
+          <option value='100'>100</option>
+          <option value='150'>150</option>
+          <option value='200'>200</option>
+          <option value='250'>250</option>
+          <option value='300'>300</option>
+          <option value='350'>350</option>
+          <option value='400'>400</option>
+          <option value='450'>450</option>
         </Form.Select>
 
         <Button
-          variant="outline-light"
+          variant='outline-light'
           onClick={async () => {
             setUpInterval();
             await searchCompetitors();
@@ -123,31 +144,39 @@ function CompetitionFrontEnd() {
         </Button>
       </div>
       <br />
-      <div className="d-flex justify-content-center">
+      <div className='d-flex justify-content-center'>
         <ButtonGroup>
-          <Button onClick={dshowMO} variant="outline-light">
+          <Button onClick={dshowMO} variant='outline-light'>
             Most liked
           </Button>
-          <Button onClick={showO} variant="outline-light">
+          <Button onClick={showO} variant='outline-light'>
             Open-ended questions
           </Button>
-          <Button onClick={showM} variant="outline-light">
+          <Button onClick={showM} variant='outline-light'>
             Multiple choice questions
           </Button>
         </ButtonGroup>
       </div>
       <br />
-      <div className="d-flex justify-content-around">
+      <div className='d-flex justify-content-around'>
         {showOpen && (
           <FormControl
-            className="w-25"
-            placeholder="Correct answer"
+            value={correctAnswer}
+            className='w-25'
+            placeholder='Correct answer'
+            onChange={(e) => {
+              setCorrectAnswer(e.target.value);
+            }}
           ></FormControl>
         )}
         {showMultiple && (
           <FormControl
-            className="w-50"
-            placeholder="Wrong answer"
+            value={rawError}
+            className='w-50'
+            placeholder='Wrong answer'
+            onChange={(e) => {
+              setRawError(e.target.value);
+            }}
           ></FormControl>
         )}
       </div>
