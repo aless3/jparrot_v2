@@ -59,12 +59,12 @@ async function searchReplies(req, client = competitionClient){
 
         let query = buildQuery(hashtag, correctAnswer);
 
-        const search = await client.v2.search(query, {
-            expansions: ["author_id"],
-            "tweet.fields": ["created_at", "public_metrics", "text"],
-            "user.fields": ["username", "name", "profile_image_url"],
-            max_results: max_results,
-        });
+    const search = await client.v2.searchAll(query, {
+      expansions: ["author_id"],
+      "tweet.fields": ["created_at", "public_metrics", "text", "entities"],
+      "user.fields": ["username", "name", "profile_image_url"],
+      max_results: max_results,
+    });
 
 
         // fetchLast twice to have all results
@@ -137,9 +137,12 @@ function containsCorrectAnswer(text, correctAnswer = null) {
 function extractIndices(replies, listIndices){
     let result = {}
     result.data = []
+function extractIndices(replies, listIndices) {
+  let result = {};
+  result.data = [];
 
-    result.includes = {}
-    result.includes.users = []
+  result.includes = {};
+  result.includes.users = [];
 
     for (const i of listIndices) {
         let tweet = replies.data[i];
@@ -161,8 +164,8 @@ function extractIndices(replies, listIndices){
     return result
 }
 
-function organizeAnswers(replies, wrongAnswers = []) {
-    let isWrongArray = Array.isArray(wrongAnswers)
+function organizeAnswers(replies, wrongAnswers = [], correctAnswer) {
+  let isWrongArray = Array.isArray(wrongAnswers);
 
     if(!isWrongArray){
         return undefined;
@@ -174,11 +177,15 @@ function organizeAnswers(replies, wrongAnswers = []) {
         lists.listLikes = [-1, -1, -1, -1];
         lists.listIndices = [-1, -1, -1, -1];
 
-        for (let i = 0; i < replies.data.length; i++) {
-            if(!containsWrongsAnswers(replies.data[i].text, wrongAnswers)){
-                let reply = {};
-                reply.value = (new Date(replies.data[i].created_at)).getTime();
-                reply.index = i;
+    for (let i = 0; i < replies.data.length; i++) {
+      let cleanedText = replies.data[i].text;
+      replies.data[i].entities.hashtags.map((hash) => {
+        cleanedText = cleanedText.replace("#" + hash.tag, "");
+      });
+      if (!containsWrongsAnswers(cleanedText, wrongAnswers)) {
+        let reply = {};
+        reply.value = new Date(replies.data[i].created_at).getTime();
+        reply.index = i;
 
                 lists = updateLists(lists, reply)
             }
