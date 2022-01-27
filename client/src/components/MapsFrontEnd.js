@@ -59,7 +59,7 @@ function MapsFrontEnd() {
           });
           setShowMap(true);
         },
-        () => {},
+        () => {return 0},
         posOptions
       );
     }
@@ -210,10 +210,10 @@ function MapsFrontEnd() {
             />
             {showTweets &&
               tweets &&
-              tweets.data.map((tweet) => {
+              tweets['data'].map((tweet) => {
                 if (tweet.geo.coordinates) {
                   console.log(tweet);
-                  const username = tweets.includes.users.filter(
+                  const username = tweets['includes'].users.filter(
                     (user) => user.id === tweet.author_id
                   )[0].username;
                   return (
@@ -239,7 +239,6 @@ function MapsFrontEnd() {
 }
 
 function MarkerPosition({ position, updatePosition, range }) {
-  // const [clicked, setClicked] = useState(false);
   useMapEvents({
     click(e) {
       updatePosition(e.latlng.lat, e.latlng.lng);
