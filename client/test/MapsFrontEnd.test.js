@@ -1,5 +1,4 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { shallow } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import Maps from "../src/components/MapsFrontEnd";
@@ -62,7 +61,6 @@ test("correctly change dates and keyword", () => {
     fireEvent.change(toDate, { target: { value: "2000-01-20" } });
   });
 
-  AuthenticatorAssertionResponse();
   expect(screen.getByTestId("keyword").value).toBe("something");
   expect(document.querySelector("#fromDate").value).toBe("2000-01-01");
   expect(document.querySelector("#toDate").value).toBe("2000-01-20");
