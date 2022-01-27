@@ -81,7 +81,7 @@ function KeywordFrontEnd() {
       let longitude = pos.coords.longitude;
 
       try {
-        const result = await axios.get("http://localhost:8000/terms", {
+        const result = await axios.get("/terms", {
           params: {
             latitude,
             longitude,
@@ -97,7 +97,23 @@ function KeywordFrontEnd() {
       }
     }
 
-    function posError(err) {
+    async function posError(err) {
+      try {
+        const result = await axios.get("/terms", {
+          params: {
+            latitude: "44.494887",
+            longitude: "11.3426163",
+          },
+        });
+
+        if (result.data !== undefined) {
+          setTermsData(result.data);
+          // setTermsLoaded(true)
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
@@ -114,7 +130,7 @@ function KeywordFrontEnd() {
 
   async function searchKeyword() {
     try {
-      let result = await axios.get("http://localhost:8000/keyword", {
+      let result = await axios.get("/keyword", {
         params: {
           keyword,
         },
@@ -134,7 +150,7 @@ function KeywordFrontEnd() {
 
   async function searchSentiment() {
     try {
-      let result = await axios.get("http://localhost:8000/sentiment", {
+      let result = await axios.get("/sentiment", {
         params: {
           keyword,
         },

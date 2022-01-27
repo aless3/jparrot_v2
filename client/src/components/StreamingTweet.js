@@ -28,7 +28,7 @@ const StreamingTweet = () => {
 
   async function start() {
     handleChangeOn();
-    socket.current = io("http://localhost:8000", { transports: ["websocket"] });
+    socket.current = io("", { transports: ["websocket"] });
     socket.current.on("connect", () => {
       console.log(socket.current.id);
     });

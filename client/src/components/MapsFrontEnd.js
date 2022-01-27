@@ -33,8 +33,8 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 function MapsFrontEnd() {
   const [range, setRange] = useState(1);
-  const [position, setPosition] = useState({ lat: 0, lng: 0 });
-  const [showMap, setShowMap] = useState(false);
+  const [position, setPosition] = useState({ lat: 44.494887, lng: 11.3426163 });
+  const [showMap, setShowMap] = useState(true);
   const [showTweets, setShowTweets] = useState(false);
   const [showError, setShowError] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -59,7 +59,9 @@ function MapsFrontEnd() {
           });
           setShowMap(true);
         },
-        () => {return 0},
+        () => {
+          return 0;
+        },
         posOptions
       );
     }
@@ -67,7 +69,7 @@ function MapsFrontEnd() {
 
   const searchTweets = async () => {
     try {
-      const result = await axios.get("http://localhost:8000/map/geo-keyword", {
+      const result = await axios.get("/map/geo-keyword", {
         params: {
           range,
           position,
@@ -212,7 +214,7 @@ function MapsFrontEnd() {
               tweets?.data.map((tweet) => {
                 if (tweet.geo.coordinates) {
                   console.log(tweet);
-                  const username = tweets['includes'].users.filter(
+                  const username = tweets["includes"].users.filter(
                     (user) => user.id === tweet.author_id
                   )[0].username;
                   return (

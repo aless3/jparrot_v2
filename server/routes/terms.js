@@ -1,6 +1,4 @@
-const {
-  TwitterApi
-} = require("twitter-api-v2");
+const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
 const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
@@ -13,10 +11,10 @@ manipola i dati, contando le occorrenza di una certa parola nei tweets
 (quanto un trend è popolare)
 se il trend è null o 1 lo ignora
 */
-function organizeTrendsOfPlace(trendsOfPlace){
+function organizeTrendsOfPlace(trendsOfPlace) {
   let r = [];
 
-  if(trendsOfPlace === undefined){
+  if (trendsOfPlace === undefined) {
     return r;
   }
 
@@ -44,7 +42,8 @@ async function searchTerms(req, client = termsClient) {
 
   let trendsOfPlace = undefined;
   try {
-    let place = (await client.v1.trendsClosest(latitude, longitude)).pop().woeid;
+    let place = (await client.v1.trendsClosest(latitude, longitude)).pop()
+      .woeid;
     trendsOfPlace = client.v1.trendsByPlace(place);
   } catch (e) {
     console.error(e);
@@ -54,7 +53,7 @@ async function searchTerms(req, client = termsClient) {
 
 router.get("/", async (req, res) => {
   let trendsOfPlace = await searchTerms(req);
-  let result = organizeTrendsOfPlace(trendsOfPlace)
+  let result = organizeTrendsOfPlace(trendsOfPlace);
   res.send(result);
 });
 
