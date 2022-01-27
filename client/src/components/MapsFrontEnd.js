@@ -160,7 +160,7 @@ function MapsFrontEnd() {
                   <Row className='mb-3'>
                     <Form.Group as={Col} md='6' controlId='validationFormik03'>
                       <FormControl
-                        data-testid='keyword'
+                        id='keyword'
                         value={keyword}
                         onChange={(e) => {
                           setKeyword(e.target.value);

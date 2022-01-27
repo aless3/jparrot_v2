@@ -52,11 +52,10 @@ test("correctly show tweets", async () => {
 test("correctly change dates and keyword", () => {
   render(<Maps />);
 
+  const keyword = document.querySelector("#keyword");
+  const fromDate = document.querySelector("#fromDate");
+  const toDate = document.querySelector("#toDate");
   act(() => {
-    const keyword = screen.getByTestId("keyword");
-    const fromDate = screen.getByTestId("fromDate");
-    const toDate = screen.getByTestId("toDate");
-
     fireEvent.change(keyword, { target: { value: "something" } });
     fireEvent.change(fromDate, { target: { value: "2000-01-01" } });
     fireEvent.change(toDate, { target: { value: "2000-01-20" } });
