@@ -28,30 +28,27 @@ function KeywordFrontEnd() {
   const [pieData, setPieData] = useState({});
 
   const [tweets, setTweets] = useState([]);
-  const [showTweets, setShowTweets] = useState(false);
-  const [showCharts, setShowCharts] = useState(false);
   const [emoijSt, setEmoijSt] = useState(Pain);
 
-  const [showSentimentData, setShowSentimentData] = useState(false);
   const [sentiment, setSentiment] = useState(0);
   const [sentimentName, setSentimentName] = useState("Neutral");
 
   const [firstSearch, setFirstSearch] = useState(false);
 
   function emoijImage() {
-    if (sentiment == 2) {
+    if (sentiment === 2) {
       setEmoijSt(Happy);
     }
-    if (sentiment == 1) {
+    if (sentiment === 1) {
       setEmoijSt(Smile);
     }
-    if (sentiment == 0) {
+    if (sentiment === 0) {
       setEmoijSt(Neutral);
     }
-    if (sentiment == -1) {
+    if (sentiment === -1) {
       setEmoijSt(Sad);
     }
-    if (sentiment == -2) {
+    if (sentiment === -2) {
       setEmoijSt(Pain);
     }
   }
@@ -142,7 +139,6 @@ function KeywordFrontEnd() {
         populatePieChart(result.data);
         setSentiment(result.data.sentiment);
         setSentimentName(result.data.sentimentName);
-        setShowSentimentData(true);
       } else {
         console.log("data is undefined");
       }
@@ -165,11 +161,8 @@ function KeywordFrontEnd() {
     await searchKeyword();
     await searchSentiment();
     setFirstSearch(true);
-    setShowCharts(true);
     setShowLineData(true);
-    setShowTweets(true);
     setShowPieData(true);
-    setShowSentimentData(true);
   }
 
   return (
