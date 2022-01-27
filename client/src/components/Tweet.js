@@ -12,10 +12,6 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet, stream }) {
-  if (!user || !tweet) {
-    console.log("user and/or tweet is null");
-    return null;
-  }
   try {
     const { name, username, profile_image_url } = user;
     const { created_at, text } = tweet;
@@ -38,7 +34,9 @@ function Tweet({ user, tweet, stream }) {
           </Card.Header>
           <Card.Body>
             <Card.Text as='div'>
-              <div className='text'>{text}</div>
+              <div className='text' data-testid='testText'>
+                {text}
+              </div>
               <div className='tweet-details'>
                 {!stream && (
                   <>

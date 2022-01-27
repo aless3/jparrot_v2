@@ -11,5 +11,5 @@
 .dates {
   font-size: medium;
   display: flex;
-  margin-left: 1rem;
+  margin-left: 0.1rem !important;
 }

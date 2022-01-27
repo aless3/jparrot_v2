@@ -1,7 +1,10 @@
 import { mount, shallow } from "enzyme";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+
 import CompetitionFrontEnd from "../src/components/CompetitionFrontEnd";
 import React from "react";
 import axios from "axios";
+import { act } from "react-dom/test-utils";
 
 test("check if CompetitionFrontEnd correctly creates the podium", async () => {
   const competition = shallow(<CompetitionFrontEnd />);
@@ -84,4 +87,20 @@ test("check if CompetitionFrontEnd correctly responds to the multiple choise but
   maxResults.simulate("click");
 
   expect(competition).toMatchSnapshot();
+});
+
+test("check error show if wrong answers is filled but correct answers are empty", () => {
+  render(<CompetitionFrontEnd />);
+
+  fireEvent.click(screen.getByTestId("multipleButton"));
+
+  fireEvent.change(document.getElementById("Multiple"), {
+    target: { value: "primo, secondo" },
+  });
+
+  act(() => {
+    fireEvent.click(document.getElementById("searchButton"));
+  });
+
+  expect(document.querySelector("body")).toMatchSnapshot();
 });

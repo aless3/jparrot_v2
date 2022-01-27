@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
-import DatePicker from "rsuite/DatePicker";
 import axios from "axios";
 import TweetList from "./TweetList";
 import "./MapsFrontEnd.css";
@@ -17,6 +16,8 @@ import {
   useMapEvents,
   Popup,
 } from "react-leaflet";
+
+import TextField from "@mui/material/TextField";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -31,9 +32,9 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 function MapsFrontEnd() {
-  const [range, setRange] = useState("");
+  const [range, setRange] = useState(1);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
-  const [showRange, setShowRange] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [showTweets, setShowTweets] = useState(false);
   const [showError, setShowError] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -41,10 +42,30 @@ function MapsFrontEnd() {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
 
-  const searchTweets = async () => {
-    if (range == "") {
-      setRange(1);
+  const now = new Date().toISOString().split("T")[0];
+
+  const posOptions = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+
+  useEffect(async () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setPosition(() => {
+            return { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          });
+          setShowMap(true);
+        },
+        () => {},
+        posOptions
+      );
     }
+  }, []);
+
+  const searchTweets = async () => {
     try {
       const result = await axios.get("http://localhost:8000/map/geo-keyword", {
         params: {
@@ -56,10 +77,9 @@ function MapsFrontEnd() {
           ...(end ? { end } : {}),
         },
       });
-      console.log(result);
       if (result.data.data !== undefined) {
         setTweets(result.data);
-        console.log(tweets);
+        console.log(result.data.data[0].text);
         setShowError(false);
         setShowTweets(true);
       } else {
@@ -92,91 +112,76 @@ function MapsFrontEnd() {
             <Card.Header>Select a position in the man</Card.Header>
             <Card.Body>
               <Card.Title>
-                {showRange && (
-                  <div className='input'>
-                    <Form.Label>Select an area</Form.Label>
-                    <Form.Range
-                      onChange={(e) => setRange(e.target.value)}
-                      className='slider'
-                      value={range}
-                      min='1'
-                      max='40000'
+                <div className='input'>
+                  <Form.Label>Select an area</Form.Label>
+                  <Form.Range
+                    onChange={(e) => setRange(e.target.value)}
+                    className='slider'
+                    value={range}
+                    min='1'
+                    max='40000'
+                    data-testid='areaSelector'
+                    id='areaSelector'
+                  />
+                  <p>Meters: {range} </p>
+                  <br />
+                  <Row className='mb-3 dates'>
+                    <TextField
+                      id='fromDate'
+                      label='From'
+                      type='date'
+                      sx={{ width: 220, marginRight: "1rem" }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{ max: now }}
+                      onChange={(date) => {
+                        if (date) {
+                          setStart(date.target.value.concat("T00:00:00Z"));
+                        }
+                      }}
                     />
-                    <p>Meters: {range} </p>
-                    <br />
-                    <Row className='mb-3 dates'>
-                      <p>from</p>
-                      <DatePicker
-                        format='dd-MM-yyyy HH:mm:ss'
-                        oneTap
-                        style={{ width: 300 }}
-                        onChange={(date) => {
-                          if (date) {
-                            setStart(
-                              date.toISOString().split(".")[0].concat("Z")
-                            );
-                            console.log(
-                              date.toISOString().split(".")[0].concat("Z")
-                            );
-                          }
+                    <TextField
+                      id='toDate'
+                      label='To'
+                      type='date'
+                      sx={{ width: 220 }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{ max: now }}
+                      onChange={(date) => {
+                        if (date) {
+                          setEnd(date.target.value.concat("T00:00:00Z"));
+                        }
+                      }}
+                    />
+                  </Row>
+                  <Row className='mb-3'>
+                    <Form.Group as={Col} md='6' controlId='validationFormik03'>
+                      <FormControl
+                        data-testid='keyword'
+                        value={keyword}
+                        onChange={(e) => {
+                          setKeyword(e.target.value);
                         }}
-                        disabledDate={(date) => {
-                          return new Date().getTime() < date.getTime()
-                            ? true
-                            : false;
-                        }}
+                        aria-label='Username'
+                        aria-describedby='basic-addon1'
+                        placeholder='Input a keyword'
                       />
-                      <p>to</p>
-                      <DatePicker
-                        format='dd-MM-yyyy HH:mm:ss'
-                        oneTap
-                        style={{ width: 300 }}
-                        onChange={(date) => {
-                          if (date) {
-                            setEnd(
-                              date.toISOString().split(".")[0].concat("Z")
-                            );
-                          }
-                        }}
-                        disabledDate={(date) => {
-                          return new Date().getTime() < date.getTime()
-                            ? true
-                            : false;
-                        }}
-                      />
-                    </Row>
-                    <Row className='mb-3'>
-                      <Form.Group
-                        as={Col}
-                        md='6'
-                        controlId='validationFormik03'
-                      >
-                        <FormControl
-                          value={keyword}
-                          onChange={(e) => {
-                            setKeyword(e.target.value);
-                          }}
-                          aria-label='Username'
-                          aria-describedby='basic-addon1'
-                          placeholder='Input a keyword  '
-                        />
-                      </Form.Group>
+                    </Form.Group>
 
-                      <Form.Group
-                        as={Col}
-                        md='6'
-                        controlId='validationFormik03'
+                    <Form.Group as={Col} md='6' controlId='validationFormik03'>
+                      <Button
+                        onClick={searchTweets}
+                        variant='outline-primary'
+                        data-testid='searchButton'
                       >
-                        <Button
-                          onClick={searchTweets}
-                          variant='outline-primary'
-                        >
-                          Search
-                        </Button>{" "}
-                      </Form.Group>
-                    </Row>
-                  </div>
-                )}
+                        Search
+                      </Button>{" "}
+                    </Form.Group>
+                  </Row>
+                </div>
               </Card.Title>
             </Card.Body>
           </Card>
@@ -185,46 +190,45 @@ function MapsFrontEnd() {
 
       <br />
       <Row className='mx-auto'>
-        <MapContainer
-          className='mapcontainer mx-auto'
-          style={{ height: "50vmin", width: "110vmin", zIndex: "1" }}
-          center={[44.494887, 11.3426163]}
-          zoom={13}
-          scrollWheelZoom={true}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          />
+        {showMap && (
+          <MapContainer
+            className='mapcontainer mx-auto'
+            style={{ height: "50vmin", width: "110vmin", zIndex: "1" }}
+            center={[position.lat, position.lng]}
+            zoom={13}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            />
 
-          <MarkerPosition
-            position={position}
-            updatePosition={updatePosition}
-            range={range}
-            setShowRange={setShowRange}
-          />
-          {showTweets &&
-            tweets.data.map((tweet) => {
-              if (tweet.geo.coordinates) {
-                console.log(tweet);
-                const username = tweets.includes.users.filter(
-                  (user) => user.id === tweet.author_id
-                )[0].username;
-                return (
-                  <Marker
-                    position={[
-                      tweet.geo.coordinates.coordinates[1],
-                      tweet.geo.coordinates.coordinates[0],
-                    ]}
-                  >
-                    <Popup>{username}</Popup>
-                  </Marker>
-                );
-              } else {
-                return <></>;
-              }
-            })}
-        </MapContainer>
+            <MarkerPosition
+              position={position}
+              updatePosition={updatePosition}
+              range={range}
+            />
+            {showTweets &&
+              tweets.data.map((tweet) => {
+                if (tweet.geo.coordinates) {
+                  console.log(tweet);
+                  const username = tweets.includes.users.filter(
+                    (user) => user.id === tweet.author_id
+                  )[0].username;
+                  return (
+                    <Marker
+                      position={[
+                        tweet.geo.coordinates.coordinates[1],
+                        tweet.geo.coordinates.coordinates[0],
+                      ]}
+                    >
+                      <Popup>{username}</Popup>
+                    </Marker>
+                  );
+                }
+              })}
+          </MapContainer>
+        )}
       </Row>
       <Row>{showTweets && <TweetList tweets={tweets} stream={false} />}</Row>
       <Row>{}</Row>
@@ -233,27 +237,23 @@ function MapsFrontEnd() {
   );
 }
 
-function MarkerPosition({ position, updatePosition, range, setShowRange }) {
-  const [clicked, setClicked] = useState(false);
+function MarkerPosition({ position, updatePosition, range }) {
+  // const [clicked, setClicked] = useState(false);
   useMapEvents({
     click(e) {
       updatePosition(e.latlng.lat, e.latlng.lng);
-      setClicked(true);
-      setShowRange(true);
     },
   });
   return (
     <>
-      {clicked && (
-        <>
-          <Circle
-            center={position}
-            pathOptions={{ color: "blue", stroke: false }}
-            radius={range}
-          />
-          <Marker position={position} />
-        </>
-      )}
+      <>
+        <Circle
+          center={position}
+          pathOptions={{ color: "blue", stroke: false }}
+          radius={range}
+        />
+        <Marker position={position} title='positionMarker' />
+      </>
     </>
   );
 }

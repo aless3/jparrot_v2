@@ -3,11 +3,11 @@ import "../App.css";
 import axios from "axios";
 import { Col, Row, Container, Button } from "react-bootstrap";
 import FormControl from "react-bootstrap/FormControl";
-import Neutral from "../icons/neutral.png"
-import Sad from "../icons/sad.png"
-import Pain from "../icons/pain.png"
-import Happy from "../icons/happy.png"
-import Smile from "../icons/smile.png"
+import Neutral from "../icons/neutral.png";
+import Sad from "../icons/sad.png";
+import Pain from "../icons/pain.png";
+import Happy from "../icons/happy.png";
+import Smile from "../icons/smile.png";
 
 import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
@@ -30,7 +30,7 @@ function KeywordFrontEnd() {
   const [tweets, setTweets] = useState([]);
   const [showTweets, setShowTweets] = useState(false);
   const [showCharts, setShowCharts] = useState(false);
-  const [emoijSt,setEmoijSt] = useState (Pain);
+  const [emoijSt, setEmoijSt] = useState(Pain);
 
   const [showSentimentData, setShowSentimentData] = useState(false);
   const [sentiment, setSentiment] = useState(0);
@@ -38,12 +38,22 @@ function KeywordFrontEnd() {
 
   const [firstSearch, setFirstSearch] = useState(false);
 
-  function emoijImage () {
-    if (sentiment == 2) { setEmoijSt(Happy)}
-    if (sentiment == 1) { setEmoijSt(Smile)}
-    if (sentiment == 0) { setEmoijSt(Neutral)}
-    if (sentiment == -1) { setEmoijSt(Sad)}
-    if (sentiment == -2) { setEmoijSt(Pain)}
+  function emoijImage() {
+    if (sentiment == 2) {
+      setEmoijSt(Happy);
+    }
+    if (sentiment == 1) {
+      setEmoijSt(Smile);
+    }
+    if (sentiment == 0) {
+      setEmoijSt(Neutral);
+    }
+    if (sentiment == -1) {
+      setEmoijSt(Sad);
+    }
+    if (sentiment == -2) {
+      setEmoijSt(Pain);
+    }
   }
 
   useEffect(async () => {
@@ -52,10 +62,9 @@ function KeywordFrontEnd() {
     }
   }, [termsData, firstTermsSearch]);
 
-  useEffect(()=> {
+  useEffect(() => {
     emoijImage();
-  })
-
+  });
 
   const searchTrending = async () => {
     const posOptions = {
@@ -98,7 +107,6 @@ function KeywordFrontEnd() {
     }
 
     setFirstTermsSearch(false);
-
   };
 
   async function searchKeyword() {
@@ -164,31 +172,6 @@ function KeywordFrontEnd() {
     setShowSentimentData(true);
   }
 
-  function toggleShowCharts() {
-    if (!firstSearch) return;
-    setShowCharts(!showCharts);
-  }
-
-  function toggleShowLineChart() {
-    if (!firstSearch) return;
-    setShowLineData(!showLineData);
-  }
-
-  function toggleShowPieChart() {
-    if (!firstSearch) return;
-    setShowPieData(!showPieData);
-  }
-
-  function toggleShowTweets() {
-    if (!firstSearch) return;
-    setShowTweets(!showTweets);
-  }
-
-  function toggleShowSentiment() {
-    if (!firstSearch) return;
-    setShowSentimentData(!showSentimentData);
-  }
-
   return (
     <Container>
       <br />
@@ -198,16 +181,16 @@ function KeywordFrontEnd() {
         </h2>
         <br />
         <h3 style={{ textAlign: "center", color: "white" }}>Termcloud</h3>
-        <div className="d-flex justify-content-center">
+        <div className='d-flex justify-content-center'>
           <SimpleCloud
             values={termsData}
             setter={setKeyword}
-            className="cloud"
+            className='cloud'
           />
         </div>
-        <br/>
-        <div className="d-flex justify-content-center">
-          <Button variant="outline-light" onClick={searchTrending}>
+        <br />
+        <div className='d-flex justify-content-center'>
+          <Button variant='outline-light' onClick={searchTrending}>
             Load/Reload
           </Button>
         </div>
@@ -217,16 +200,16 @@ function KeywordFrontEnd() {
       <Row>
         <Col md={{ span: 5, offset: 3 }}>
           <FormControl
-            type="text"
+            type='text'
             value={keyword}
-            placeholder="Inserisci la keyword..."
+            placeholder='Inserisci la keyword...'
             onChange={(e) => {
               setKeyword(e.target.value);
             }}
           />
         </Col>
         <Col>
-          <Button variant="outline-light" onClick={search}>
+          <Button variant='outline-light' onClick={search}>
             Cerca
           </Button>{" "}
         </Col>
@@ -235,95 +218,73 @@ function KeywordFrontEnd() {
       {firstSearch && (
         <div className={"searchedView"}>
           <br />
-          <div className="d-flex justify-content-center">
-            <Button variant="outline-light" onClick={toggleShowCharts}>
-              Toggle Show Charts
-            </Button>
-            <Button variant="outline-light" onClick={toggleShowSentiment}>
-              Toggle Show Sentiment
-            </Button>
-            <Button variant="outline-light" onClick={toggleShowLineChart}>
-              Toggle Line Chart
-            </Button>
-            <Button variant="outline-light" onClick={toggleShowPieChart}>
-              Toggle Pie Chart
-            </Button>
-            <Button variant="outline-light" onClick={toggleShowTweets}>
-              Toggle Show Tweets
-            </Button>
-          </div>
-          <br />
-          {showCharts && (
-            <Row className="charts">
-              <Col xs={8}>
-                {showLineData && (
-                  <div>
-                    <h3 style={{ textAlign: "center", color: "white" }}>
-                      Line Chart
-                    </h3>
-                    <div className="line-chart">
-                      <LineChartSentiment data={lineData} />
-                    </div>
-                  </div>
-                )}
-              </Col>
 
-              <Col xs={4}>
-                {showPieData && (
-                  <div>
-                    <h3 style={{ textAlign: "center", color: "white" }}>
-                      Pie Chart
-                    </h3>
-                    <div className="pie-chart">
-                      <PieChartSentiment
-                        positiveCount={pieData.positiveCount}
-                        negativeCount={pieData.negativeCount}
-                      />
-                    </div>
-                  </div>
-                )}
-              </Col>
-            </Row>
-          )}
           <br />
-          <Row>
+
+          <Row className='charts'>
             <Col xs={8}>
-              {showTweets && (
+              {showLineData && (
                 <div>
                   <h3 style={{ textAlign: "center", color: "white" }}>
-                    Tweets
+                    Line Chart
                   </h3>
-                  <br />
-                  <div className="tweets">
-                    {/* <ShowTweets tweets={tweets} users={users} /> */}
-                    <TweetList tweets={tweets} stream={false} />
+                  <div className='line-chart'>
+                    <LineChartSentiment data={lineData} />
                   </div>
                 </div>
               )}
             </Col>
+
             <Col xs={4}>
-              {showSentimentData && (
+              {showPieData && (
                 <div>
                   <h3 style={{ textAlign: "center", color: "white" }}>
-                    Sentiment
+                    Pie Chart
                   </h3>
-                  <br />
-                  <div className="sentiment">
-                    <h4 style={{ textAlign: "center", color: "white" }}>
-                      The sentiment value of tweets with this keyword is{" "}
-                      <b>{sentimentName}</b> (value: {sentiment})
-                    </h4>
-                    <br/>
-                    <div className="d-flex justify-content-center">
-                    <img
-                        style={{width:"77%", height:"77%"}}
-                        src={emoijSt}
-                        alt={emoijSt}
+                  <div className='pie-chart'>
+                    <PieChartSentiment
+                      positiveCount={pieData.positiveCount}
+                      negativeCount={pieData.negativeCount}
                     />
-                    </div>
                   </div>
                 </div>
               )}
+            </Col>
+          </Row>
+
+          <br />
+          <Row>
+            <Col xs={8}>
+              <div>
+                <h3 style={{ textAlign: "center", color: "white" }}>Tweets</h3>
+                <br />
+                <div className='tweets'>
+                  {/* <ShowTweets tweets={tweets} users={users} /> */}
+                  <TweetList tweets={tweets} stream={false} />
+                </div>
+              </div>
+            </Col>
+            <Col xs={4}>
+              <div>
+                <h3 style={{ textAlign: "center", color: "white" }}>
+                  Sentiment
+                </h3>
+                <br />
+                <div className='sentiment'>
+                  <h4 style={{ textAlign: "center", color: "white" }}>
+                    The sentiment value of tweets with this keyword is{" "}
+                    <b>{sentimentName}</b> (value: {sentiment})
+                  </h4>
+                  <br />
+                  <div className='d-flex justify-content-center'>
+                    <img
+                      style={{ width: "77%", height: "77%" }}
+                      src={emoijSt}
+                      alt={emoijSt}
+                    />
+                  </div>
+                </div>
+              </div>
             </Col>
           </Row>
         </div>
