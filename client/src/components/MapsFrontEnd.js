@@ -209,8 +209,7 @@ function MapsFrontEnd() {
               range={range}
             />
             {showTweets &&
-              tweets &&
-              tweets['data'].map((tweet) => {
+              tweets?.data.map((tweet) => {
                 if (tweet.geo.coordinates) {
                   console.log(tweet);
                   const username = tweets['includes'].users.filter(
