@@ -85,7 +85,7 @@ test("check if KeywordFrontEnd correctly reacts to user inputs", async () => {
 
 test("check emoji function", () => {
   const cb = (param) => {
-    expect(param).toBe("");
+    expect(param).toBe("png");
   };
 
   for (let i = -2; i < 4; i++) {
