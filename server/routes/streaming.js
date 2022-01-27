@@ -81,7 +81,6 @@ const deleteRules = async (args, client = streamingClient) => {
   }
 };
 
-
 /**
  *  Rule reset and insertion function.
  *  Reset rules and add the new ones.
@@ -98,8 +97,8 @@ const reloadRules = async (args, client = streamingClient) => {
   } catch (error) {
     console.log("FROM RESET-AND-SET ");
     console.log(error);
+    return false;
   }
-  return false;
 };
 
 /**
@@ -114,9 +113,8 @@ const reloadRules = async (args, client = streamingClient) => {
  *  @returns {stream} - returns the created stream
  */
 const startStream = async (args, socket, client = streamingClient) => {
-  reloadRules(args, client);
-
   try {
+    await reloadRules(args, client);
     stream = await client.v2.searchStream({
       expansions: ["author_id"],
       "tweet.fields": ["created_at", "text"],
@@ -127,8 +125,8 @@ const startStream = async (args, socket, client = streamingClient) => {
       socket.emit("tweet", tweet);
     });
   } catch (error) {
-    console.log("FROM STREAMING");
     console.log(error);
+    return false;
   }
 
   return stream;
@@ -154,7 +152,7 @@ const getStream = () => {
  *  to close the stream object from outside this file
  */
 const closeStream = () => {
-  if(stream !== undefined){
+  if (stream !== undefined) {
     stream.close();
   }
 };
