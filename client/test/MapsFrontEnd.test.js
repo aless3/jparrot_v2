@@ -52,15 +52,18 @@ test("correctly show tweets", async () => {
 test("correctly change dates and keyword", () => {
   render(<Maps />);
 
-  const keyword = document.querySelector("#keyword");
+  const keyword = screen.getByTestId("keyword");
   const fromDate = document.querySelector("#fromDate");
   const toDate = document.querySelector("#toDate");
+
   act(() => {
     fireEvent.change(keyword, { target: { value: "something" } });
     fireEvent.change(fromDate, { target: { value: "2000-01-01" } });
     fireEvent.change(toDate, { target: { value: "2000-01-20" } });
   });
-  expect(document.querySelector("#keyword").value).toBe("something");
+
+  AuthenticatorAssertionResponse();
+  expect(screen.getByTestId("keyword").value).toBe("something");
   expect(document.querySelector("#fromDate").value).toBe("2000-01-01");
   expect(document.querySelector("#toDate").value).toBe("2000-01-20");
 });

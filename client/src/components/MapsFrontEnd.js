@@ -160,7 +160,7 @@ function MapsFrontEnd() {
                   <Row className='mb-3'>
                     <Form.Group as={Col} md='6' controlId='validationFormik03'>
                       <FormControl
-                        id='keyword'
+                        data-testid='keyword'
                         value={keyword}
                         onChange={(e) => {
                           setKeyword(e.target.value);
@@ -209,6 +209,7 @@ function MapsFrontEnd() {
               range={range}
             />
             {showTweets &&
+              tweets &&
               tweets.data.map((tweet) => {
                 if (tweet.geo.coordinates) {
                   console.log(tweet);
