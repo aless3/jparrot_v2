@@ -7,11 +7,16 @@ const config = {
     //    "\\.(css|less)$": "<rootDir>/assets/css/mocks/styleMock.js",
   },
   testEnvironment: "jsdom",
-  setupFiles: ["./test/setupTests.js"],
-  reporters: ['default',
-    ['jest-sonar', {
-      outputDirectory: './coverage',
-    }]],
+  setupFilesAfterEnv: ["./test/setupTests.js"],
+  reporters: [
+    "default",
+    [
+      "jest-sonar",
+      {
+        outputDirectory: "./coverage",
+      },
+    ],
+  ],
 };
 
 module.exports = config;
