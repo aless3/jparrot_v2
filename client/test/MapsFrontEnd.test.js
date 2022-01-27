@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import Maps from "../src/components/MapsFrontEnd";
-const mapsData = require("../blobs/mapsAxios.json");
+const mapsData = require("../blobs/MapsAxios.json");
 
 jest.mock("axios");
 const axios = require("axios");

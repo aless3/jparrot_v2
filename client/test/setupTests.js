@@ -6,7 +6,6 @@ const sentimentFile = require("../blobs/SentimentAxiosFedez.json");
 const termsFile = require("../blobs/TermsAxios.json");
 const competitionFile1 = require("../blobs/CompetitionTest1.json");
 const competitionFile2 = require("../blobs/CompetitionTest2.json");
-const mapsData = require("../blobs/mapsAxios.json");
 let competitionUpdate = false;
 
 jest.setTimeout(30000);
