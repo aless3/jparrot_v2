@@ -10,6 +10,13 @@ const mockSocket = require("mock-socket");
 
 describe("streaming Tests", () => {
   beforeEach(async () => {
+    await new Promise((res) =>
+      setTimeout(() => {
+        console.log("new test starting");
+        res();
+      }, 2000)
+    );
+
     await streaming.resetRules(client);
   });
 
