@@ -175,7 +175,7 @@ function organizeAnswers(replies, correctAnswer, wrongAnswers = []) {
         for (let i = 0; i < replies.data.length; i++) {
             let cleanedText = replies.data[i].text;
             replies.data[i].entities.hashtags.map((hash) => {
-                cleanedText = cleanedText.replace("#" + hash.tag, "");
+                cleanedText = cleanedText.replace("#" + hash['tag'], "");
             });
             if (!containsWrongsAnswers(cleanedText, wrongAnswers) && containsCorrectAnswer(cleanedText, correctAnswer)) {
                 let reply = {};
@@ -186,7 +186,8 @@ function organizeAnswers(replies, correctAnswer, wrongAnswers = []) {
             }
         }
 
-        let listIndices = lists.listIndices.reverse();
+        let listIndices = lists.listIndices;
+        listIndices = listIndices.reverse();
 
         return extractIndices(replies, listIndices)
     } catch (e) {
