@@ -135,7 +135,7 @@ const startStream = async (args, socket, client = streamingClient) => {
 /**
  *  @function
  *  @name getStream
- *  @returns {TwitterV2apiHandler} - Returns the stream
+ *  @returns - Returns the stream
  *  @description - Get stream handler function.
  *  Get the twitter v2 api stream handler. This function makes it possible
  *  to obtain the stream object from outside this file
