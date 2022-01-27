@@ -12,11 +12,13 @@ describe("streaming Tests", () => {
   beforeEach(async () => {
     await new Promise((res) =>
       setTimeout(() => {
-        console.log("new test starting");
+        console.log("streaming waiting");
         res();
       }, 2000)
     );
+  });
 
+  beforeEach(async () => {
     await streaming.resetRules(client);
   });
 
