@@ -26,8 +26,8 @@ async function searchGeo(req, client = mapsClient) {
       "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
       "user.fields": ["username", "name", "profile_image_url"],
       max_results: 500,
-      start_time: start,
-      end_time: end
+      ...(start ? { start_time: start } : {}),
+      ...(end ? { end_time: end } : {}),
     });
 
     return res.data;
