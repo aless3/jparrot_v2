@@ -15,6 +15,30 @@ import TweetList from "./TweetList";
 import { SimpleCloud } from "./SimpleCloud";
 import "./KeywordFrontEnd.css";
 
+export function emoijImage(sentiment, callback) {
+  switch (sentiment) {
+    case 2:
+      callback(Happy);
+      break;
+    case 1:
+      callback(Smile);
+      break;
+    case 0:
+      callback(Neutral);
+      break;
+    case -1:
+      callback(Sad);
+      break;
+    case -2:
+      callback(Pain);
+      break;
+
+    default:
+      callback(Neutral);
+      break;
+  }
+}
+
 function KeywordFrontEnd() {
   const [termsData, setTermsData] = useState([]);
   const [firstTermsSearch, setFirstTermsSearch] = useState(true);
@@ -35,24 +59,6 @@ function KeywordFrontEnd() {
 
   const [firstSearch, setFirstSearch] = useState(false);
 
-  function emoijImage() {
-    if (sentiment === 2) {
-      setEmoijSt(Happy);
-    }
-    if (sentiment === 1) {
-      setEmoijSt(Smile);
-    }
-    if (sentiment === 0) {
-      setEmoijSt(Neutral);
-    }
-    if (sentiment === -1) {
-      setEmoijSt(Sad);
-    }
-    if (sentiment === -2) {
-      setEmoijSt(Pain);
-    }
-  }
-
   useEffect(async () => {
     if (firstTermsSearch) {
       await searchTrending();
@@ -60,7 +66,7 @@ function KeywordFrontEnd() {
   }, [termsData, firstTermsSearch]);
 
   useEffect(() => {
-    emoijImage();
+    emoijImage(sentiment, setEmoijSt);
   });
 
   const searchTrending = async () => {
