@@ -69,3 +69,8 @@
 .icon-container {
   margin-left: 0.5rem;
 }
+
+.rt-text {
+  color: rgba(0, 0, 0, 0.562);
+  margin-bottom: 0.25rem;
+}

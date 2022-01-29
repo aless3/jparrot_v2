@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import { Row, Col, Container } from "react-bootstrap";
 
@@ -12,17 +12,31 @@ import {
 import "./Tweet.css";
 
 function Tweet({ user, tweet, stream }) {
+  const [isRT, setIsRT] = useState(false);
+
+  useEffect(() => {
+    if (tweet !== undefined) {
+      if (tweet.text.substring(0, 2) === "RT") {
+        setIsRT(true);
+        tweet.text = tweet.text.slice(2);
+      }
+    }
+  }, []);
+
   try {
     const { name, username, profile_image_url } = user;
     const { created_at, text } = tweet;
+
     const { like_count, quote_count, reply_count, retweet_count } = !stream
       ? tweet.public_metrics
       : 0;
+
     return (
       <Container className='card-container'>
         <Card border='light'>
           <Card.Header>
             <Row>
+              {isRT && <div className='rt-text'>Retweet</div>}
               <Col className='tweet-top'>
                 <img className='userimg' src={profile_image_url} alt={name} />
                 <div>
