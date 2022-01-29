@@ -19,7 +19,7 @@ pipeline {
             steps {
                 dir("client"){
                     sh "npm install jest"
-                    sh "npm test -- -u"
+                    sh "npm test"
                 }
             }
         }

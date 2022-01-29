@@ -208,7 +208,6 @@ function KeywordFrontEnd() {
       setTimeout(() => {
         setShowEmpty(false);
       }, 3000);
-      return;
     }
   }
 
