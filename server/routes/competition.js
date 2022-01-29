@@ -32,6 +32,11 @@ async function searchReplies(req, client = competitionClient) {
   if (hasWhiteSpace(hashtag)) {
     return undefined;
   }
+
+  if (!hashtag) {
+    return undefined;
+  }
+
   // if it is not a real hashtag, make it one adding the # symbol at the beginning
   if (hashtag.charAt(0) !== "#") {
     hashtag = "#".concat(hashtag);
