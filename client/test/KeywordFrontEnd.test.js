@@ -104,6 +104,8 @@ test("check component when axios query is satisfied", () => {
 
   console.log(document.querySelector("[data-testid=keywordInput]"));
   fireEvent.click(document.querySelector("#searchButton"));
+
+  expect(document.querySelector("body")).toMatchSnapshot();
 });
 
 test("Error case when input is empty or no data found", () => {
@@ -130,4 +132,6 @@ test("Error case when input is empty or no data found", () => {
 
   console.log(document.querySelector("[data-testid=keywordInput]"));
   fireEvent.click(document.querySelector("#searchButton"));
+
+  expect(document.querySelector("body")).toMatchSnapshot();
 });
