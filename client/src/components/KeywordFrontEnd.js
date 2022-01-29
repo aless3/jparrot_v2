@@ -81,7 +81,7 @@ function KeywordFrontEnd() {
       let longitude = pos.coords.longitude;
 
       try {
-        const result = await axios.get("/terms", {
+        const result = await axios.get("http://localhost:8000/terms", {
           params: {
             latitude,
             longitude,
@@ -99,7 +99,7 @@ function KeywordFrontEnd() {
 
     async function posError(err) {
       try {
-        const result = await axios.get("/terms", {
+        const result = await axios.get("http://localhost:8000/terms", {
           params: {
             latitude: "44.494887",
             longitude: "11.3426163",
@@ -130,7 +130,7 @@ function KeywordFrontEnd() {
 
   async function searchKeyword() {
     try {
-      let result = await axios.get("/keyword", {
+      let result = await axios.get("http://localhost:8000/keyword", {
         params: {
           keyword,
         },
@@ -150,7 +150,7 @@ function KeywordFrontEnd() {
 
   async function searchSentiment() {
     try {
-      let result = await axios.get("/sentiment", {
+      let result = await axios.get("http://localhost:8000/sentiment", {
         params: {
           keyword,
         },
@@ -191,9 +191,7 @@ function KeywordFrontEnd() {
     <Container>
       <br />
       <div>
-        <h2 style={{ textAlign: "center", color: "white" }}>
-          Ricerca per keyword
-        </h2>
+        <h2 style={{ textAlign: "center", color: "white" }}>Search Keyword</h2>
         <br />
         <h3 style={{ textAlign: "center", color: "white" }}>Termcloud</h3>
         <div className='d-flex justify-content-center'>
@@ -217,7 +215,7 @@ function KeywordFrontEnd() {
           <FormControl
             type='text'
             value={keyword}
-            placeholder='Inserisci la keyword...'
+            placeholder='Write a keyword...'
             onChange={(e) => {
               setKeyword(e.target.value);
             }}
@@ -225,7 +223,7 @@ function KeywordFrontEnd() {
         </Col>
         <Col>
           <Button variant='outline-light' onClick={search}>
-            Cerca
+            Search
           </Button>{" "}
         </Col>
       </Row>
@@ -274,7 +272,6 @@ function KeywordFrontEnd() {
                 <h3 style={{ textAlign: "center", color: "white" }}>Tweets</h3>
                 <br />
                 <div className='tweets'>
-                  {/* <ShowTweets tweets={tweets} users={users} /> */}
                   <TweetList tweets={tweets} stream={false} />
                 </div>
               </div>

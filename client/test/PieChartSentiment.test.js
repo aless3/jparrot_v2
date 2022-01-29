@@ -4,7 +4,7 @@ import React from "react";
 import axios from "axios";
 
 test("check if the component renders correctly using stored blobs", async () => {
-  const sentiment = await axios.get("/sentiment");
+  const sentiment = await axios.get("http://localhost:8000/sentiment");
 
   const pieChart = shallow(
     <PieChartSentiment

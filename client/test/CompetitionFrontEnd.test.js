@@ -13,7 +13,7 @@ test("check if CompetitionFrontEnd correctly creates the podium", async () => {
 });
 
 test("check if CompetitionFrontEnd correctly updates creates the podium", async () => {
-  await axios.get("/competition");
+  await axios.get("http://localhost:8000/competition");
   const competition = shallow(<CompetitionFrontEnd />);
 
   expect(competition).toMatchSnapshot();

@@ -52,7 +52,7 @@ function CompetitionFrontEnd() {
         return;
       }
 
-      let result = await axios.get("/competition", {
+      let result = await axios.get("http://localhost:8000/competition", {
         params: {
           hashtag,
           maxResults,

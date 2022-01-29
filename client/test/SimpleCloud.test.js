@@ -9,7 +9,7 @@ test("check if the component renders correctly using stored blobs", async () => 
     value = val || 1;
   };
 
-  const terms = await axios.get("/terms");
+  const terms = await axios.get("http://localhost:8000/terms");
 
   const cloud = shallow(
     <SimpleCloud values={terms.data} setter={setter} className='cloud' />
