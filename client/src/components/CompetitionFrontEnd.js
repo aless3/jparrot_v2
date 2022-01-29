@@ -124,7 +124,7 @@ function CompetitionFrontEnd() {
           onChange={(e) => {
             setHashtag(e.target.value);
           }}
-          placeholder='Inserisci la keyword...'
+          placeholder='Enter a Keyword...'
         />
         <Form.Select
           id='keywordSelect'

@@ -55,10 +55,10 @@ const StreamingTweet = () => {
         <Row>
           <Col xs={2}>
             <Button variant='outline-light' onClick={start}>
-              Inizia
+              Start
             </Button>{" "}
             <Button variant='outline-light' onClick={end}>
-              Ferma
+              Stop
             </Button>{" "}
           </Col>
           <Col>
@@ -66,7 +66,7 @@ const StreamingTweet = () => {
               <FormControl
                 aria-label='Default'
                 aria-describedby='inputGroup-sizing-default'
-                placeholder='Inserisci la keyword...'
+                placeholder='Enter a keyword...'
                 onChange={(e) => setText(e.target.value)}
               />
             </InputGroup>

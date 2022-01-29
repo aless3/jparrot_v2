@@ -101,7 +101,7 @@ function MapsFrontEnd() {
   return (
     <div className='container'>
       <br />
-      <h2 style={{ textAlign: "center", color: "white" }}>Mappe</h2>
+      <h2 style={{ textAlign: "center", color: "white" }}>Maps</h2>
       <br />
       <Row className='mx-auto'>
         <Col>

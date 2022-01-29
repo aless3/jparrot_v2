@@ -12,26 +12,26 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <nav className="navbar navbar-expand-lg navbar-light bg-light w-30 p-2 mx-auto">
-            <ul className="navbar-nav mx-auto ">
+          <nav className='navbar navbar-expand-lg navbar-light bg-light w-30 p-2 mx-auto'>
+            <ul className='navbar-nav mx-auto '>
               <li>
-                <Link to={"/"} className="nav-link">
+                <Link to={"/"} className='nav-link'>
                   {" "}
                   Home{" "}
                 </Link>
               </li>
               <li>
-                <Link to={"/map"} className="nav-link">
-                  Mappe
+                <Link to={"/map"} className='nav-link'>
+                  Maps
                 </Link>
               </li>
               <li>
-                <Link to={"/stream"} className="nav-link">
+                <Link to={"/stream"} className='nav-link'>
                   Stream
                 </Link>
               </li>
               <li>
-                <Link to={"/competition"} className="nav-link">
+                <Link to={"/competition"} className='nav-link'>
                   Competition
                 </Link>
               </li>
@@ -39,10 +39,10 @@ class App extends Component {
           </nav>
 
           <Routes>
-            <Route path="/" element={<Keyword />} />
-            <Route path="/map" element={<Maps />} />
-            <Route path="/stream" element={<Streaming />} />
-            <Route path="/competition" element={<Competition />} />
+            <Route path='/' element={<Keyword />} />
+            <Route path='/map' element={<Maps />} />
+            <Route path='/stream' element={<Streaming />} />
+            <Route path='/competition' element={<Competition />} />
           </Routes>
         </div>
       </Router>
