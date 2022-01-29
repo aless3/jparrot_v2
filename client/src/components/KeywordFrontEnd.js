@@ -14,6 +14,7 @@ import { LineChartSentiment } from "./LineChartSentiment";
 import TweetList from "./TweetList";
 import { SimpleCloud } from "./SimpleCloud";
 import "./KeywordFrontEnd.css";
+import "animate.css";
 
 export function emoijImage(sentiment, callback) {
   switch (sentiment) {
@@ -58,6 +59,9 @@ function KeywordFrontEnd() {
   const [sentimentName, setSentimentName] = useState("Neutral");
 
   const [firstSearch, setFirstSearch] = useState(false);
+
+  const [showError, setShowError] = useState(false);
+  const [showEmpty, setShowEmpty] = useState(false);
 
   useEffect(async () => {
     if (firstTermsSearch) {
@@ -136,12 +140,14 @@ function KeywordFrontEnd() {
         },
       });
 
-      if (result.data !== undefined) {
+      if (result.data !== undefined && result.data.meta.result_count > 0) {
         setTweets(() => {
           return result.data;
         });
+        return true;
       } else {
         console.log("data is undefined");
+        return false;
       }
     } catch (error) {
       console.error(error);
@@ -180,11 +186,30 @@ function KeywordFrontEnd() {
   }
 
   async function search() {
-    await searchKeyword();
-    await searchSentiment();
-    setFirstSearch(true);
-    setShowLineData(true);
-    setShowPieData(true);
+    if (!keyword) {
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+      return;
+    }
+    let result = await searchKeyword();
+    if (result) {
+      await searchSentiment();
+      setFirstSearch(true);
+      setShowLineData(true);
+      setShowPieData(true);
+    } else {
+      setFirstSearch(false);
+      setShowLineData(false);
+      setShowPieData(false);
+
+      setShowEmpty(true);
+      setTimeout(() => {
+        setShowEmpty(false);
+      }, 3000);
+      return;
+    }
   }
 
   return (
@@ -213,6 +238,7 @@ function KeywordFrontEnd() {
       <Row>
         <Col md={{ span: 5, offset: 3 }}>
           <FormControl
+            data-testid='keywordInput'
             type='text'
             value={keyword}
             placeholder='Write a keyword...'
@@ -222,11 +248,26 @@ function KeywordFrontEnd() {
           />
         </Col>
         <Col>
-          <Button variant='outline-light' onClick={search}>
+          <Button id='searchButton' variant='outline-light' onClick={search}>
             Search
           </Button>{" "}
         </Col>
       </Row>
+      {showError && (
+        <Row>
+          <Col className='d-flex justify-content-center mt-2 text-danger animate__bounceIn'>
+            <h5>No keyword input!</h5>
+          </Col>
+        </Row>
+      )}
+
+      {showEmpty && (
+        <Row>
+          <Col className='d-flex justify-content-center mt-2 text-danger animate__bounceIn'>
+            <h5>No results found!</h5>
+          </Col>
+        </Row>
+      )}
 
       {firstSearch && (
         <div className={"searchedView"}>

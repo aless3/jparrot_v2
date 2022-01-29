@@ -1,16 +1,18 @@
 import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import KeywordFrontEnd, { emoijImage } from "../src/components/KeywordFrontEnd";
 import { shallow } from "enzyme";
+import axios from "axios";
 
-test("check if KeywordFrontEnd correctly creates the graphs with data stored from blobs", async () => {
-  const keyword = shallow(<KeywordFrontEnd />);
+// test("check if KeywordFrontEnd correctly creates the graphs with data stored from blobs", async () => {
+//   const keyword = shallow(<KeywordFrontEnd />);
 
-  let searchButton = keyword.find("Button").at(1);
+//   let searchButton = keyword.find("Button").at(1);
 
-  searchButton.simulate("click");
+//   searchButton.simulate("click");
 
-  expect(keyword).toMatchSnapshot();
-});
+//   expect(keyword).toMatchSnapshot();
+// });
 
 test("check if KeywordFrontEnd correctly creates correctly the term cloud", async () => {
   global.navigator.geolocation = {
@@ -91,4 +93,41 @@ test("check emoji function", () => {
   for (let i = -2; i < 4; i++) {
     emoijImage(i, cb);
   }
+});
+
+test("check component when axios query is satisfied", () => {
+  render(<KeywordFrontEnd />);
+
+  fireEvent.change(screen.getByTestId("keywordInput"), {
+    target: { value: "something" },
+  });
+
+  console.log(document.querySelector("[data-testid=keywordInput]"));
+  fireEvent.click(document.querySelector("#searchButton"));
+});
+
+test("Error case when input is empty or no data found", () => {
+  render(<KeywordFrontEnd />);
+
+  fireEvent.click(document.querySelector("#searchButton"));
+
+  jest.mock("axios");
+  axios.get.mockImplementation((url) => {
+    let result = {
+      data: undefined,
+    };
+
+    return {
+      data: undefined,
+    };
+
+    return Promise.resolve(result);
+  });
+
+  fireEvent.change(screen.getByTestId("keywordInput"), {
+    target: { value: "something" },
+  });
+
+  console.log(document.querySelector("[data-testid=keywordInput]"));
+  fireEvent.click(document.querySelector("#searchButton"));
 });
