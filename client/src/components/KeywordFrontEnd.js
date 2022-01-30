@@ -339,7 +339,7 @@ function KeywordFrontEnd() {
                 <div className='sentiment'>
                   <h4 style={{ textAlign: "center", color: "white" }}>
                     The sentiment value of tweets with this keyword is{" "}
-                    <b>{sentimentName}</b> (value: {sentiment})
+                    <b>{sentimentName}</b>
                   </h4>
                   <br />
                   <div className='d-flex justify-content-center'>
