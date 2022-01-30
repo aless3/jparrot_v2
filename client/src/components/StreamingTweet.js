@@ -9,6 +9,7 @@ import Container from "react-bootstrap/Container";
 import "./StreamingTweet.css";
 import "bootstrap/dist/css/bootstrap.css";
 import TweetList from "./TweetList";
+import "animate.css";
 
 const StreamingTweet = () => {
   let socket = useRef(null);
@@ -17,6 +18,7 @@ const StreamingTweet = () => {
   const [tweets, setTweets] = useState([]);
   const [showText, setShowText] = useState(false);
   const [showTweets, setShowTweets] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const handleChangeOn = () => {
     setShowText(true);
@@ -27,6 +29,13 @@ const StreamingTweet = () => {
   };
 
   async function start() {
+    if (!text) {
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+      return;
+    }
     handleChangeOn();
     socket.current = io("http://localhost:8000", { transports: ["websocket"] });
     socket.current.on("connect", () => {
@@ -43,10 +52,12 @@ const StreamingTweet = () => {
 
   async function end() {
     handleChangeOff();
-    await socket.current.emit("end-stream");
-    console.log("streaming ended");
-    socket.current.disconnect();
-    console.log("disconnected");
+    if (socket.current) {
+      await socket.current.emit("end-stream");
+      console.log("streaming ended");
+      socket.current.disconnect();
+      console.log("disconnected");
+    }
   }
 
   return (
@@ -54,28 +65,51 @@ const StreamingTweet = () => {
       <Container>
         <Row>
           <Col xs={2}>
-            <Button variant='outline-light' onClick={start}>
+            <Button
+              variant="outline-light"
+              onClick={start}
+              data-testid="startButton"
+            >
               Start
             </Button>{" "}
-            <Button variant='outline-light' onClick={end}>
+            <Button
+              variant="outline-light"
+              onClick={end}
+              data-testid="stopButton"
+            >
               Stop
             </Button>{" "}
           </Col>
           <Col>
-            <InputGroup className=''>
+            <InputGroup className="">
               <FormControl
-                aria-label='Default'
-                aria-describedby='inputGroup-sizing-default'
-                placeholder='Enter a keyword...'
+                data-testid="input"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                placeholder="Enter a keyword..."
                 onChange={(e) => setText(e.target.value)}
               />
             </InputGroup>
           </Col>
         </Row>
+        {showError && (
+          <Row>
+            <h5
+              id="errorMsg"
+              className="d-flex justify-content-center text-danger mt-2 animate__bounceIn"
+            >
+              No keywords entered!
+            </h5>
+          </Row>
+        )}
       </Container>
       <br />
-      <div className='d-flex justify-content-center'>
-        {showText && <h4 className='pulser'>Sto cercando i tweet</h4>}
+      <div className="d-flex justify-content-center">
+        {showText && (
+          <h4 id="searching" className="pulser">
+            Looking for Tweets...
+          </h4>
+        )}
       </div>
       {showTweets && <TweetList tweets={tweets} stream={true} />}
     </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import StreamingTweet from "../src/components/StreamingTweet";
 import { shallow } from "enzyme";
 
@@ -7,73 +8,101 @@ import io from "socket.io-client";
 import MockedSocket from "socket.io-mock";
 
 test("check if can connect and disconnect", async () => {
-    let socket;
-    socket = new MockedSocket();
-    socket.disconnect = jest.fn();
-    socket.id = 42
-    socket.on = jest.fn()
-    io.mockReturnValue(socket);
+  let socket;
+  socket = new MockedSocket();
+  socket.disconnect = jest.fn();
+  socket.id = 42;
+  socket.on = jest.fn();
+  io.mockReturnValue(socket);
 
-    const streaming = shallow(<StreamingTweet />);
+  // const streaming = shallow(<StreamingTweet />);
+  render(<StreamingTweet />);
 
-    let text = "covid";
+  let text = "covid";
 
-    let form = streaming.find("FormControl").at(0);
-    let startButton = streaming.find("Button").at(0);
-    let endButton = streaming.find("Button").at(1);
+  // let form = streaming.find("FormControl").at(0);
+  let form = screen.getByTestId("input");
+  // let startButton = streaming.find("Button").at(0);
+  let startButton = screen.getByTestId("startButton");
+  // let endButton = streaming.find("Button").at(1);
+  let endButton = screen.getByTestId("stopButton");
 
-    // set an input
-    let textObj = {
-        target: {
-            value: text,
-        },
-    };
-    form.simulate("change", textObj);
+  // set an input
+  let textObj = {
+    target: {
+      value: text,
+    },
+  };
+  // form.simulate("change", textObj);
+  fireEvent.change(form, textObj);
+  // start
+  socket.on("start-stream", (data) => {
+    expect(data).toEqual(text);
+    done();
+  });
+  // startButton.simulate("click");
+  fireEvent.click(startButton);
 
-    // start
-    socket.on("start-stream", (data) => {
-        expect(data).toEqual(text);
-        done();
-    });
-    startButton.simulate("click");
+  socket.socketClient.emit("connect");
+  expect(io.connect).toHaveBeenCalled();
 
-    socket.socketClient.emit("connect");
-    expect(io.connect).toHaveBeenCalled();
-
-    // end
-    socket.on("end-stream", () => {
-        expect(socket.disconnect).toHaveBeenCalled();
-        done();
-    });
-    endButton.simulate("click");
+  // end
+  socket.on("end-stream", () => {
+    expect(socket.disconnect).toHaveBeenCalled();
+    done();
+  });
+  // endButton.simulate("click");
+  fireEvent.click(endButton);
 });
 
 test("check if StreamingTweet shows that it is trying to show the tweets stream", async () => {
-    const streaming = shallow(<StreamingTweet />);
+  // const streaming = shallow(<StreamingTweet />);
+  render(<StreamingTweet />);
 
-    expect(streaming.text()).toEqual(
-        expect.not.stringContaining("Sto cercando i tweet")
-    );
+  // expect(document.querySelector("body")).toEqual(
+  //   expect.not.stringContaining("Sto cercando i tweet")
+  // );
 
-    let startButton = streaming.find("Button").at(0);
-    let endButton = streaming.find("Button").at(1);
+  expect(document.querySelector("#searching")).toBeNull();
 
-    // start
-    startButton.simulate("click");
+  // let startButton = streaming.find("Button").at(0);
+  let startButton = screen.getByTestId("startButton");
+  // let endButton = streaming.find("Button").at(1);
+  let endButton = screen.getByTestId("stopButton");
 
-    expect(streaming.text()).toEqual(
-        expect.stringContaining("Sto cercando i tweet")
-    );
+  fireEvent.change(screen.getByTestId("input"), {
+    target: { value: "bonini" },
+  });
 
-    // end
-    endButton.simulate("click");
+  // start
+  // startButton.simulate("click");
+  fireEvent.click(startButton);
 
-    expect(streaming.text()).toEqual(
-        expect.not.stringContaining("Sto cercando i tweet")
-    );
+  // expect(document.querySelector("body")).toEqual(
+  //   expect.stringContaining("Sto cercando i tweet")
+  // );
+
+  expect(document.querySelector("#searching").innerHTML).toBe(
+    "Looking for Tweets..."
+  );
+
+  // end
+  // endButton.simulate("click");
+  fireEvent.click(endButton);
+
+  // expect(document.querySelector("body")).toEqual(
+  //   expect.not.stringContaining("Sto cercando i tweet")
+  // );
+
+  expect(document.querySelector("#searching")).toBe(null);
 });
 
+test("show error if no input", () => {
+  render(<StreamingTweet />);
 
-test("simulate tweet incoming", async () => {
+  fireEvent.click(screen.getByTestId("startButton"));
 
+  expect(document.querySelector("#errorMsg").innerHTML).toBe(
+    "No keywords entered!"
+  );
 });
