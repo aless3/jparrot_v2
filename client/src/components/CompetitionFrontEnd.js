@@ -3,7 +3,7 @@ import "../App.css";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import { ButtonGroup, FormControl, Form } from "react-bootstrap";
-
+import "animate.css";
 import Podium from "./Podium";
 
 function CompetitionFrontEnd() {
@@ -18,6 +18,7 @@ function CompetitionFrontEnd() {
   const [showError, setShowError] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [rawError, setRawError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const interval = useRef(null);
 
   function showM() {
@@ -41,14 +42,23 @@ function CompetitionFrontEnd() {
   async function searchCompetitors() {
     try {
       const wrongAnswers = setError(rawError);
-
-      if (wrongAnswers.length && !correctAnswer) {
+      if (showOpen && !correctAnswer) {
         clearInterval(interval.current);
         setShowTweets(false);
+        setErrorMsg("No correct answer!");
         setShowError(true);
         setTimeout(() => {
           setShowError(false);
-        }, 5000);
+        }, 3000);
+        return;
+      } else if (showMultiple && wrongAnswers.length === 0) {
+        clearInterval(interval.current);
+        setShowTweets(false);
+        setErrorMsg("No wrong answers!");
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 3000);
         return;
       }
 
@@ -113,7 +123,22 @@ function CompetitionFrontEnd() {
   return (
     <div className='container'>
       <br />
-      <h2 style={{ textAlign: "center", color: "white" }}>Competition</h2>
+      <h2 className='mb-3' style={{ textAlign: "center", color: "white" }}>
+        Competition
+      </h2>
+      <div className='d-flex justify-content-center text-light'>
+        <p>
+          To use this service, make a tweet with you special hashtag, and
+          instruct your followers to include the following hashtags in their
+          replies:
+          <b className='text-warning'>#competition</b>,{" "}
+          <b className='text-warning'>#jparrot_v2</b> and{" "}
+          <b className='text-warning'>#uniboswe2021</b>
+          <br />
+          Search the special hastag for your competition in this textbox, and
+          select how many replies you want to consider.
+        </p>
+      </div>
       <br />
       <div className='d-flex justify-content-center gap-3'>
         <Form.Control
@@ -175,33 +200,51 @@ function CompetitionFrontEnd() {
       </div>
       <br />
       {showError && (
-        <h5 style={{ color: "red", textAlign: "center" }}>
-          No correct answers for these wrong answers
+        <h5
+          className='animate__bounceIn'
+          style={{ color: "red", textAlign: "center" }}
+        >
+          {errorMsg}
         </h5>
       )}
 
-      <div className='d-flex justify-content-around'>
+      <div className='d-flex align-items-center flex-column'>
+        {!showOpen && (
+          <h6 className='text-light'>
+            The replies will be sorted by most liked
+          </h6>
+        )}
         {showOpen && (
-          <FormControl
-            id='OpenEnded'
-            value={correctAnswer}
-            className='w-25'
-            placeholder='Correct answer'
-            onChange={(e) => {
-              setCorrectAnswer(e.target.value);
-            }}
-          />
+          <>
+            <h5 className='text-light'>Write a single correct answer</h5>
+            <FormControl
+              id='OpenEnded'
+              value={correctAnswer}
+              className='w-25 mb-4 mt-1'
+              placeholder='Correct answer'
+              onChange={(e) => {
+                setCorrectAnswer(e.target.value);
+              }}
+            />
+          </>
         )}
         {showMultiple && (
-          <FormControl
-            id='Multiple'
-            value={rawError}
-            className='w-50'
-            placeholder='Wrong answer'
-            onChange={(e) => {
-              setRawError(e.target.value);
-            }}
-          />
+          <>
+            <p className='text-light'>
+              write wrong answers, separeted by a comma and a space
+              <br />
+              e.g. alessandro, maria, giulia
+            </p>
+            <FormControl
+              id='Multiple'
+              value={rawError}
+              className='w-25 mt-1'
+              placeholder='Wrong answer'
+              onChange={(e) => {
+                setRawError(e.target.value);
+              }}
+            />
+          </>
         )}
       </div>
       {showTweets && <Podium tweets={tweets} />}
