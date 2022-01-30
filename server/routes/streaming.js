@@ -169,6 +169,9 @@ const closeStream = async (socket = null) => {
 };
 
 const wordFreq = (data = text) => {
+  if(!data){
+   return undefined;
+  }
   let dataArray = Object.entries(wf.freq(data, true, false));
   dataArray = dataArray.filter((word) => word[0].length > 2);
   dataArray.sort(function (a, b) {

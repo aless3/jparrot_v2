@@ -78,25 +78,27 @@ const StreamingTweet = () => {
     if (socket.current) {
       await socket.current.emit("end-stream");
       socket.current.on("text", (res) => {
-        let ls = [];
-        let dt = [];
-        for (let el of res) {
-          ls.push(el[0]);
-          dt.push(el[1]);
+        if (res) {
+          let ls = [];
+          let dt = [];
+          for (let el of res) {
+            ls.push(el[0]);
+            dt.push(el[1]);
+          }
+
+          setDataset({
+            labels: ls,
+            datasets: [
+              {
+                label: "Most used words",
+                data: dt,
+                backgroundColor: "rgba(255, 99, 132, 0.5)",
+              },
+            ],
+          });
+
+          setShowChart(true);
         }
-
-        setDataset({
-          labels: ls,
-          datasets: [
-            {
-              label: "Most used words",
-              data: dt,
-              backgroundColor: "rgba(255, 99, 132, 0.5)",
-            },
-          ],
-        });
-
-        setShowChart(true);
         socket.current.disconnect();
         console.log("streaming ended");
         console.log("disconnected");
