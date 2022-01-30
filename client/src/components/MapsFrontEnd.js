@@ -84,7 +84,6 @@ function MapsFrontEnd() {
         setShowTweets(true);
       } else {
         setShowTweets(false);
-        console.log("quiii");
         setShowError(true);
       }
     } catch (error) {
