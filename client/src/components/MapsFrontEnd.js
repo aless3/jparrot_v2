@@ -39,8 +39,8 @@ function MapsFrontEnd() {
   const [showError, setShowError] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [tweets, setTweets] = useState();
-  const [start, setStart] = useState();
-  const [end, setEnd] = useState();
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
 
   const now = new Date().toISOString().split("T")[0];
 
@@ -74,14 +74,12 @@ function MapsFrontEnd() {
           range,
           position,
           keyword,
-          start,
           ...(start ? { start } : {}),
           ...(end ? { end } : {}),
         },
       });
       if (result.data.data !== undefined) {
         setTweets(result.data);
-        console.log(result.data.data[0].text);
         setShowError(false);
         setShowTweets(true);
       } else {
@@ -99,85 +97,89 @@ function MapsFrontEnd() {
     });
   };
   return (
-    <div className='container'>
+    <div className="container">
       <br />
       <h2 style={{ textAlign: "center", color: "white" }}>Maps</h2>
       <br />
-      <Row className='mx-auto'>
+      <Row className="mx-auto">
         <Col>
           <Card
-            id='cardinput'
-            border='light'
-            className='mx-auto'
+            id="cardinput"
+            border="light"
+            className="mx-auto"
             style={{ width: "50vw" }}
           >
             <Card.Header>Select a position in the man</Card.Header>
             <Card.Body>
               <Card.Title>
-                <div className='input'>
+                <div className="input">
                   <Form.Label>Select an area</Form.Label>
                   <Form.Range
                     onChange={(e) => setRange(e.target.value)}
-                    className='slider'
+                    className="slider"
                     value={range}
-                    min='1'
-                    max='40000'
-                    data-testid='areaSelector'
-                    id='areaSelector'
+                    min="1"
+                    max="40000"
+                    data-testid="areaSelector"
+                    id="areaSelector"
                   />
                   <p>Meters: {range} </p>
                   <br />
-                  <Row className='mb-3 dates'>
+                  <Row className="mb-3 dates">
                     <TextField
-                      id='fromDate'
-                      label='From'
-                      type='date'
+                      id="fromDate"
+                      label="From"
+                      type="date"
                       sx={{ width: 220, marginRight: "1rem" }}
                       InputLabelProps={{
                         shrink: true,
                       }}
                       inputProps={{ max: now }}
                       onChange={(date) => {
-                        if (date) {
-                          setStart(date.target.value.concat("T00:00:00Z"));
-                        }
+                        setStart(
+                          date.target.value
+                            ? date.target.value.concat("T00:00:00Z")
+                            : ""
+                        );
                       }}
                     />
                     <TextField
-                      id='toDate'
-                      label='To'
-                      type='date'
+                      id="toDate"
+                      label="To"
+                      type="date"
                       sx={{ width: 220 }}
                       InputLabelProps={{
                         shrink: true,
                       }}
                       inputProps={{ max: now }}
                       onChange={(date) => {
-                        if (date) {
-                          setEnd(date.target.value.concat("T00:00:00Z"));
-                        }
+                        setEnd(
+                          date.target.value
+                            ? date.target.value.concat("T00:00:00Z")
+                            : ""
+                        );
                       }}
                     />
                   </Row>
-                  <Row className='mb-3'>
-                    <Form.Group as={Col} md='6' controlId='validationFormik03'>
+                  <Row className="mb-3">
+                    <Form.Group as={Col} md="6" controlId="validationFormik03">
                       <FormControl
-                        data-testid='keyword'
+                        data-testid="keyword"
                         value={keyword}
                         onChange={(e) => {
                           setKeyword(e.target.value);
                         }}
-                        aria-label='Username'
-                        aria-describedby='basic-addon1'
-                        placeholder='Input a keyword'
+                        aria-label="Username"
+                        aria-describedby="basic-addon1"
+                        placeholder="Input a keyword"
                       />
                     </Form.Group>
 
-                    <Form.Group as={Col} md='6' controlId='validationFormik03'>
+                    <Form.Group as={Col} md="6" controlId="validationFormik03">
                       <Button
                         onClick={searchTweets}
-                        variant='outline-primary'
-                        data-testid='searchButton'
+                        variant="outline-primary"
+                        data-testid="searchButton"
                       >
                         Search
                       </Button>{" "}
@@ -191,10 +193,10 @@ function MapsFrontEnd() {
       </Row>
 
       <br />
-      <Row className='mx-auto'>
+      <Row className="mx-auto">
         {showMap && (
           <MapContainer
-            className='mapcontainer mx-auto'
+            className="mapcontainer mx-auto"
             style={{ height: "50vmin", width: "110vmin", zIndex: "1" }}
             center={[position.lat, position.lng]}
             zoom={13}
@@ -202,7 +204,7 @@ function MapsFrontEnd() {
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
             <MarkerPosition
@@ -234,7 +236,7 @@ function MapsFrontEnd() {
       </Row>
       <Row>{showTweets && <TweetList tweets={tweets} stream={false} />}</Row>
       <Row>{}</Row>
-      {showError && <div className='errormsg'>No Tweets Found :C</div>}
+      {showError && <div className="errormsg">No Tweets Found :C</div>}
     </div>
   );
 }
@@ -253,7 +255,7 @@ function MarkerPosition({ position, updatePosition, range }) {
           pathOptions={{ color: "blue", stroke: false }}
           radius={range}
         />
-        <Marker position={position} title='positionMarker' />
+        <Marker position={position} title="positionMarker" />
       </>
     </>
   );
