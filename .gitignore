@@ -13,3 +13,9 @@
 
 # .DS_Store macos files
 **/.DS_Store
+
+# server coverage
+server/coverage/*
+
+# snapshots
+client/test/__snapshots__
