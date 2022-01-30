@@ -11,8 +11,31 @@ import {
 } from "react-icons/fa";
 import "./Tweet.css";
 
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Circle,
+  useMapEvents,
+  Popup,
+} from "react-leaflet";
+
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
 function Tweet({ user, tweet, stream }) {
   const [isRT, setIsRT] = useState(false);
+  const [showGeoButton, setShowGeoButton] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     if (tweet !== undefined) {
@@ -20,6 +43,10 @@ function Tweet({ user, tweet, stream }) {
         setIsRT(true);
         tweet.text = tweet.text.slice(2);
       }
+    }
+
+    if (tweet?.geo?.coordinates) {
+      setShowGeoButton(true);
     }
   }, []);
 
@@ -30,7 +57,6 @@ function Tweet({ user, tweet, stream }) {
     const { like_count, quote_count, reply_count, retweet_count } = !stream
       ? tweet.public_metrics
       : 0;
-
     return (
       <Container className='card-container'>
         <Card border='light'>
@@ -78,6 +104,43 @@ function Tweet({ user, tweet, stream }) {
                   <div>{created_at.split("T")[1].split(".")[0]}</div>
                 </div>
               </div>
+              {showGeoButton && (
+                <div>
+                  <button
+                    className='mt-2'
+                    onClick={() => {
+                      setShowMap(!showMap);
+                    }}
+                  >
+                    Show Map
+                  </button>
+                </div>
+              )}
+              {showMap && (
+                <div>
+                  <MapContainer
+                    className='mapcontainer mx-auto'
+                    style={{ height: "20rem", width: "auto", zIndex: "1" }}
+                    center={[
+                      tweet.geo.coordinates.coordinates[1],
+                      tweet.geo.coordinates.coordinates[0],
+                    ]}
+                    zoom={13}
+                    scrollWheelZoom={true}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    />
+                    <Marker
+                      position={[
+                        tweet.geo.coordinates.coordinates[1],
+                        tweet.geo.coordinates.coordinates[0],
+                      ]}
+                    ></Marker>
+                  </MapContainer>
+                </div>
+              )}
             </Card.Text>
           </Card.Body>
         </Card>

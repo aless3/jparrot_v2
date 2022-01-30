@@ -84,6 +84,7 @@ function MapsFrontEnd() {
         setShowTweets(true);
       } else {
         setShowTweets(false);
+        console.log("quiii");
         setShowError(true);
       }
     } catch (error) {
@@ -97,39 +98,39 @@ function MapsFrontEnd() {
     });
   };
   return (
-    <div className="container">
+    <div className='container'>
       <br />
       <h2 style={{ textAlign: "center", color: "white" }}>Maps</h2>
       <br />
-      <Row className="mx-auto">
+      <Row className='mx-auto'>
         <Col>
           <Card
-            id="cardinput"
-            border="light"
-            className="mx-auto"
+            id='cardinput'
+            border='light'
+            className='mx-auto'
             style={{ width: "50vw" }}
           >
             <Card.Header>Select a position in the man</Card.Header>
             <Card.Body>
               <Card.Title>
-                <div className="input">
+                <div className='input'>
                   <Form.Label>Select an area</Form.Label>
                   <Form.Range
                     onChange={(e) => setRange(e.target.value)}
-                    className="slider"
+                    className='slider'
                     value={range}
-                    min="1"
-                    max="40000"
-                    data-testid="areaSelector"
-                    id="areaSelector"
+                    min='1'
+                    max='40000'
+                    data-testid='areaSelector'
+                    id='areaSelector'
                   />
                   <p>Meters: {range} </p>
                   <br />
-                  <Row className="mb-3 dates">
+                  <Row className='mb-3 dates'>
                     <TextField
-                      id="fromDate"
-                      label="From"
-                      type="date"
+                      id='fromDate'
+                      label='From'
+                      type='date'
                       sx={{ width: 220, marginRight: "1rem" }}
                       InputLabelProps={{
                         shrink: true,
@@ -144,9 +145,9 @@ function MapsFrontEnd() {
                       }}
                     />
                     <TextField
-                      id="toDate"
-                      label="To"
-                      type="date"
+                      id='toDate'
+                      label='To'
+                      type='date'
                       sx={{ width: 220 }}
                       InputLabelProps={{
                         shrink: true,
@@ -161,25 +162,25 @@ function MapsFrontEnd() {
                       }}
                     />
                   </Row>
-                  <Row className="mb-3">
-                    <Form.Group as={Col} md="6" controlId="validationFormik03">
+                  <Row className='mb-3'>
+                    <Form.Group as={Col} md='6' controlId='validationFormik03'>
                       <FormControl
-                        data-testid="keyword"
+                        data-testid='keyword'
                         value={keyword}
                         onChange={(e) => {
                           setKeyword(e.target.value);
                         }}
-                        aria-label="Username"
-                        aria-describedby="basic-addon1"
-                        placeholder="Input a keyword"
+                        aria-label='Username'
+                        aria-describedby='basic-addon1'
+                        placeholder='Input a keyword'
                       />
                     </Form.Group>
 
-                    <Form.Group as={Col} md="6" controlId="validationFormik03">
+                    <Form.Group as={Col} md='6' controlId='validationFormik03'>
                       <Button
                         onClick={searchTweets}
-                        variant="outline-primary"
-                        data-testid="searchButton"
+                        variant='outline-primary'
+                        data-testid='searchButton'
                       >
                         Search
                       </Button>{" "}
@@ -193,10 +194,17 @@ function MapsFrontEnd() {
       </Row>
 
       <br />
-      <Row className="mx-auto">
+      <Row>
+        {showError && (
+          <h4 className='errormsg d-flex justify-content-center text-danger mb-2'>
+            No Tweets Found :C
+          </h4>
+        )}
+      </Row>
+      <Row className='mx-auto'>
         {showMap && (
           <MapContainer
-            className="mapcontainer mx-auto"
+            className='mapcontainer mx-auto'
             style={{ height: "50vmin", width: "110vmin", zIndex: "1" }}
             center={[position.lat, position.lng]}
             zoom={13}
@@ -204,7 +212,7 @@ function MapsFrontEnd() {
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
 
             <MarkerPosition
@@ -235,8 +243,6 @@ function MapsFrontEnd() {
         )}
       </Row>
       <Row>{showTweets && <TweetList tweets={tweets} stream={false} />}</Row>
-      <Row>{}</Row>
-      {showError && <div className="errormsg">No Tweets Found :C</div>}
     </div>
   );
 }
@@ -255,7 +261,7 @@ function MarkerPosition({ position, updatePosition, range }) {
           pathOptions={{ color: "blue", stroke: false }}
           radius={range}
         />
-        <Marker position={position} title="positionMarker" />
+        <Marker position={position} title='positionMarker' />
       </>
     </>
   );
