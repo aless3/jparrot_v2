@@ -127,8 +127,8 @@ function CompetitionFrontEnd() {
         Competition
       </h2>
       <div className='d-flex justify-content-center text-light'>
-        <p>
-          To use this service, make a tweet with your special hashtag, include
+        <p className='d-flex align-items-center flex-column'>
+          {/* To use this service, make a tweet with your special hashtag, include
           the following hashtags in your competition and instruct your followers
           to as well, including your special hashtag:
           <b className='text-warning'>#competition</b>,{" "}
@@ -136,7 +136,12 @@ function CompetitionFrontEnd() {
           <b className='text-warning'>#uniboswe2021</b>
           <br />
           Search the special hastag for your competition in this textbox, and
-          select how many replies you want to consider.
+          select how many replies you want to consider. */}
+          To use this service, make a tweet with the hashtag of this specific
+          competition and the following hashtags:
+          <b className='text-warning'>#competition #jparrot_v2 #uniboswe2021</b>
+          then instruct your followers to use those four hashtags as well in
+          their commissions
         </p>
       </div>
       <br />
