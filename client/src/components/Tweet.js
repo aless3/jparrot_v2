@@ -11,14 +11,7 @@ import {
 } from "react-icons/fa";
 import "./Tweet.css";
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Circle,
-  useMapEvents,
-  Popup,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -137,7 +130,7 @@ function Tweet({ user, tweet, stream }) {
                         tweet.geo.coordinates.coordinates[1],
                         tweet.geo.coordinates.coordinates[0],
                       ]}
-                    ></Marker>
+                    />
                   </MapContainer>
                 </div>
               )}
