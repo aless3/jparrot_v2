@@ -19,7 +19,8 @@
     "path": "^0.12.7",
     "socket.io": "^4.4.0",
     "socket.io-client": "^4.4.0",
-    "twitter-api-v2": "^1.6.5"
+    "twitter-api-v2": "^1.6.5",
+    "word-freq": "^0.0.8"
   },
   "devDependencies": {
     "jest": "^27.4.7",
