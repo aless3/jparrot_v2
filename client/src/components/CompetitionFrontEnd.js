@@ -128,9 +128,9 @@ function CompetitionFrontEnd() {
       </h2>
       <div className='d-flex justify-content-center text-light'>
         <p>
-          To use this service, make a tweet with you special hashtag, and
-          instruct your followers to include the following hashtags in their
-          replies:
+          To use this service, make a tweet with your special hashtag, include
+          the following hashtags in your competition and instruct your followers
+          to as well, including your special hashtag:
           <b className='text-warning'>#competition</b>,{" "}
           <b className='text-warning'>#jparrot_v2</b> and{" "}
           <b className='text-warning'>#uniboswe2021</b>
