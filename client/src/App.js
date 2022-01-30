@@ -27,7 +27,7 @@ class App extends Component {
               </li>
               <li>
                 <Link to={"/stream"} className='nav-link'>
-                  Stream
+                  Streaming
                 </Link>
               </li>
               <li>

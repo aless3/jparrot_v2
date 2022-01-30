@@ -10,7 +10,7 @@ async function searchKeyword(req, client = keywordClient) {
   let keyword = req.query.keyword;
   try {
     return (
-      await client.v2.search(`${keyword}`, {
+      await client.v2.searchAll(`${keyword}`, {
         expansions: ["author_id"],
         "tweet.fields": ["created_at", "public_metrics", "text"],
         "user.fields": ["username", "name", "profile_image_url"],

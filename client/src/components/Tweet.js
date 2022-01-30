@@ -32,6 +32,7 @@ function Tweet({ user, tweet, stream }) {
 
   useEffect(() => {
     if (tweet !== undefined) {
+      console.log(tweet);
       if (tweet.text.substring(0, 2) === "RT") {
         setIsRT(true);
         tweet.text = tweet.text.slice(2);

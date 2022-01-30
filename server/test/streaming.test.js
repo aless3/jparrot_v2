@@ -133,4 +133,9 @@ describe("streaming Tests", () => {
 
     expect(result).toBeFalsy();
   });
+
+  test("test word frquency functions", () => {
+    const data = streaming.wordFreq("parola");
+    expect(data[0][0]).toBe("parola");
+  });
 });

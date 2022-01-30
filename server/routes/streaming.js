@@ -2,11 +2,15 @@ const { ETwitterStreamEvent, TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
 
+const wf = require("word-freq");
+
 const appOnlyClient = new TwitterApi(process.env.CORE_NEW);
 const streamingClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 let stream;
+
+let text = "";
 
 /**
  *  @module streaming
@@ -114,6 +118,7 @@ const reloadRules = async (args, client = streamingClient) => {
  */
 const startStream = async (args, socket, client = streamingClient) => {
   try {
+    text = "";
     await reloadRules(args, client);
     stream = await client.v2.searchStream({
       expansions: ["author_id"],
@@ -123,6 +128,8 @@ const startStream = async (args, socket, client = streamingClient) => {
     stream.autoReconnect = true;
     stream.on(ETwitterStreamEvent.Data, async (tweet) => {
       socket.emit("tweet", tweet);
+      text = text.concat(" ");
+      text = text.concat(tweet.data.text);
     });
   } catch (error) {
     console.log(error);
@@ -151,10 +158,24 @@ const getStream = () => {
  *  Close the twitter v2 api stream handler. This function makes it possible
  *  to close the stream object from outside this file
  */
-const closeStream = () => {
+const closeStream = async (socket = null) => {
   if (stream !== undefined) {
+    if (socket) {
+      let data = wordFreq();
+      await socket.emit("text", data);
+    }
     stream.close();
   }
+};
+
+const wordFreq = (data = text) => {
+  let dataArray = Object.entries(wf.freq(data, true, false));
+  dataArray = dataArray.filter((word) => word[0].length > 2);
+  dataArray.sort(function (a, b) {
+    return b[1] - a[1];
+  });
+  dataArray = dataArray.slice(0, 10);
+  return dataArray;
 };
 
 module.exports = {
@@ -167,4 +188,5 @@ module.exports = {
   getStream,
   startStream,
   closeStream,
+  wordFreq,
 };

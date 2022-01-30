@@ -11,6 +11,26 @@ import "bootstrap/dist/css/bootstrap.css";
 import TweetList from "./TweetList";
 import "animate.css";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const StreamingTweet = () => {
   let socket = useRef(null);
 
@@ -19,6 +39,8 @@ const StreamingTweet = () => {
   const [showText, setShowText] = useState(false);
   const [showTweets, setShowTweets] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [showChart, setShowChart] = useState(false);
+  const [dataset, setDataset] = useState({});
 
   const handleChangeOn = () => {
     setShowText(true);
@@ -29,6 +51,7 @@ const StreamingTweet = () => {
   };
 
   async function start() {
+    setShowChart(false);
     if (!text) {
       setShowError(true);
       setTimeout(() => {
@@ -54,9 +77,30 @@ const StreamingTweet = () => {
     handleChangeOff();
     if (socket.current) {
       await socket.current.emit("end-stream");
-      console.log("streaming ended");
-      socket.current.disconnect();
-      console.log("disconnected");
+      socket.current.on("text", (res) => {
+        let ls = [];
+        let dt = [];
+        for (let el of res) {
+          ls.push(el[0]);
+          dt.push(el[1]);
+        }
+
+        setDataset({
+          labels: ls,
+          datasets: [
+            {
+              label: "Most used words",
+              data: dt,
+              backgroundColor: "rgba(255, 99, 132, 0.5)",
+            },
+          ],
+        });
+
+        setShowChart(true);
+        socket.current.disconnect();
+        console.log("streaming ended");
+        console.log("disconnected");
+      });
     }
   }
 
@@ -66,27 +110,27 @@ const StreamingTweet = () => {
         <Row>
           <Col xs={2}>
             <Button
-              variant="outline-light"
+              variant='outline-light'
               onClick={start}
-              data-testid="startButton"
+              data-testid='startButton'
             >
               Start
             </Button>{" "}
             <Button
-              variant="outline-light"
+              variant='outline-light'
               onClick={end}
-              data-testid="stopButton"
+              data-testid='stopButton'
             >
               Stop
             </Button>{" "}
           </Col>
           <Col>
-            <InputGroup className="">
+            <InputGroup className=''>
               <FormControl
-                data-testid="input"
-                aria-label="Default"
-                aria-describedby="inputGroup-sizing-default"
-                placeholder="Enter a keyword..."
+                data-testid='input'
+                aria-label='Default'
+                aria-describedby='inputGroup-sizing-default'
+                placeholder='Enter keyword(s)...'
                 onChange={(e) => setText(e.target.value)}
               />
             </InputGroup>
@@ -95,18 +139,23 @@ const StreamingTweet = () => {
         {showError && (
           <Row>
             <h5
-              id="errorMsg"
-              className="d-flex justify-content-center text-danger mt-2 animate__bounceIn"
+              id='errorMsg'
+              className='d-flex justify-content-center text-danger mt-2 animate__bounceIn'
             >
               No keywords entered!
             </h5>
           </Row>
         )}
+        {showChart && (
+          <div className='chart-container'>
+            <Bar type='bar' data={dataset} />
+          </div>
+        )}
       </Container>
       <br />
-      <div className="d-flex justify-content-center">
+      <div className='d-flex justify-content-center'>
         {showText && (
-          <h4 id="searching" className="pulser">
+          <h4 id='searching' className='pulser'>
             Looking for Tweets...
           </h4>
         )}

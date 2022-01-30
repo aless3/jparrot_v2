@@ -60,6 +60,6 @@ io.on("connection", (socket) => {
 
   socket.on("end-stream", () => {
     console.log("stream closing");
-    streaming.closeStream();
+    streaming.closeStream(socket);
   });
 });

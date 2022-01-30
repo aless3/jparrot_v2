@@ -126,24 +126,15 @@ function CompetitionFrontEnd() {
       <h2 className='mb-3' style={{ textAlign: "center", color: "white" }}>
         Competition
       </h2>
-      <div className='d-flex justify-content-center text-light'>
+      <h6 className='d-flex justify-content-center text-light'>
         <p className='d-flex align-items-center flex-column'>
-          {/* To use this service, make a tweet with your special hashtag, include
-          the following hashtags in your competition and instruct your followers
-          to as well, including your special hashtag:
-          <b className='text-warning'>#competition</b>,{" "}
-          <b className='text-warning'>#jparrot_v2</b> and{" "}
-          <b className='text-warning'>#uniboswe2021</b>
-          <br />
-          Search the special hastag for your competition in this textbox, and
-          select how many replies you want to consider. */}
           To use this service, make a tweet with the hashtag of this specific
           competition and the following hashtags:
           <b className='text-warning'>#competition #jparrot_v2 #uniboswe2021</b>
           then instruct your followers to use those four hashtags as well in
           their commissions
         </p>
-      </div>
+      </h6>
       <br />
       <div className='d-flex justify-content-center gap-3'>
         <Form.Control
@@ -154,7 +145,7 @@ function CompetitionFrontEnd() {
           onChange={(e) => {
             setHashtag(e.target.value);
           }}
-          placeholder='Enter a Keyword...'
+          placeholder='Enter the competition hashtag...'
         />
         <Form.Select
           id='keywordSelect'

@@ -128,7 +128,7 @@ function MapsFrontEnd() {
                   <Row className='mb-3 dates'>
                     <TextField
                       id='fromDate'
-                      label='From'
+                      label='From (optional)'
                       type='date'
                       sx={{ width: 220, marginRight: "1rem" }}
                       InputLabelProps={{
@@ -145,7 +145,7 @@ function MapsFrontEnd() {
                     />
                     <TextField
                       id='toDate'
-                      label='To'
+                      label='To (optional)'
                       type='date'
                       sx={{ width: 220 }}
                       InputLabelProps={{
@@ -171,7 +171,7 @@ function MapsFrontEnd() {
                         }}
                         aria-label='Username'
                         aria-describedby='basic-addon1'
-                        placeholder='Input a keyword'
+                        placeholder='Input a keyword (optional)'
                       />
                     </Form.Group>
 
@@ -222,7 +222,6 @@ function MapsFrontEnd() {
             {showTweets &&
               tweets?.data.map((tweet) => {
                 if (tweet.geo.coordinates) {
-                  console.log(tweet);
                   const username = tweets["includes"].users.filter(
                     (user) => user.id === tweet.author_id
                   )[0].username;

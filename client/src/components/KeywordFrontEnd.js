@@ -215,9 +215,11 @@ function KeywordFrontEnd() {
     <Container>
       <br />
       <div>
-        <h2 style={{ textAlign: "center", color: "white" }}>Search Keyword</h2>
+        <h2 style={{ textAlign: "center", color: "white" }}>Home</h2>
         <br />
-        <h3 style={{ textAlign: "center", color: "white" }}>Termcloud</h3>
+        <h4 style={{ textAlign: "center", color: "white" }}>
+          Trending near you
+        </h4>
         <div className='d-flex justify-content-center'>
           <SimpleCloud
             values={termsData}
@@ -235,12 +237,24 @@ function KeywordFrontEnd() {
       <hr />
 
       <Row>
+        <div className='d-flex justify-content-center text-light mb-3'>
+          <h6 className='d-flex align-items-center flex-column'>
+            Write the keywords you want to search and analyze separated by a
+            space
+            <span className='mb-3'>(e.g. covid america)</span>
+            You will be shown a linechart, a piechart and the sentiment about
+            this query, as well as the tweets involved in the search
+          </h6>
+        </div>
+      </Row>
+
+      <Row>
         <Col md={{ span: 5, offset: 3 }}>
           <FormControl
             data-testid='keywordInput'
             type='text'
             value={keyword}
-            placeholder='Write a keyword...'
+            placeholder='Write keyword(s)...'
             onChange={(e) => {
               setKeyword(e.target.value);
             }}
