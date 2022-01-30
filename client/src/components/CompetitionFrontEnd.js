@@ -175,10 +175,9 @@ function CompetitionFrontEnd() {
       </div>
       <br />
       {showError && (
-        <div style={{ color: "red", textAlign: "center" }}>
-          Devi impostare la risposta corretta quando inserisci risposte
-          sbagliate
-        </div>
+        <h5 style={{ color: "red", textAlign: "center" }}>
+          No correct answers for these wrong answers
+        </h5>
       )}
 
       <div className='d-flex justify-content-around'>
