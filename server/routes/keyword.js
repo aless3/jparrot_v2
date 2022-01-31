@@ -1,3 +1,4 @@
+/**@module keyword */
 const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
@@ -6,6 +7,16 @@ const keywordClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
+/**
+ * @function
+ * @name searchKeyword
+ * @description - Funzione che cerca la keyword.
+ * Cerca i tweet che contengono la keyword fornita
+ * @async
+ * @param req - Query proveniente dal front end che contiene la keyword
+ * @param  client - Il client da usare [opzionale, se non presente usa streamingClient]
+ * @returns - I tweet ottenuti cercando la keyword
+ */
 async function searchKeyword(req, client = keywordClient) {
   let keyword = req.query.keyword;
   try {

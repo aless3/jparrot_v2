@@ -1,3 +1,4 @@
+/**@module maps */
 const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
@@ -6,10 +7,16 @@ const mapsClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
-/*
-funzione che prende la richiesta, ci tira fuori il range, le coordinate
-e la keyword e sputa il campo data della richiesta
-*/
+/**
+ * @function
+ * @name searchGeo
+ * @description - Funzione di ricerca geolocalizzata
+ * Cerca i tweet provenienti da una specifica area geografica, entro un certo periodo di tempo e contenente delle keyword
+ * @async
+ * @param  req - Contiene i a posizione geografica, il periodo temporale e la keyword da usare come filtro
+ * @param  client - Il client da usare [opzionale, se non presente usa streamingClient]
+ * @returns - I tweet ottenuti dalla ricerca
+ */
 async function searchGeo(req, client = mapsClient) {
   const range = req.query.range;
   const coords = JSON.parse(req.query.position);

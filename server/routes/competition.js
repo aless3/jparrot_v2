@@ -1,3 +1,5 @@
+/** @module competition */
+
 const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
@@ -6,10 +8,27 @@ const competitionClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
+/**
+ * @function
+ * @name hasWhiteSpace
+ * @description - Funzione di verifica.
+ * Verifica che la stringa passata abbiamo o meno spazi
+ * @param {String} s  - Stringa da controllare
+ * @returns {Boolean} - True se stringa contiene spazi, false altrimenti
+ */
 function hasWhiteSpace(s) {
   return /\s/g.test(s);
 }
 
+/**
+ * @function
+ * @name buibuildQuery
+ * @description - Funzione di costruzione della query.
+ * Prende un hashtag ed eventuali risposte corrette, e prepara una stringa unica contenente entrambi
+ * @param {String} hashtag - Stringa contenente hashtag
+ * @param {String} correctAnswer - Stringa opzionale contenente la risposta corretta
+ * @returns {String} - Stringa contenente gli eventuali due parametri in input
+ */
 function buildQuery(hashtag, correctAnswer = null) {
   let query = "#competition #jparrot_v2 #uniboswe2021 is:reply ";
   // build the no-answer query
@@ -26,6 +45,16 @@ function buildQuery(hashtag, correctAnswer = null) {
   return query;
 }
 
+/**
+ * @function
+ * @name searchReplies
+ * @description - Funzione di ricerca.
+ * Cerca le risposte alla competizione definita dall'hashtag
+ * @async
+ * @param req - La query di richiesta, che contiene l'hashtag e il numero di risposte desiderate
+ * @param client - Il client da usare [opzionale, se non presente usa streamingClient]
+ * @returns - I dati ottenuti dalla query verso l'API, oppure undefined se non ci sono risultati
+ */
 async function searchReplies(req, client = competitionClient) {
   let hashtag = req.query.hashtag;
   // hashtag cannot have white spaces
@@ -78,6 +107,15 @@ async function searchReplies(req, client = competitionClient) {
   }
 }
 
+/**
+ *  @function
+ *  @name updateLists
+ *  @description - Funzione di aggiornamento.
+ * Aggiorna la lista dei tweet inserendo newItem nella posizione ordinata
+ *  @param lists - La lista corrente dei tweet
+ *  @param newItem - Il nuovo tweet da inserire
+ *  @returns - La lista aggiornata
+ */
 function updateLists(lists, newItem) {
   let list = lists.listLikes;
   let indices = lists.listIndices;
@@ -106,6 +144,15 @@ function updateLists(lists, newItem) {
   return lists;
 }
 
+/**
+ * @function
+ * @name containsWrongsAnswers
+ * @description - Funzione di controllo delle risposte errate.
+ * Analizza la stringa per vedere se contiene una delle stringa dell'array
+ * @param {String} text - La stringa da analizzare
+ * @param {String[]} - Array delle stringhe da usare per l'analisi
+ * @returns {Boolean} - Booleano che indica se la stringa contiene almeno una delle stringhe nell'array
+ */
 function containsWrongsAnswers(text, wrongAnswers = []) {
   for (const wrongAnswer of wrongAnswers) {
     try {
@@ -119,6 +166,15 @@ function containsWrongsAnswers(text, wrongAnswers = []) {
   return false;
 }
 
+/**
+ * @function
+ * @name containsCorrectAnswer
+ * @description - Funzione di verifica della risposta corretta.
+ * Verifica se una stringa contiene un'altra stringa
+ * @param {String} text - La stringa su cui effettuale la verifica
+ * @param {String} correctAnswer - La stringa da usare per effettuare la verifica
+ * @returns {Boolean} - Booleano che indica se text contiene CorrectAnswer
+ */
 function containsCorrectAnswer(text, correctAnswer = null) {
   try {
     if (text.includes(correctAnswer)) {
@@ -131,6 +187,15 @@ function containsCorrectAnswer(text, correctAnswer = null) {
   return false;
 }
 
+/**
+ * @function
+ * @name extractIndices
+ * @description - Funzione di riordino dei tweet.
+ * Riorganozza i tweet arrivati dall'API in modo che abbiano particolare ordine
+ * @param replies - Le risposte ottenute da Twitter
+ * @param listIndices - Il nuovo ordine secondo cui organizzarli
+ * @returns - I tweet ordinati nel nuovo modo
+ */
 function extractIndices(replies, listIndices) {
   let result = {};
   result.data = [];
@@ -155,7 +220,16 @@ function extractIndices(replies, listIndices) {
 
   return result;
 }
-
+/**
+ * @function
+ * @name organizeAnswers
+ * @description - Funzione di organizzazione dei tweet di risposta.
+ * Organizza la competition nel caso ci siano solo risposte corrette o anche risposte sbagliate
+ * @param  replies - I tweet ottenuti dall'API
+ * @param  correctAnswer - La risposta corretta
+ * @param  wrongAnswers - L'array delle risposte sbaglite
+ * @returns - L'array ordinato che contiene i tweet di risposta
+ */
 function organizeAnswers(replies, correctAnswer, wrongAnswers = []) {
   let isWrongArray = Array.isArray(wrongAnswers);
 
@@ -195,6 +269,14 @@ function organizeAnswers(replies, correctAnswer, wrongAnswers = []) {
   }
 }
 
+/**
+ * @function
+ * @name organizeCompetition
+ * @description - Funzione di ordinamento in base ai like.
+ * Ordina i tweet secondo i like, in ordine discendente
+ * @param replies - I tweet da ordinare
+ * @returns - I Tweet ordinati secondo i like
+ */
 function organizeCompetition(replies) {
   try {
     let lists = {};
@@ -218,6 +300,16 @@ function organizeCompetition(replies) {
   }
 }
 
+/**
+ * @function
+ * @name organizeReplies
+ * @description - Funzione di crezione della competizione
+ * Decide quale tipo di competizione preparare a seconda dei parametri disponibili
+ * @param  replies - I tweet
+ * @param  correctAnswer - La risposta corretta, se manca assieme a wrongAnswer fara' una competition in base ai like
+ * @param  wrongAnswers - Le risposte errate, se manca fara' una trivia a domanda aperta
+ * @returns - I tweet ordinati secondo il tipo di competition
+ */
 function organizeReplies(replies, correctAnswer, wrongAnswers) {
   let errorResult = {};
   errorResult.data = [];

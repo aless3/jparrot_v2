@@ -2,18 +2,18 @@
 
 /**
  * @typedef {object} Result
- * @property {int} positiveCount - Positive tweets counter
- * @property {int} negativeCount - Negative tweets counter
- * @property {int} sentimentCount - (Positive + negative) tweets counter
- * @property {int} totalCount - Total tweets counter
+ * @property {int} positiveCount - Contatore dei tweet positivi
+ * @property {int} negativeCount - Contatore dei tweet negativi
+ * @property {int} sentimentCount - (positivi + negativi) contatore tweet
+ * @property {int} totalCount - totale dei tweet
  */
 
 /**
  * @typedef {object} SentimentTweets
- * @property {int} positiveCount - Positive tweets counter
- * @property {int} negativeCount - Negative tweets counter
- * @property {int} sentimentCount - (Positive + negative) tweets counter
- * @property {int} totalCount - Total tweets counter
+ * @property {int} positiveCount - Contatore dei tweet positivi
+ * @property {int} negativeCount - Contatore dei tweet negativi
+ * @property {int} sentimentCount - (positivi + negativi) contatore tweet
+ * @property {int} totalCount - totale dei tweet
  */
 
 const { TwitterApi } = require("twitter-api-v2");
@@ -27,12 +27,12 @@ const router = express.Router();
 /**
  *  @function
  *  @name searchCounts
- *  @description - Twitter api to function.
- *  Takes a keyword stored inside the request object and returns tweets with that keyword and positive or negative words.
+ *  @description - Funzione di API Twitter.
+ *  Usa la keyword contenuta dentro l'oggetto req e ritorna il numero dei tweet positivi, quelli negativi e anche il totale.
  *  @async
- *  @returns {SentimentTweets} - Returns a SentimentTweets object.
- * @param req - the request sent from the frontend
- * @param client - the client to use [optional, if not passed use streamingClient]
+ *  @returns {SentimentTweets} - Ritorna un oggetto SentimentTweets.
+ * @param req - L'oggetto richiesta proveniente dal front end
+ * @param client - Il client per comunicare con l'API, opzionale da usare solo durante i test
  */
 async function searchCounts(req, client = sentimentClient) {
   let keyword = req.query.keyword;
@@ -69,12 +69,11 @@ async function searchCounts(req, client = sentimentClient) {
 /**
  *  @function
  *  @name sentimentCount
- *  @description - Sentiment Analysis function.
- *  Takes a tweets array and counts tweets with that keyword and positive/negative words
- *  Result is dependent on percentage of tweets with positive/negative words
+ *  @description - Funzione di analisi del Sentiment.
+ *  Prende un array di tweet proveniente dalla ricerca di una keyword e analizza il sentimento globale verso di essa
  *  @async
- *  @param counts - object containing 20 tweets per category: negative tweets, positive tweets and total tweets
- *  @returns {Result} - Returns a Result object.
+ *  @param counts - Oggetto contenente 20 tweet per categoria: Tweet positivi, negativi e totali
+ *  @returns {Result} - Restituisce un oggetto Result.
  */
 async function sentimentCount(counts) {
   if (counts === undefined) {
@@ -124,7 +123,7 @@ async function sentimentCount(counts) {
   let sentimentName;
 
   let posPercentage = (100 * posCount) / (posCount + negCount);
-  let zero = (posCount === 0 && negCount === 0)
+  let zero = posCount === 0 && negCount === 0;
 
   if (posPercentage > 90) {
     sentiment = 2;

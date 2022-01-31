@@ -1,3 +1,4 @@
+/**@module terms */
 const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
@@ -6,11 +7,14 @@ const termsClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
-/*
-manipola i dati, contando le occorrenza di una certa parola nei tweets
-(quanto un trend è popolare)
-se il trend è null o 1 lo ignora
-*/
+/**
+ * @function
+ * @name organizeTrendsOfPlace
+ * @description - Funzione di ordinamento delle tendenze.
+ * Prende un array di oggetti e li prepara come array contenenti nome di un trend e numero di occorrenze
+ * @param trendsOfPlace - Array di oggetti contenenti nome di un trend e numero di occorrenza, ma non ordinato
+ * @returns - Array di oggetti ordinati in base al numero di occorrenze
+ */
 function organizeTrendsOfPlace(trendsOfPlace) {
   let r = [];
 
@@ -33,9 +37,15 @@ function organizeTrendsOfPlace(trendsOfPlace) {
   return r;
 }
 
-/*
-gestisce la richiesta con req
-*/
+/**
+ * @function
+ * @name searchTerms
+ * @description - Funzioen di ricerca delle tendenze.
+ * Prende un oggetto request contenente delle coordinate e cerca le tendenze attorno al quel luogo
+ * @param req - L'oggetto request contenente le coordinate
+ * @param  client - Il client da usare [opzionale, se non presente usa streamingClient]
+ * @returns - Un array di oggetti contenenti il trend e  ordinati in base alla tendenza
+ */
 async function searchTerms(req, client = termsClient) {
   let latitude = req.query.latitude;
   let longitude = req.query.longitude;

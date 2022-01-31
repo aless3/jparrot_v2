@@ -19,10 +19,10 @@ let text = "";
 /**
  *  @function
  *  @name resetRules
- *  @description - Rule reset function.
- *  Deletes all set rules.
+ *  @description - Funzione di reset delle rules.
+ *  Eliminia tutte le regole.
  *  @async
- *  @param client - the client to use [optional, if not passed use streamingClient]
+ *  @param client - il client da usare [optionale, se non passato usa streamingClient]
  */
 const resetRules = async (client = streamingClient) => {
   let rules = await client.v2.streamRules();
@@ -37,11 +37,11 @@ const resetRules = async (client = streamingClient) => {
 /**
  *  @function
  *  @name setRules
- *  @description - Rule insertion function.
- *  Add rules passed by argument. (WHAT DOES IT DO WITH ALREADY EXISTING RULES?)
+ *  @description - Funzione di agguinta delle rules.
+ *  Aggiunge le regole passate come argomento, se una regola e' gia' presente non fa nulla.
  *  @async
- *  @param rules - the list of rule strings to add to the rules applied for tweets filtering.
- *  @param client - the client to use [optional, if not passed use streamingClient]
+ *  @param rules - La lista delle stringhe da impostare come filtri.
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
  */
 const setRules = async (rules, client = streamingClient) => {
   if (rules.length > 0) {
@@ -56,11 +56,11 @@ const setRules = async (rules, client = streamingClient) => {
 /**
  *  @function
  *  @name getRules
- *  @description - Rule output function.
- *  Returns all the rules applied for tweets filtering.
+ *  @description - Funzione di output delle regole.
+ *  Restituisve tutte le regole impostate al momento.
  *  @async
- *  @param client - the client to use [optional, if not passed use streamingClient]
- *  @returns {Promise} - returns the tweet filtering rules as a Promise<StreamingV2GetRulesResult>
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
+ *  @returns {Promise} - restituisce le regole impostare al momento sottoforma di Promise<StreamingV2GetRulesResult>
  */
 const getRules = async (client = streamingClient) => {
   return client.v2.streamRules();
@@ -69,11 +69,11 @@ const getRules = async (client = streamingClient) => {
 /**
  *  @function
  *  @name deleteRules
- *  @description - Rule deletion function.
- *  Delete rules passed by argument, keeps all others.
+ *  @description - Funzione di cancellazioine delle regole.
+ *  Elimina le regole passate come argomento, lascia le altre.
  *  @async
- *  @param args - the list of rule IDs to remove from the rules applied for tweets filtering.
- *  @param client - the client to use [optional, if not passed use streamingClient]
+ *  @param args - la lista degli id delle regole da rimuovere.
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
  */
 const deleteRules = async (args, client = streamingClient) => {
   if (args.length > 0) {
@@ -86,12 +86,13 @@ const deleteRules = async (args, client = streamingClient) => {
 };
 
 /**
- *  Rule reset and insertion function.
- *  Reset rules and add the new ones.
+ * @function
+ * @description -  Funzione di aggiornamento delle regole.
+ * Elimina tutte le regole presenti e imposta quelle passate come parametro
  *  @async
- *  @param args - the list of rule IDs to insert after the reset.
- *  @param client - the client to use [optional, if not passed use streamingClient]
- *  @return {boolean} - returns true if successful, false otherwise.
+ *  @param args - Le regole da impostare dopo aver eliminato quelle precedenti.
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
+ *  @return {boolean} - ritorna true se ha successo, false altrimenti.
  */
 const reloadRules = async (args, client = streamingClient) => {
   try {
@@ -108,13 +109,13 @@ const reloadRules = async (args, client = streamingClient) => {
 /**
  *  @function
  *  @name startStream
- *  @description - Streaming function.
- *  Set rules, starts stream
+ *  @description - Funzione di streaming.
+ *  Imposta le regole e fa partire lo streaming
  *  @async
- *  @param args - the list of rules to set for tweets filtering
- *  @param socket - the io socket to emit data to
- *  @param client - the client to use [optional, if not passed use streamingClient]
- *  @returns {stream} - returns the created stream
+ *  @param args - La lista delle regole da impostare
+ *  @param socket - Il socket io verso cui mandare i tweet
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
+ *  @returns {stream} - Ritorna lo stream.
  */
 const startStream = async (args, socket, client = streamingClient) => {
   try {
@@ -143,9 +144,8 @@ const startStream = async (args, socket, client = streamingClient) => {
  *  @function
  *  @name getStream
  *  @returns - Returns the stream
- *  @description - Get stream handler function.
- *  Get the twitter v2 api stream handler. This function makes it possible
- *  to obtain the stream object from outside this file
+ *  @description - Funzione per avere lo handler dello stream.
+ *  Questa funzione permette di ottenere lo handler per lo streaming al di fuori di questo file
  */
 const getStream = () => {
   return stream;
@@ -154,9 +154,8 @@ const getStream = () => {
 /**
  *  @function
  *  @name closeStream
- *  @description - Close stream handler function.
- *  Close the twitter v2 api stream handler. This function makes it possible
- *  to close the stream object from outside this file
+ *  @description - Funzione di chiusira dello stream.
+ *  Manda al front end le 10 parole con piu' utilizzate tra i tweet ottenuti durante lo stream, e chiude la connessione con l'API
  */
 const closeStream = async (socket = null) => {
   if (stream !== undefined) {
@@ -168,6 +167,14 @@ const closeStream = async (socket = null) => {
   }
 };
 
+/**
+ * @function
+ * @name wordFreq
+ * @description - Funzione di analisi del testo.
+ * Prende un testo e restituisce le 10 parole piu' utilizzate in esso, rimuovendo le parole piu' piccole di 2 caratteri
+ * @param data - Il testo da analizzare
+ * @returns  - un array di array, dove ciascuno indice contiene la parola e il numero di volte che compare nel testo
+ */
 const wordFreq = (data = text) => {
   if (!data) {
     return undefined;
