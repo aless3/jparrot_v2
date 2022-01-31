@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>terms - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,23 +35,183 @@
 
 <div id="main">
     
+    <h1 class="page-title">terms</h1>
+    
 
     
 
 
 
+
+<section>
+
+<header>
+    
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="~organizeTrendsOfPlace"><span class="type-signature">(inner) </span>organizeTrendsOfPlace<span class="signature">(trendsOfPlace)</span><span class="type-signature"></span></h4>
+
     
 
 
-    <section class="package">
-        <h3> </h3>		
-    </section>
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>- Funzione di ordinamento delle tendenze.
+Prende un array di oggetti e li prepara come array contenenti nome di un trend e numero di occorrenze</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="terms.js.html">terms.js</a>, <a href="terms.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
 
 
 
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>trendsOfPlace</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Array di oggetti contenenti nome di un trend e numero di occorrenza, ma non ordinato</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Array di oggetti ordinati in base al numero di occorrenze
+</div>
 
 
 
@@ -59,24 +219,173 @@
 
 
 
-    <section class="readme usertext">
-        <article><h2>JParrot</h2>
-<p>This is a simple tweet analysis tool.</p>
-<p>Three main tools are currently available:</p>
-<ul>
-<li>geolocalized tweet search</li>
-<li>word cloud</li>
-<li>sentiment analysis</li>
-</ul>
-<h2>Documentation</h2>
-<p>Documentation generated using <a href="https://jsdoc.app">jsdoc</a>.</p>
-<p>Generate using:</p>
-<pre class="prettyprint source lang-bash"><code>jsdoc -c jsdoc_conf.js
-</code></pre>
-<p>This will create a documentation/ folder inside the project folder.</p></article>
-    </section>
+        
+            
+
+    
+
+    <h4 class="name" id="~searchTerms"><span class="type-signature">(inner) </span>searchTerms<span class="signature">(req, client)</span><span class="type-signature"></span></h4>
+
+    
 
 
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>- Funzioen di ricerca delle tendenze.
+Prende un oggetto request contenente delle coordinate e cerca le tendenze attorno al quel luogo</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="terms.js.html">terms.js</a>, <a href="terms.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">L'oggetto request contenente le coordinate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Il client da usare [opzionale, se non presente usa streamingClient]</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Un array di oggetti contenenti il trend e  ordinati in base alla tendenza
+</div>
+
+
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

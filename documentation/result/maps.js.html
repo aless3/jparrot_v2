@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>maps.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,48 +35,71 @@
 
 <div id="main">
     
+    <h1 class="page-title">maps.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**@module maps */
+const { TwitterApi } = require("twitter-api-v2");
 
+const express = require("express");
+const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
+const mapsClient = appOnlyClient.readOnly;
 
-    <section class="package">
-        <h3> </h3>		
-    </section>
+const router = express.Router();
 
+/**
+ * @function
+ * @name searchGeo
+ * @description - Funzione di ricerca geolocalizzata
+ * Cerca i tweet provenienti da una specifica area geografica, entro un certo periodo di tempo e contenente delle keyword
+ * @async
+ * @param  req - Contiene i a posizione geografica, il periodo temporale e la keyword da usare come filtro
+ * @param  client - Il client da usare [opzionale, se non presente usa streamingClient]
+ * @returns - I tweet ottenuti dalla ricerca
+ */
+async function searchGeo(req, client = mapsClient) {
+  const range = req.query.range;
+  const coords = JSON.parse(req.query.position);
+  const keyword = req.query.keyword;
+  const start = req.query.start;
+  const end = req.query.end;
 
+  const query = `${keyword} point_radius:[${coords.lng} ${coords.lat} ${
+    range / 1000
+  }km] has:geo`;
+  try {
+    let res = await client.v2.searchAll(query, {
+      expansions: ["author_id"],
+      "tweet.fields": ["created_at", "public_metrics", "text", "geo"],
+      "user.fields": ["username", "name", "profile_image_url"],
+      max_results: 500,
+      ...(start ? { start_time: start } : {}),
+      ...(end ? { end_time: end } : {}),
+    });
 
+    return res.data;
+  } catch (e) {
+    console.error(e);
+    return undefined;
+  }
+}
 
+router.get("/geo-keyword", async (req, res) => {
+  let result = await searchGeo(req);
+  res.send(result);
+});
 
-
-
-
-
-    
-
-
-
-    <section class="readme usertext">
-        <article><h2>JParrot</h2>
-<p>This is a simple tweet analysis tool.</p>
-<p>Three main tools are currently available:</p>
-<ul>
-<li>geolocalized tweet search</li>
-<li>word cloud</li>
-<li>sentiment analysis</li>
-</ul>
-<h2>Documentation</h2>
-<p>Documentation generated using <a href="https://jsdoc.app">jsdoc</a>.</p>
-<p>Generate using:</p>
-<pre class="prettyprint source lang-bash"><code>jsdoc -c jsdoc_conf.js
+module.exports = { router, searchGeo };
 </code></pre>
-<p>This will create a documentation/ folder inside the project folder.</p></article>
+        </article>
     </section>
-
-
 
 
 

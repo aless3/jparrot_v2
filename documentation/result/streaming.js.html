@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sentyment.html">sentyment</a><ul class='methods'><li data-type='method'><a href="module-sentyment.html#searchCounts#~searchCounts">searchCounts</a></li><li data-type='method'><a href="module-sentyment.html#sentimentCount#~sentimentCount">sentimentCount</a></li></ul></li><li><a href="module-streaming.html">streaming</a><ul class='methods'><li data-type='method'><a href="module-streaming.html#closeStream#~closeStream">closeStream</a></li><li data-type='method'><a href="module-streaming.html#deleteRules#~deleteRules">deleteRules</a></li><li data-type='method'><a href="module-streaming.html#getRules#~getRules">getRules</a></li><li data-type='method'><a href="module-streaming.html#getStream#~getStream">getStream</a></li><li data-type='method'><a href="module-streaming.html#resetRules#~resetRules">resetRules</a></li><li data-type='method'><a href="module-streaming.html#setRules#~setRules">setRules</a></li><li data-type='method'><a href="module-streaming.html#startStream#~startStream">startStream</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-competition.html">competition</a><ul class='methods'><li data-type='method'><a href="module-competition.html#buibuildQuery#~buibuildQuery">buibuildQuery</a></li><li data-type='method'><a href="module-competition.html#containsCorrectAnswer#~containsCorrectAnswer">containsCorrectAnswer</a></li><li data-type='method'><a href="module-competition.html#containsWrongsAnswers#~containsWrongsAnswers">containsWrongsAnswers</a></li><li data-type='method'><a href="module-competition.html#extractIndices#~extractIndices">extractIndices</a></li><li data-type='method'><a href="module-competition.html#hasWhiteSpace#~hasWhiteSpace">hasWhiteSpace</a></li><li data-type='method'><a href="module-competition.html#organizeAnswers#~organizeAnswers">organizeAnswers</a></li><li data-type='method'><a href="module-competition.html#organizeCompetition#~organizeCompetition">organizeCompetition</a></li><li data-type='method'><a href="module-competition.html#organizeReplies#~organizeReplies">organizeReplies</a></li><li data-type='method'><a href="module-competition.html#searchReplies#~searchReplies">searchReplies</a></li><li data-type='method'><a href="module-competition.html#updateLists#~updateLists">updateLists</a></li></ul></li><li><a href="module-keyword.html">keyword</a><ul class='methods'><li data-type='method'><a href="module-keyword.html#searchKeyword#~searchKeyword">searchKeyword</a></li></ul></li><li><a href="module-maps.html">maps</a><ul class='methods'><li data-type='method'><a href="module-maps.html#searchGeo#~searchGeo">searchGeo</a></li></ul></li><li><a href="module-sentiment.html">sentiment</a><ul class='methods'><li data-type='method'><a href="module-sentiment.html#searchCounts#~searchCounts">searchCounts</a></li><li data-type='method'><a href="module-sentiment.html#sentimentCount#~sentimentCount">sentimentCount</a></li></ul></li><li><a href="module-streaming.html">streaming</a><ul class='methods'><li data-type='method'><a href="module-streaming.html#closeStream#~closeStream">closeStream</a></li><li data-type='method'><a href="module-streaming.html#deleteRules#~deleteRules">deleteRules</a></li><li data-type='method'><a href="module-streaming.html#getRules#~getRules">getRules</a></li><li data-type='method'><a href="module-streaming.html#getStream#~getStream">getStream</a></li><li data-type='method'><a href="module-streaming.html#reloadRules#~reloadRules">reloadRules</a></li><li data-type='method'><a href="module-streaming.html#resetRules#~resetRules">resetRules</a></li><li data-type='method'><a href="module-streaming.html#setRules#~setRules">setRules</a></li><li data-type='method'><a href="module-streaming.html#startStream#~startStream">startStream</a></li><li data-type='method'><a href="module-streaming.html#wordFreq#~wordFreq">wordFreq</a></li></ul></li><li><a href="module-terms.html">terms</a><ul class='methods'><li data-type='method'><a href="module-terms.html#organizeTrendsOfPlace#~organizeTrendsOfPlace">organizeTrendsOfPlace</a></li><li data-type='method'><a href="module-terms.html#searchTerms#~searchTerms">searchTerms</a></li></ul></li></ul>
     
 </nav>
 
@@ -45,167 +45,210 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const
-    {
-        ETwitterStreamEvent,
-        TwitterApi
-    } = require('twitter-api-v2');
+            <pre class="prettyprint source linenums"><code>const { ETwitterStreamEvent, TwitterApi } = require("twitter-api-v2");
 
-const path = require('path')
-const express = require('express')
+const express = require("express");
 
-const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
+const wf = require("word-freq");
+
+const appOnlyClient = new TwitterApi(process.env.CORE_NEW);
 const streamingClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 let stream;
 
-router.get('/home', (req, res) =>{
-    res.sendFile(path.resolve(__dirname, '../index.html'))
-})
+let text = "";
 
 /**
  *  @module streaming
  */
- 
+
 /**
  *  @function
  *  @name resetRules
- *  @description - Rule reset function.
- *  Deletes all set rules.
+ *  @description - Funzione di reset delle rules.
+ *  Eliminia tutte le regole.
  *  @async
+ *  @param client - il client da usare [optionale, se non passato usa streamingClient]
  */
 const resetRules = async (client = streamingClient) => {
-    let rules = await client.v2.streamRules()
-    if(rules.data?.length){
-        await deleteRules(rules.data.map(rule=>rule.id))
-    }
-}
+  let rules = await client.v2.streamRules();
+  if (rules.data?.length) {
+    await deleteRules(
+      rules.data.map((rule) => rule.id),
+      client
+    );
+  }
+};
 
 /**
  *  @function
  *  @name setRules
- *  @description - Rule insertion function.
- *  Add rules passed by argument. (WHAT DOES IT DO WITH ALREADY EXISTING RULES?)
+ *  @description - Funzione di agguinta delle rules.
+ *  Aggiunge le regole passate come argomento, se una regola e' gia' presente non fa nulla.
  *  @async
- *  @param rules - the list of rule strings to add to the rules applied for tweets filtering.
- *  @param client - the client to use [optional, if not passed use streamingClient
+ *  @param rules - La lista delle stringhe da impostare come filtri.
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
  */
 const setRules = async (rules, client = streamingClient) => {
-    if(rules.length > 0) {
-        await client.v2.updateStreamRules({
-            add: rules.map((keyword)=>{
-                return{value: keyword}
-            })
-        })
-        let streamRules = await client.v2.streamRules();
-        console.log(streamRules)
-    }
-}
+  if (rules.length > 0) {
+    await client.v2.updateStreamRules({
+      add: rules.map((keyword) => {
+        return { value: keyword };
+      }),
+    });
+  }
+};
 
 /**
  *  @function
  *  @name getRules
- *  @description - Rule output function.
- *  Returns all the rules applied for tweets filtering.
+ *  @description - Funzione di output delle regole.
+ *  Restituisve tutte le regole impostate al momento.
  *  @async
- *  @param client - the client to use [optional, if not passed use streamingClient
- *  @returns {Rules} - returns the tweet filtering rules
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
+ *  @returns {Promise} - restituisce le regole impostare al momento sottoforma di Promise&lt;StreamingV2GetRulesResult>
  */
 const getRules = async (client = streamingClient) => {
-    return client.v2.streamRules()
-}
+  return client.v2.streamRules();
+};
 
 /**
  *  @function
  *  @name deleteRules
- *  @description - Rule deletion function.
- *  Delete rules passed by argument, keeps all others.
+ *  @description - Funzione di cancellazioine delle regole.
+ *  Elimina le regole passate come argomento, lascia le altre.
  *  @async
- *  @param args - the list of rule IDs to remove from the rules applied for tweets filtering.
- *  @param client - the client to use [optional, if not passed use streamingClient
+ *  @param args - la lista degli id delle regole da rimuovere.
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
  */
 const deleteRules = async (args, client = streamingClient) => {
-    if(args.length > 0){
-        await client.v2.updateStreamRules({
-            delete:{
-                ids: args
-            }
-        })
-        console.log('Rules Deleted')
-    }
-}
+  if (args.length > 0) {
+    await client.v2.updateStreamRules({
+      delete: {
+        ids: args,
+      },
+    });
+  }
+};
 
-let active = false;
+/**
+ * @function
+ * @description -  Funzione di aggiornamento delle regole.
+ * Elimina tutte le regole presenti e imposta quelle passate come parametro
+ *  @async
+ *  @param args - Le regole da impostare dopo aver eliminato quelle precedenti.
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
+ *  @return {boolean} - ritorna true se ha successo, false altrimenti.
+ */
+const reloadRules = async (args, client = streamingClient) => {
+  try {
+    await resetRules(client);
+    await setRules(args, client);
+    return true;
+  } catch (error) {
+    console.log("FROM RESET-AND-SET ");
+    console.log(error);
+    return false;
+  }
+};
 
 /**
  *  @function
  *  @name startStream
- *  @description - Streaming function.
- *  Set rules, starts stream
+ *  @description - Funzione di streaming.
+ *  Imposta le regole e fa partire lo streaming
  *  @async
- *  @param args - the list of rules to set for tweets filtering
- *  @param socket - the io socket to emit data to
- *  @param client - the client to use [optional, if not passed use streamingClient
+ *  @param args - La lista delle regole da impostare
+ *  @param socket - Il socket io verso cui mandare i tweet
+ *  @param client - Il client da usare [opzionale, se non presente usa streamingClient]
+ *  @returns {stream} - Ritorna lo stream.
  */
 const startStream = async (args, socket, client = streamingClient) => {
-    let i = 0;
-    try{
-        await resetRules()
-        await setRules(args)
+  try {
+    text = "";
+    await reloadRules(args, client);
+    stream = await client.v2.searchStream({
+      expansions: ["author_id"],
+      "tweet.fields": ["created_at", "text"],
+      "user.fields": ["username", "name", "profile_image_url"],
+    });
+    stream.autoReconnect = true;
+    stream.on(ETwitterStreamEvent.Data, async (tweet) => {
+      socket.emit("tweet", tweet);
+      text = text.concat(" ");
+      text = text.concat(tweet.data.text);
+    });
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 
-    }catch (error){
-        console.log('FROM RESET-AND-SET ')
-        console.log(error)
-    }
-
-    try{
-        stream = await client.v2.searchStream({
-            expansions: ["author_id"],
-            "tweet.fields": ["created_at", "text"],
-            "user.fields": ["username", "name", "profile_image_url"],
-        })
-        active = true;
-        stream.autoReconnect = true
-        stream.on(ETwitterStreamEvent.Data, async tweet => {
-            if(active) {
-                socket.emit('tweet', tweet)
-                i++
-                console.log(`Data sent${i}`)
-            }
-        })
-
-    } catch (error){
-        console.log('FROM STREAMING')
-        console.log(error)
-    }
-}
+  return stream;
+};
 
 /**
  *  @function
  *  @name getStream
- *  @returns {TwitterV2apiHandler} - Returns the stream
- *  @description - Get stream handler function.
- *  Get the twitter v2 api stream handler. This function makes it possible
- *  to obtain the stream object from outside this file
+ *  @returns - Returns the stream
+ *  @description - Funzione per avere lo handler dello stream.
+ *  Questa funzione permette di ottenere lo handler per lo streaming al di fuori di questo file
  */
 const getStream = () => {
-    return stream;
-}
+  return stream;
+};
 
 /**
  *  @function
  *  @name closeStream
- *  @description - Close stream handler function.
- *  Close the twitter v2 api stream handler. This function makes it possible
- *  to close the stream object from outside this file
+ *  @description - Funzione di chiusira dello stream.
+ *  Manda al front end le 10 parole con piu' utilizzate tra i tweet ottenuti durante lo stream, e chiude la connessione con l'API
  */
-const closeStream = () => {
+const closeStream = async (socket = null) => {
+  if (stream !== undefined) {
+    if (socket) {
+      let data = wordFreq();
+      await socket.emit("text", data);
+    }
     stream.close();
-}
+  }
+};
 
+/**
+ * @function
+ * @name wordFreq
+ * @description - Funzione di analisi del testo.
+ * Prende un testo e restituisce le 10 parole piu' utilizzate in esso, rimuovendo le parole piu' piccole di 2 caratteri
+ * @param data - Il testo da analizzare
+ * @returns  - un array di array, dove ciascuno indice contiene la parola e il numero di volte che compare nel testo
+ */
+const wordFreq = (data = text) => {
+  if (!data) {
+    return undefined;
+  }
+  let dataArray = Object.entries(wf.freq(data, true, false));
+  dataArray = dataArray.filter((word) => {
+    return word[0].length > 2 &amp;&amp; word[0] !== "https";
+  });
+  dataArray.sort(function (a, b) {
+    return b[1] - a[1];
+  });
+  dataArray = dataArray.slice(0, 10);
+  return dataArray;
+};
 
-module.exports = { router, resetRules, setRules, getRules, deleteRules, getStream, startStream, closeStream };
+module.exports = {
+  router,
+  resetRules,
+  setRules,
+  getRules,
+  deleteRules,
+  reloadRules,
+  getStream,
+  startStream,
+  closeStream,
+  wordFreq,
+};
 </code></pre>
         </article>
     </section>
@@ -220,7 +263,7 @@ module.exports = { router, resetRules, setRules, getRules, deleteRules, getStrea
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Mon Jan 10 2022 12:10:05 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Mon Jan 31 2022 19:32:46 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

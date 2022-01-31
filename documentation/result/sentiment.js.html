@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sentyment.html">sentyment</a><ul class='methods'><li data-type='method'><a href="module-sentyment.html#searchCounts#~searchCounts">searchCounts</a></li><li data-type='method'><a href="module-sentyment.html#sentimentCount#~sentimentCount">sentimentCount</a></li></ul></li><li><a href="module-streaming.html">streaming</a><ul class='methods'><li data-type='method'><a href="module-streaming.html#closeStream#~closeStream">closeStream</a></li><li data-type='method'><a href="module-streaming.html#deleteRules#~deleteRules">deleteRules</a></li><li data-type='method'><a href="module-streaming.html#getRules#~getRules">getRules</a></li><li data-type='method'><a href="module-streaming.html#getStream#~getStream">getStream</a></li><li data-type='method'><a href="module-streaming.html#resetRules#~resetRules">resetRules</a></li><li data-type='method'><a href="module-streaming.html#setRules#~setRules">setRules</a></li><li data-type='method'><a href="module-streaming.html#startStream#~startStream">startStream</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-competition.html">competition</a><ul class='methods'><li data-type='method'><a href="module-competition.html#buibuildQuery#~buibuildQuery">buibuildQuery</a></li><li data-type='method'><a href="module-competition.html#containsCorrectAnswer#~containsCorrectAnswer">containsCorrectAnswer</a></li><li data-type='method'><a href="module-competition.html#containsWrongsAnswers#~containsWrongsAnswers">containsWrongsAnswers</a></li><li data-type='method'><a href="module-competition.html#extractIndices#~extractIndices">extractIndices</a></li><li data-type='method'><a href="module-competition.html#hasWhiteSpace#~hasWhiteSpace">hasWhiteSpace</a></li><li data-type='method'><a href="module-competition.html#organizeAnswers#~organizeAnswers">organizeAnswers</a></li><li data-type='method'><a href="module-competition.html#organizeCompetition#~organizeCompetition">organizeCompetition</a></li><li data-type='method'><a href="module-competition.html#organizeReplies#~organizeReplies">organizeReplies</a></li><li data-type='method'><a href="module-competition.html#searchReplies#~searchReplies">searchReplies</a></li><li data-type='method'><a href="module-competition.html#updateLists#~updateLists">updateLists</a></li></ul></li><li><a href="module-keyword.html">keyword</a><ul class='methods'><li data-type='method'><a href="module-keyword.html#searchKeyword#~searchKeyword">searchKeyword</a></li></ul></li><li><a href="module-maps.html">maps</a><ul class='methods'><li data-type='method'><a href="module-maps.html#searchGeo#~searchGeo">searchGeo</a></li></ul></li><li><a href="module-sentiment.html">sentiment</a><ul class='methods'><li data-type='method'><a href="module-sentiment.html#searchCounts#~searchCounts">searchCounts</a></li><li data-type='method'><a href="module-sentiment.html#sentimentCount#~sentimentCount">sentimentCount</a></li></ul></li><li><a href="module-streaming.html">streaming</a><ul class='methods'><li data-type='method'><a href="module-streaming.html#closeStream#~closeStream">closeStream</a></li><li data-type='method'><a href="module-streaming.html#deleteRules#~deleteRules">deleteRules</a></li><li data-type='method'><a href="module-streaming.html#getRules#~getRules">getRules</a></li><li data-type='method'><a href="module-streaming.html#getStream#~getStream">getStream</a></li><li data-type='method'><a href="module-streaming.html#reloadRules#~reloadRules">reloadRules</a></li><li data-type='method'><a href="module-streaming.html#resetRules#~resetRules">resetRules</a></li><li data-type='method'><a href="module-streaming.html#setRules#~setRules">setRules</a></li><li data-type='method'><a href="module-streaming.html#startStream#~startStream">startStream</a></li><li data-type='method'><a href="module-streaming.html#wordFreq#~wordFreq">wordFreq</a></li></ul></li><li><a href="module-terms.html">terms</a><ul class='methods'><li data-type='method'><a href="module-terms.html#organizeTrendsOfPlace#~organizeTrendsOfPlace">organizeTrendsOfPlace</a></li><li data-type='method'><a href="module-terms.html#searchTerms#~searchTerms">searchTerms</a></li></ul></li></ul>
     
 </nav>
 
@@ -45,43 +45,41 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module sentyment */
+            <pre class="prettyprint source linenums"><code>/** @module sentiment */
 
 /**
  * @typedef {object} Result
- * @property {int} positiveCount - Positive tweets counter
- * @property {int} negativeCount - Negative tweets counter
- * @property {int} sentimentCount - (Positive + negative) tweets counter
- * @property {int} totalCount - Total tweets counter
+ * @property {int} positiveCount - Contatore dei tweet positivi
+ * @property {int} negativeCount - Contatore dei tweet negativi
+ * @property {int} sentimentCount - (positivi + negativi) contatore tweet
+ * @property {int} totalCount - totale dei tweet
  */
 
 /**
  * @typedef {object} SentimentTweets
- * @property {int} positiveCount - Positive tweets counter
- * @property {int} negativeCount - Negative tweets counter
- * @property {int} sentimentCount - (Positive + negative) tweets counter
- * @property {int} totalCount - Total tweets counter
+ * @property {int} positiveCount - Contatore dei tweet positivi
+ * @property {int} negativeCount - Contatore dei tweet negativi
+ * @property {int} sentimentCount - (positivi + negativi) contatore tweet
+ * @property {int} totalCount - totale dei tweet
  */
 
 const { TwitterApi } = require("twitter-api-v2");
 
 const express = require("express");
-const cors = require("cors");
-const appOnlyClient = new TwitterApi(process.env.ADVANCED_BEARER);
+const appOnlyClient = new TwitterApi(process.env.CORE_BEARER);
 const sentimentClient = appOnlyClient.readOnly;
 
 const router = express.Router();
 
-router.use(cors());
-
 /**
  *  @function
  *  @name searchCounts
- *  @description - twitter api to function.
- *  Takes a keyword stored inside the request object and returns tweets with that keyword and positive or negative words.
+ *  @description - Funzione di API Twitter.
+ *  Usa la keyword contenuta dentro l'oggetto req e ritorna il numero dei tweet positivi, quelli negativi e anche il totale.
  *  @async
- *  @param counts - object containing 20 tweets per category: negative tweets, positive tweets and total tweets
- *  @returns {SentimentTweets} - Returns a SentimentTweets object.
+ *  @returns {SentimentTweets} - Ritorna un oggetto SentimentTweets.
+ * @param req - L'oggetto richiesta proveniente dal front end
+ * @param client - Il client per comunicare con l'API, opzionale da usare solo durante i test
  */
 async function searchCounts(req, client = sentimentClient) {
   let keyword = req.query.keyword;
@@ -118,12 +116,11 @@ async function searchCounts(req, client = sentimentClient) {
 /**
  *  @function
  *  @name sentimentCount
- *  @description - Sentiment Analysis function.
- *  Takes a tweets array and counts tweets with that keyword and positive/negative words
- *  Result is dependent on percentage of tweets with positive/negative words
+ *  @description - Funzione di analisi del Sentiment.
+ *  Prende un array di tweet proveniente dalla ricerca di una keyword e analizza il sentimento globale verso di essa
  *  @async
- *  @param counts - object containing 20 tweets per category: negative tweets, positive tweets and total tweets
- *  @returns {Result} - Returns a Result object.
+ *  @param counts - Oggetto contenente 20 tweet per categoria: Tweet positivi, negativi e totali
+ *  @returns {Result} - Restituisce un oggetto Result.
  */
 async function sentimentCount(counts) {
   if (counts === undefined) {
@@ -173,13 +170,15 @@ async function sentimentCount(counts) {
   let sentimentName;
 
   let posPercentage = (100 * posCount) / (posCount + negCount);
+  let zero = posCount === 0 &amp;&amp; negCount === 0;
+
   if (posPercentage > 90) {
     sentiment = 2;
     sentimentName = "Very Positive";
   } else if (posPercentage > 66) {
     sentiment = 1;
     sentimentName = "Positive";
-  } else if (posPercentage > 33) {
+  } else if (posPercentage > 33 || zero) {
     sentiment = 0;
     sentimentName = "Neutral";
   } else if (posPercentage > 10) {
@@ -218,7 +217,7 @@ module.exports = { router, searchCounts, sentimentCount };
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Mon Jan 10 2022 12:10:05 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Mon Jan 31 2022 19:32:46 GMT+0100 (Central European Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
