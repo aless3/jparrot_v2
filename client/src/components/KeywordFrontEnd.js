@@ -93,8 +93,11 @@ function KeywordFrontEnd() {
         });
 
         if (result.data !== undefined) {
-          setTermsData(result.data);
-          // setTermsLoaded(true)
+          let newData = [];
+          result.data.forEach((el) => {
+            newData.push({ ...el, props: { title: el.count } });
+          });
+          setTermsData(newData);
         }
       } catch (error) {
         console.error(error);
@@ -111,7 +114,11 @@ function KeywordFrontEnd() {
         });
 
         if (result.data !== undefined) {
-          setTermsData(result.data);
+          let newData = [];
+          result.data.forEach((el) => {
+            newData.push({ ...el, props: { title: el.count } });
+          });
+          setTermsData(newData);
           // setTermsLoaded(true)
         }
       } catch (error) {

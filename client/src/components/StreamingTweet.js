@@ -51,6 +51,7 @@ const StreamingTweet = () => {
   };
 
   async function start() {
+    setTweets([]);
     setShowChart(false);
     if (!text) {
       setShowError(true);

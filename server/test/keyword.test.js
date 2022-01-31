@@ -18,17 +18,21 @@ describe("keyword Tests", () => {
     req.query.position = JSON.stringify(coords);
 
     let search = await keyword.searchKeyword(req, client);
-
-    for (let datum of search.data) {
-      expect(datum).toStrictEqual(
-        expect.objectContaining({
-          text: expect.any(String),
-          created_at: expect.any(String),
-          author_id: expect.any(String),
-          id: expect.any(String),
-          public_metrics: expect.any(Object),
-        })
-      );
+    console.log(search.data);
+    if (search.data) {
+      for (let datum of search.data) {
+        expect(datum).toStrictEqual(
+          expect.objectContaining({
+            text: expect.any(String),
+            created_at: expect.any(String),
+            author_id: expect.any(String),
+            id: expect.any(String),
+            public_metrics: expect.any(Object),
+          })
+        );
+      }
+    } else {
+      expect(search.data).toBeUndefined();
     }
   });
 
