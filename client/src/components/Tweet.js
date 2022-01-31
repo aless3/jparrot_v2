@@ -9,7 +9,7 @@ import {
   FaQuoteRight,
   FaCalendar,
 } from "react-icons/fa";
-import "./Tweet.css";
+import "../style/Tweet.css";
 
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 

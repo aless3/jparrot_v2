@@ -1,5 +1,5 @@
 import React from "react";
-import "../App.css";
+import "../style/App.css";
 import { TagCloud } from "react-tagcloud";
 
 export function SimpleCloud({ values, setter }) {

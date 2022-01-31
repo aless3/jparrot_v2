@@ -6,7 +6,7 @@ import FormControl from "react-bootstrap/FormControl";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import "./StreamingTweet.css";
+import "../style/StreamingTweet.css";
 import "bootstrap/dist/css/bootstrap.css";
 import TweetList from "./TweetList";
 import "animate.css";

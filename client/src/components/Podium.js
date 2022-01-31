@@ -1,7 +1,7 @@
 import React from "react";
 import PodiumPlace from "./PodiumPlace";
 import Tweet from "./Tweet";
-import "./Podium.css";
+import "../style/Podium.css";
 
 const Podium = ({ tweets }) => {
   return (

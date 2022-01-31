@@ -7,7 +7,7 @@ import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
 import axios from "axios";
 import TweetList from "./TweetList";
-import "./MapsFrontEnd.css";
+import "../style/MapsFrontEnd.css";
 import {
   MapContainer,
   TileLayer,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../App.css";
+import "../style/App.css";
 import axios from "axios";
 import { Col, Row, Container, Button } from "react-bootstrap";
 import FormControl from "react-bootstrap/FormControl";
@@ -13,7 +13,7 @@ import { PieChartSentiment } from "./PieChartSentiment";
 import { LineChartSentiment } from "./LineChartSentiment";
 import TweetList from "./TweetList";
 import { SimpleCloud } from "./SimpleCloud";
-import "./KeywordFrontEnd.css";
+import "../style/KeywordFrontEnd.css";
 import "animate.css";
 
 export function emoijImage(sentiment, callback) {

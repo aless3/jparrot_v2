@@ -1,6 +1,5 @@
 import React from "react";
 import StreamingTweet from "./StreamingTweet";
-import "./Tweet.css";
 
 const Streaming = () => {
   return (

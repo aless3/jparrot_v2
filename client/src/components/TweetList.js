@@ -1,7 +1,7 @@
 import React from "react";
 import Tweet from "./Tweet";
 
-import "./TweetList.css";
+import "../style/TweetList.css";
 
 const TweetList = ({ tweets, stream }) => {
   return (

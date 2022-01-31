@@ -1,5 +1,5 @@
 import React from "react";
-import "../App.css";
+import "../style/App.css";
 
 import {
   Chart as ChartJS,
@@ -66,7 +66,7 @@ export class LineChartSentiment extends React.Component {
 
     return (
       <div>
-        <Line type="line" data={lineData} />
+        <Line type='line' data={lineData} />
       </div>
     );
   }
