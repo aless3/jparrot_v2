@@ -3,10 +3,16 @@ JParrot
 
 This is a simple tweet analysis tool.
 
-Three main tools are currently available:
+Five main tools are currently available:
 - geolocalized tweet search
 - word cloud
 - sentiment analysis
+- Tweet streaming and analisys
+- Twitter Competition and trivia management
+
+The project can be accessed in the following website:
+
+http://site202153.tw.cs.unibo.it/
 
 
 Documentation
@@ -21,3 +27,7 @@ jsdoc -c jsdoc_conf.js
 ```
 
 This will create a documentation/ folder inside the project folder.
+
+The documentation can be accessed in the following website:
+
+http://fabio.mirza.tw.cs.unibo.it/
